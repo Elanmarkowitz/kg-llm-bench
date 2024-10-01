@@ -1,0 +1,10 @@
+name: kg-llm-bench
+channels:
+  - pyg
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pyg
+  - networkx
+  - jsbeautifier
