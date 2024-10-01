@@ -1,4 +1,3 @@
-import requests
 """
 This script retrieves a subgraph from Wikidata based on a list of entity IDs, pseudonymizes the entities, builds a graph, generates questions about the graph, and evaluates the questions using the OpenAI API.
 Functions:
@@ -14,12 +13,12 @@ Usage:
 3. Run the script.
 Note: This script requires the `requests`, `random`, `networkx`, and `openai` libraries.
 """
+import requests
 import random
 import networkx as nx
 import openai
 import os
 from typing import List, Dict, Tuple
-
 # Set your OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Ensure you set your key as an environment variable
 # If you prefer, uncomment the following line and put your API key directly
@@ -32,6 +31,7 @@ def get_wikidata_subgraph(entity_ids: List[str]) -> List[Dict]:
     WHERE {
       VALUES ?item { %s }
       ?item ?prop ?value .
+      FILTER(STRSTARTS(STR(?prop), "http://www.wikidata.org/prop/direct/"))
       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
     }
     """ % (' '.join('wd:' + eid for eid in entity_ids))
@@ -40,6 +40,7 @@ def get_wikidata_subgraph(entity_ids: List[str]) -> List[Dict]:
     headers = {
         'Accept': 'application/json'
     }
+    print(query)
     r = requests.get(url, params={'query': query}, headers=headers)
     data = r.json()
     return data['results']['bindings']
@@ -56,7 +57,7 @@ def pseudonymize_entities(bindings: List[Dict]) -> Tuple[Dict[str, str], Dict[st
             uri = b[key]['value']
             label = b[key + 'Label']['value']
             if uri not in entity_mapping:
-                pseudonym = f"E{entity_counter}"
+                pseudonym = f"E{entity_counter}"    
                 entity_counter += 1
                 entity_mapping[uri] = pseudonym
         prop_uri = b['prop']['value']
@@ -104,9 +105,9 @@ def generate_questions(G: nx.Graph, entity_mapping: Dict[str, str], property_map
         })
 
     # Path existence questions
-    node_pairs = [(nodes[i], nodes[j]) for i in range(len(nodes)) for j in range(i+1, len(nodes))]
-    random.shuffle(node_pairs)
-    for n1, n2 in node_pairs[:5]:
+    N_path_existence = 10
+    node_pairs = list(tuple(sorted(random.sample(nodes, 2))) for _ in range(N_path_existence))
+    for n1, n2 in node_pairs:
         exists = nx.has_path(G, n1, n2)
         q = f"Is there a path between {n1} and {n2}?"
         a = 'Yes' if exists else 'No'
@@ -117,7 +118,9 @@ def generate_questions(G: nx.Graph, entity_mapping: Dict[str, str], property_map
         })
 
     # Shortest path questions
-    for n1, n2 in node_pairs[5:10]:
+    N_shortest_path = 10
+    node_pairs = list(tuple(sorted(random.sample(nodes, 2))) for _ in range(N_shortest_path))
+    for n1, n2 in node_pairs:
         if nx.has_path(G, n1, n2):
             path = nx.shortest_path(G, n1, n2)
             q = f"What is the shortest path between {n1} and {n2}?"
@@ -187,5 +190,5 @@ def main():
         print("-" * 50)
     
 
-if name == "main":
+if __name__ == "__main__":
     main()
