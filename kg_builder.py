@@ -77,6 +77,29 @@ class KnowledgeGraph:
         nx.draw(self.graph, with_labels=True, node_color='lightblue', font_weight='bold')
 
 
+    # Method to get and visualize ego graph with radius 1
+    def get_ego_graph(self, entity_id, radius=1):
+        if entity_id in self.graph.nodes:
+            ego_g = nx.ego_graph(self.graph, entity_id, radius=radius)
+            print(f"Ego Graph centered on entity {entity_id} with radius {radius}:")
+            print("Nodes in the subgraph:", ego_g.nodes(data=True))
+            print("Edges in the subgraph:", ego_g.edges(data=True))
+
+            # Prepare node labels using human-readable labels
+            node_labels = {node: self.graph.nodes[node]['label'] for node in ego_g.nodes}
+            # Visualize the ego graph
+            plt.figure(figsize=(8, 6))
+            pos = nx.spring_layout(ego_g)  # Layout for visualization
+            nx.draw(ego_g, pos, with_labels=True, node_size=300, font_size=10, labels=node_labels, node_color='lightgreen', font_weight='bold', edge_color="gray")
+            # nx.draw(G, pos, with_labels=True, node_size=300, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", edge_color="gray")
+            edge_labels = nx.get_edge_attributes(ego_g, 'relation')
+            nx.draw_networkx_edge_labels(ego_g, pos, edge_labels=edge_labels, font_color='red')
+            plt.show()
+
+        else:
+            print(f"Entity ID {entity_id} not found in the graph.")
+
+
 
 if __name__ == "__main__":
     kg = KnowledgeGraph()
@@ -93,6 +116,8 @@ if __name__ == "__main__":
     kg.load_attributes('data/attributes.tsv')
 
     # Print graph information
-    kg.print_graph_info()
+    # kg.print_graph_info()
 
-
+    # Visualize the graph
+    # kg.visualize_graph()
+    kg.get_ego_graph(3393, radius=1)
