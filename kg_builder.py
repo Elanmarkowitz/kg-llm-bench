@@ -100,6 +100,38 @@ class KnowledgeGraph:
             print(f"Entity ID {entity_id} not found in the graph.")
 
 
+class KnowledgeGraphTextPresenter:
+    def __init__(self, kg: KnowledgeGraph):
+        self.kg = kg
+
+    # Method to generate triplets (head, relation, tail) from the ego graph
+    def get_triplets(self, entity_id, radius=1):
+        if entity_id in self.kg.graph.nodes:
+            ego_g = nx.ego_graph(self.kg.graph, entity_id, radius=radius)
+            triplets = []
+            for head, tail, data in ego_g.edges(data=True):
+                relation = data.get('relation', 'unknown')
+                triplets.append((self.kg.graph.nodes[head]['label'], relation, self.kg.graph.nodes[tail]['label']))
+            return triplets
+        else:
+            print(f"Entity ID {entity_id} not found in the graph.")
+            return []
+
+    # Method to convert triplets into human-readable sentences
+    def get_triplet_sentences(self, entity_id, radius=1):
+        triplets = self.get_triplets(entity_id, radius)
+        sentences = []
+        for head, relation, tail in triplets:
+            sentence = f"{head} {relation} {tail}."
+            sentences.append(sentence)
+        return sentences
+
+    # Method to generate a textual summary from a subset of the knowledge graph
+    def get_summary(self, entity_id, radius=1):
+        sentences = self.get_triplet_sentences(entity_id, radius)
+        summary = " ".join(sentences)
+        return summary
+
 
 if __name__ == "__main__":
     kg = KnowledgeGraph()
@@ -120,4 +152,24 @@ if __name__ == "__main__":
 
     # Visualize the graph
     # kg.visualize_graph()
-    kg.get_ego_graph(3393, radius=1)
+    # kg.get_ego_graph(3393, radius=1)
+
+    # Create an instance of KnowledgeGraphTextPresenter and extract triplets
+    presenter = KnowledgeGraphTextPresenter(kg)
+
+    # Get triplets
+    triplets = presenter.get_triplets(entity_id=3393, radius=1)
+    print("Triplets (head, relation, tail):")
+    for triplet in triplets:
+        print(triplet)
+
+    # Get sentences from triplets
+    sentences = presenter.get_triplet_sentences(entity_id=3393, radius=1)
+    print("\nTriplet Sentences:")
+    for sentence in sentences:
+        print(sentence)
+
+    # Get textual summary of the knowledge graph subset
+    summary = presenter.get_summary(entity_id=3393, radius=1)
+    print("\nTextual Summary of Knowledge Graph Subset:")
+    print(summary)
