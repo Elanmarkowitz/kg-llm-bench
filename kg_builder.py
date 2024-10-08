@@ -118,13 +118,12 @@ class KnowledgeGraphTextPresenter:
             return []
 
     # Method to convert triplets into human-readable sentences
-    def get_triplet_sentences(self, entity_id, radius=1):
-        triplets = self.get_triplets(entity_id, radius)
+    def get_triplet_sentences(self, triplets):
         sentences = []
         for head, relation, tail in triplets:
             sentence = f"{head} {relation} {tail}."
             sentences.append(sentence)
-        return sentences
+        return "\n".join(sentences)
 
     # Method to generate a textual summary from a subset of the knowledge graph
     def get_summary(self, entity_id, radius=1):
@@ -137,15 +136,15 @@ if __name__ == "__main__":
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('data/entities.tsv')
-    kg.load_entities('data/nodes.tsv')
+    kg.load_entities('data/countries/entities.tsv')
+    kg.load_entities('data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('data/relations.tsv')
+    kg.load_relations('data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('data/edges.tsv')
-    kg.load_attributes('data/attributes.tsv')
+    kg.load_edges('data/countries/edges.tsv')
+    kg.load_attributes('data/countries/attributes.tsv')
 
     # Print graph information
     # kg.print_graph_info()
