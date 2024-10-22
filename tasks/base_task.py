@@ -1,7 +1,10 @@
 import random
 from kg_builder import KnowledgeGraph, KnowledgeGraphTextPresenter
+from samplers import graph_samplers
 
 class BaseTask:
+    """Tasks are the main function that runs things. They handle sampling the kg, pseudonimizing, creating task question, 
+    creating the question, making the llm request, and evaluating the response."""
 
     def __init__(self, task_name):
         self.task_name = task_name
@@ -12,24 +15,32 @@ class BaseTask:
 
 class TripleRetrievalTask(BaseTask):
 
-    def __init__(self, task_name):
+    def __init__(self, task_name, conversion_config, llm_config, pseudonomizer_config):
         super().__init__(task_name)
+        self.text_presenter = KnowledgeGraphTextPresenter(conversion_config)
+        self.llm = LLM(llm_config)
+        self.pseudonomizer = Pseudonomizer(pseudonomizer_config)
 
-    def run(self, kg: KnowledgeGraph, seed_entities):
+
+
+    def run(self, kg: KnowledgeGraph, seed_entities, max_edges=100):
         # Retrieve triples based on seed entities
         breakpoint()
-        text_presenter = KnowledgeGraphTextPresenter(kg)
-        triplets = [text_presenter.get_triplets(e) for e in seed_entities]
-        text_kg = text_presenter.get_triplet_sentences(triplets)
-        triple_sample = random.choice(triplets)
+        sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
+        sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges, max_degree=20)
+
+        text_kg = self.text_presenter.to_list_of_sentences(sampled_kg)
+
+        triple_sample = random.choice(sampled_kg.graph.edges(data=True))
         if random.randint(0, 1) == 0:
-            triples = triple_sample
+            triple = triple_sample
         else:
             corrupted_triplet = list(triple_sample)
             corrupt_index = random.choice([0, 1, 2])
             corrupted_triplet[corrupt_index] = random.choice(kg.entities if corrupt_index != 1 else kg.relations)
-            triples = tuple(corrupted_triplet)
-        return triples
+            triple = tuple(corrupted_triplet)
+        
+        question = f"Is the following triplet fact present in the knowledge graph? ({triple[0]}, triple[])"
     
 
 # sample_kg: (KnowledgeGraph -> KnowledgeGraph)
