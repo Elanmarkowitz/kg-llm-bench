@@ -1,3 +1,4 @@
+import random
 import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -101,30 +102,40 @@ class KnowledgeGraph:
 
 
 class KnowledgeGraphTextPresenter:
-    def __init__(self, kg: KnowledgeGraph):
-        self.kg = kg
+    """
+    TextPresenter handles turning a kg into in-context text version
+    """
+    def __init__(self, conversion_config):
+        self.conversion_config = conversion_config
+
+    def convert(self, kg: KnowledgeGraph, pseudonomizer=None):
+        """Converts a knowledge graph into a textual representation"""
+        if self.conversion_config['type'] == "list_of_sentences":
+            text = self.to_list_of_sentences(kg)
+        return text
 
     # Method to generate triplets (head, relation, tail) from the ego graph
-    def get_triplets(self, entity_id, radius=1):
-        if entity_id in self.kg.graph.nodes:
-            ego_g = nx.ego_graph(self.kg.graph, entity_id, radius=radius)
-            triplets = []
-            for head, tail, data in ego_g.edges(data=True):
-                relation = data.get('relation', 'unknown')
-                triplets.append((self.kg.graph.nodes[head]['label'], relation, self.kg.graph.nodes[tail]['label']))
-            return triplets
-        else:
-            print(f"Entity ID {entity_id} not found in the graph.")
-            return []
+    def get_triplets(self, kg):
+        """gets the triplets in the kg"""
+        for head, tail, data in kg.graph.edges(data=True):
+            relation = data.get('relation', 'unknown')
+            triplets.append((kg.graph.nodes[head]['label'], relation, kg.graph.nodes[tail]['label']))
+        return triplets
+        
+        # if entity_id in kg.graph.nodes:
+        #     ego_g = nx.ego_graph(self.kg.graph, entity_id, radius=radius)
+        #     triplets = []
+        # else:
+        #     print(f"Entity ID {entity_id} not found in the graph.")
+        #     return []
 
     # Method to convert triplets into human-readable sentences
-    def get_triplet_sentences(self, entity_id, radius=1):
-        triplets = self.get_triplets(entity_id, radius)
+    def get_triplet_sentences(self, triplets):
         sentences = []
         for head, relation, tail in triplets:
             sentence = f"{head} {relation} {tail}."
             sentences.append(sentence)
-        return sentences
+        return "\n".join(sentences)
 
     # Method to generate a textual summary from a subset of the knowledge graph
     def get_summary(self, entity_id, radius=1):
@@ -132,20 +143,33 @@ class KnowledgeGraphTextPresenter:
         summary = " ".join(sentences)
         return summary
 
+    def to_list_of_sentences(self, kg: KnowledgeGraph, pseudonomizer):
+        """Takes a knowledge graph (or knowledge graph subgraph)"""
+        # create pseudonymized kg
+        # TODO: call implement pseudonomizer
+        pseudo_kg = kg
+
+        # get kg triplets
+        triplets = self.get_triplets(pseudo_kg)
+
+        text = "\n".join(self.get_triplet_sentences(triplets))
+        
+        return text
+
 
 if __name__ == "__main__":
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('data/entities.tsv')
-    kg.load_entities('data/nodes.tsv')
+    kg.load_entities('data/countries/entities.tsv')
+    kg.load_entities('data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('data/relations.tsv')
+    kg.load_relations('data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('data/edges.tsv')
-    kg.load_attributes('data/attributes.tsv')
+    kg.load_edges('data/countries/edges.tsv')
+    kg.load_attributes('data/countries/attributes.tsv')
 
     # Print graph information
     # kg.print_graph_info()
