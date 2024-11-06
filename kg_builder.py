@@ -1,4 +1,5 @@
 import random
+from typing import Dict
 import networkx as nx
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -23,13 +24,24 @@ class Relation:
 
     def __repr__(self):
         return f"Relation(id={self.relation_id}, label={self.label})"
+    
+
+class Triple:
+    def __init__(self, head: Entity, relation: Relation, tail: Entity):
+        self.head = head  # Relation ID from relations.tsv
+        self.relation = relation  # WikiData relation ID
+        self.tail = tail  # The name of the relation
+
+    def __repr__(self):
+        return f"Triple(head={self.head}, relation={self.relation}, tail={self.tail})"
 
 
 class KnowledgeGraph:
     def __init__(self):
-        self.graph = nx.DiGraph()  # Directed graph
-        self.entities = {}  # Stores Entity objects by entity_id
-        self.relations = {}  # Stores Relation objects by relation_id
+        self.graph = nx.DiGraph()  # Directed graph # TODO: Switch to MultiDiGraph
+        self.entities: Dict[int, Entity] = {}  # Stores Entity objects by entity_id
+        self.relations: Dict[int, Relation] = {}  # Stores Relation objects by relation_id
+        self.core_nodes: Dict[int, Entity] = {} # Stores core nodes in the graph
 
     # Load entities (nodes) from entities.tsv or nodes.tsv
     def load_entities(self, file_path):
@@ -46,6 +58,13 @@ class KnowledgeGraph:
             relation = Relation(row['relationID'], row['wikidataID'], row['label'])
             self.relations[row['relationID']] = relation
 
+    # load core nodes from nodes.tsv
+    def load_core_nodes(self, file_path):
+        df = pd.read_csv(file_path, sep='\t')
+        for _, row in df.iterrows():
+            entity = Entity(row['entityID'], row['wikidataID'], row['label'])
+            self.core_nodes[row['entityID']] = entity
+
     # Load edges from edges.tsv and add them to the graph
     def load_edges(self, file_path):
         df = pd.read_csv(file_path, sep='\t')
@@ -55,7 +74,9 @@ class KnowledgeGraph:
             relation_id = row['relation']
             if relation_id in self.relations:
                 relation_label = self.relations[relation_id].label
-                self.graph.add_edge(head, tail, relation=relation_label)
+                self.graph.add_edge(head, tail, relation=relation_label, relation_id=relation_id)
+            else:
+                raise ValueError(f"Relation ID {relation_id} not found in the relations.")
 
     # Load attributes from attributes.tsv and add them as edges
     def load_attributes(self, file_path):
@@ -66,7 +87,7 @@ class KnowledgeGraph:
             relation_id = row['relation']
             if relation_id in self.relations:
                 relation_label = self.relations[relation_id].label
-                self.graph.add_edge(head, tail, relation=relation_label)
+                self.graph.add_edge(head, tail, relation=relation_label, relation_id=relation_id)
 
     # Print graph information
     def print_graph_info(self):
@@ -105,20 +126,27 @@ class KnowledgeGraphTextPresenter:
     """
     TextPresenter handles turning a kg into in-context text version
     """
-    def __init__(self, conversion_config):
-        self.conversion_config = conversion_config
+    FORMAT_DESCRIPTION = {
+        "list_of_edges": "The knowledge graph is presented as a list of directed edges of the form (subject, relation, object)."
+    }
 
-    def convert(self, kg: KnowledgeGraph, pseudonomizer=None):
+    def __init__(self, type="list_of_edges"):
+        self.type = type
+
+    def get_description(self):
+        return self.FORMAT_DESCRIPTION[self.type]
+
+    def convert(self, kg: KnowledgeGraph):
         """Converts a knowledge graph into a textual representation"""
-        if self.conversion_config['type'] == "list_of_sentences":
-            text = self.to_list_of_sentences(kg)
+        if self.type == "list_of_edges":
+            text = self.to_list_of_edges(kg)
         return text
 
     # Method to generate triplets (head, relation, tail) from the ego graph
     def get_triplets(self, kg):
         """gets the triplets in the kg"""
-        for head, tail, data in kg.graph.edges(data=True):
-            relation = data.get('relation', 'unknown')
+        triplets = []
+        for head, tail, relation in kg.graph.edges(data='relation'):
             triplets.append((kg.graph.nodes[head]['label'], relation, kg.graph.nodes[tail]['label']))
         return triplets
         
@@ -133,9 +161,9 @@ class KnowledgeGraphTextPresenter:
     def get_triplet_sentences(self, triplets):
         sentences = []
         for head, relation, tail in triplets:
-            sentence = f"{head} {relation} {tail}."
+            sentence = f"({head}, {relation}, {tail})"
             sentences.append(sentence)
-        return "\n".join(sentences)
+        return sentences
 
     # Method to generate a textual summary from a subset of the knowledge graph
     def get_summary(self, entity_id, radius=1):
@@ -143,16 +171,12 @@ class KnowledgeGraphTextPresenter:
         summary = " ".join(sentences)
         return summary
 
-    def to_list_of_sentences(self, kg: KnowledgeGraph, pseudonomizer):
+    def to_list_of_edges(self, kg: KnowledgeGraph):
         """Takes a knowledge graph (or knowledge graph subgraph)"""
-        # create pseudonymized kg
-        # TODO: call implement pseudonomizer
-        pseudo_kg = kg
-
         # get kg triplets
-        triplets = self.get_triplets(pseudo_kg)
+        triplets = self.get_triplets(kg)
 
-        text = "\n".join(self.get_triplet_sentences(triplets))
+        text = "Edges: [\n" + ",\n".join(self.get_triplet_sentences(triplets)) + "\n]\n"
         
         return text
 
