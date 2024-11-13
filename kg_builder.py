@@ -1,7 +1,9 @@
+import pickle
 import random
 from typing import Dict
 import networkx as nx
 import pandas as pd
+import os
 import matplotlib.pyplot as plt
 
 
@@ -89,6 +91,26 @@ class KnowledgeGraph:
                 relation_label = self.relations[relation_id].label
                 self.graph.add_edge(head, tail, relation=relation_label, relation_id=relation_id)
 
+    def save_kg(self, file_path):
+        data = {
+            'entities': self.entities,
+            'relations': self.relations,
+            'core_nodes': self.core_nodes,
+            'graph': self.graph
+        }
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'wb') as file:
+            pickle.dump(data, file)
+        return file_path
+
+    def load_kg(self, file_path):
+        with open(file_path, 'rb') as file:
+            data = pickle.load(file)
+            self.entities = data['entities']
+            self.relations = data['relations']
+            self.core_nodes = data['core_nodes']
+            self.graph = data['graph']
+
     # Print graph information
     def print_graph_info(self):
         print("Graph Nodes (Entities):", self.graph.nodes(data=True))
@@ -97,7 +119,6 @@ class KnowledgeGraph:
     # Visualize the graph (optional)
     def visualize_graph(self):
         nx.draw(self.graph, with_labels=True, node_color='lightblue', font_weight='bold')
-
 
     # Method to get and visualize ego graph with radius 1
     def get_ego_graph(self, entity_id, radius=1):

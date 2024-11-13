@@ -13,26 +13,54 @@ class BaseTask:
 
     def __init__(self, task_name):
         self.task_name = task_name
+        self.results = []
+        self.data = []
+        self.benchmark_dir = f'benchmark_data/{task_name}'
+        dataset_file = os.path.join(self.benchmark_dir, f'{task_name}_dataset.json')
+        results_file = os.path.join(self.benchmark_dir, 'results', f'{task_name}_results.json')
 
     def run(self, kg, seed_entities, config):
         raise NotImplementedError('You must implement the run method in your task class')
     
+    def save_results(self):
+        if self.results_file:
+            with open(self.results_file, 'w') as f:
+                json.dump(self.results, f)
 
+    def save_dataset(self):
+        save_data = deepcopy(self.data)
+        for instance in save_data:
+            kg: KnowledgeGraph = instance.pop('kg')
+            id = instance['id']
+            kg_path = os.path.join(self.benchmark_dir, 'kg', f"kg_{id:04d}.pkl")
+            instance['kg_path'] = kg.save_kg(kg_path)
+
+        if self.dataset_file:
+            if os.path.exists(self.dataset_file):
+                base, ext = os.path.splitext(self.dataset_file)
+                counter = 1
+                new_dataset_file = f"{base}_{counter}{ext}"
+                while os.path.exists(new_dataset_file):
+                    counter += 1
+                    new_dataset_file = f"{base}_{counter}{ext}"
+                self.dataset_file = new_dataset_file
+            with open(self.dataset_file, 'w') as f:
+                json.dump(save_data, f)
+    
+    def load_dataset(self):
+        if self.dataset_file and os.path.exists(self.dataset_file):
+            with open(self.dataset_file, 'r') as f:
+                self.data = json.load(f)
 class TripleRetrievalTask(BaseTask):
 
     def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
-        super().__init__("Triple Retrieval")
+        super().__init__("Triple Retrieval", dataset_file, results_file)
         self.text_presenter = KnowledgeGraphTextPresenter(**conversion_config)
         self.model = LLM(**llm_config)
         self.pseudonomizer = Pseudonymizer(**pseudonomizer_config)
-        self.dataset_file = dataset_file
-        self.results_file = results_file
-        self.data = []
-        self.results = []
 
     def run(self):
         self.results = deepcopy(self.data)
-        breakpoint()
         for instance in self.results:
             prompt = instance['prompt']
             response = self.model(prompt)
@@ -50,9 +78,9 @@ class TripleRetrievalTask(BaseTask):
         """Constructs instances for the task."""
         for instance in range(num_instances):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            self.data.append(self.construct_instance(kg, seed_entities, max_edges))
+            self.data.append(self.construct_instance(kg, seed_entities, max_edges, instance))
 
-    def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100):
+    def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
         # Retrieve triples based on seed entities
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
@@ -76,6 +104,7 @@ class TripleRetrievalTask(BaseTask):
         answer = "Yes" if corruption_type == "None" else "No"
 
         return {
+            'id': instance_id,
             'prompt': prompt,
             'question': question,
             'text_kg': text_kg,
@@ -83,23 +112,8 @@ class TripleRetrievalTask(BaseTask):
             'answer': answer,
             'corruption_type': corruption_type,
             'seed_entities': seed_entities,
-            # 'kg': kg # TODO: Find way to save kg
+            'kg': kg # TODO: Find way to save kg
         }
-
-    def save_results(self):
-        if self.results_file:
-            with open(self.results_file, 'w') as f:
-                json.dump(self.results, f)
-
-    def save_data(self):
-        if self.dataset_file:
-            with open(self.dataset_file, 'w') as f:
-                json.dump(self.data, f)
-    
-    def load_data(self):
-        if self.dataset_file and os.path.exists(self.dataset_file):
-            with open(self.dataset_file, 'r') as f:
-                self.data = json.load(f)
 
     def corrupt_triplet(self, triple: Triple, kg: KnowledgeGraph):
         corrupted_triplet = deepcopy(triple)
