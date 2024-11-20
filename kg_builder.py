@@ -5,6 +5,7 @@ import networkx as nx
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+import json
 
 
 # Class to represent each entity (node in the graph)
@@ -17,6 +18,16 @@ class Entity:
     def __repr__(self):
         return f"Entity(id={self.entity_id}, wikidata_id={self.wikidata_id}, label={self.label})"
 
+    def to_dict(self):
+        return {
+            'entity_id': self.entity_id,
+            'wikidata_id': self.wikidata_id,
+            'label': self.label
+        }
+
+    def from_dict(cls, data):
+        return cls(data['entity_id'], data['wikidata_id'], data['label'])
+
 # Class to represent relations between entities (edges in the graph)
 class Relation:
     def __init__(self, relation_id, wikidata_id, label):
@@ -26,7 +37,23 @@ class Relation:
 
     def __repr__(self):
         return f"Relation(id={self.relation_id}, label={self.label})"
-    
+
+    def to_dict(self):
+        return {
+            'relation_id': self.relation_id,
+            'wikidata_id': self.wikidata_id,
+            'label': self.label
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data['relation_id'], data['wikidata_id'], data['label'])
+
+class CustomEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, 'to_dict'):
+            return obj.to_dict()
+        return super().default(obj)
 
 class Triple:
     def __init__(self, head: Entity, relation: Relation, tail: Entity):
@@ -37,6 +64,19 @@ class Triple:
     def __repr__(self):
         return f"Triple(head={self.head}, relation={self.relation}, tail={self.tail})"
 
+    def to_dict(self):
+        return {
+            'head': self.head.to_dict(),
+            'relation': self.relation.to_dict(),
+            'tail': self.tail.to_dict()
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        head = Entity.from_dict(data['head'])
+        relation = Relation.from_dict(data['relation'])
+        tail = Entity.from_dict(data['tail'])
+        return cls(head, relation, tail)
 
 class KnowledgeGraph:
     def __init__(self):

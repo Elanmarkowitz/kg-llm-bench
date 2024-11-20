@@ -11,41 +11,71 @@ class BaseTask:
     """Tasks are the main function that runs things. They handle sampling the kg, pseudonimizing, creating task question, 
     creating the question, making the llm request, and evaluating the response."""
 
-    def __init__(self, task_name):
+    def __init__(self, 
+                 task_name, 
+                 conversion_config, 
+                 llm_config, 
+                 pseudonomizer_config, 
+                 dataset_file=None, 
+                 results_file=None):
         self.task_name = task_name
+        self.llm_config = llm_config
+        self.conversion_config = conversion_config
+        self.pseudonomizer_config = pseudonomizer_config
+        
+        self.model = LLM(**llm_config)
+        self.text_presenter = KnowledgeGraphTextPresenter(**conversion_config)
+        self.pseudonomizer = Pseudonymizer(**pseudonomizer_config)
+        
         self.results = []
         self.data = []
         self.benchmark_dir = f'benchmark_data/{task_name}'
-        dataset_file = os.path.join(self.benchmark_dir, f'{task_name}_dataset.json')
-        results_file = os.path.join(self.benchmark_dir, 'results', f'{task_name}_results.json')
 
-    def run(self, kg, seed_entities, config):
+        os.makedirs(self.benchmark_dir, exist_ok=True)
+        os.makedirs(os.path.join(self.benchmark_dir, 'results'), exist_ok=True)
+        os.makedirs(os.path.join(self.benchmark_dir, 'kg'), exist_ok=True)
+
+        self.dataset_file = dataset_file
+        if not self.dataset_file:
+            self.dataset_file = os.path.join(self.benchmark_dir, f'{task_name}_dataset.json')
+        
+        self.results_file = results_file
+        if not self.results_file:
+            self.results_file = os.path.join(self.benchmark_dir, 'results', f'{task_name}_results.json')
+       
+    def run(self):
         raise NotImplementedError('You must implement the run method in your task class')
     
     def save_results(self):
-        if self.results_file:
-            with open(self.results_file, 'w') as f:
-                json.dump(self.results, f)
+        self.save_data(file_path=self.results_file, save_data=self.results)
 
     def save_dataset(self):
-        save_data = deepcopy(self.data)
-        for instance in save_data:
-            kg: KnowledgeGraph = instance.pop('kg')
-            id = instance['id']
-            kg_path = os.path.join(self.benchmark_dir, 'kg', f"kg_{id:04d}.pkl")
-            instance['kg_path'] = kg.save_kg(kg_path)
+        self.save_data(file_path=self.dataset_file, save_data=self.data)
 
-        if self.dataset_file:
-            if os.path.exists(self.dataset_file):
-                base, ext = os.path.splitext(self.dataset_file)
-                counter = 1
+    def save_data(self, file_path=None, save_data=None):
+        file_path = file_path or self.dataset_file
+        save_data = deepcopy(save_data) or deepcopy(self.data)
+
+        if not file_path:
+            raise ValueError('Dataset file path not set. Please set the dataset file path before saving the dataset.')
+        
+        for instance in save_data:
+            if 'kg' in instance:
+                kg: KnowledgeGraph = instance.pop('kg')
+                id = instance['id']
+                kg_path = os.path.join(self.benchmark_dir, 'kg', f"kg_{id:04d}.pkl")
+                instance['kg_path'] = kg.save_kg(kg_path)
+
+        if os.path.exists(file_path):
+            base, ext = os.path.splitext(file_path)
+            counter = 1
+            new_dataset_file = f"{base}_{counter}{ext}"
+            while os.path.exists(new_dataset_file):
+                counter += 1
                 new_dataset_file = f"{base}_{counter}{ext}"
-                while os.path.exists(new_dataset_file):
-                    counter += 1
-                    new_dataset_file = f"{base}_{counter}{ext}"
-                self.dataset_file = new_dataset_file
-            with open(self.dataset_file, 'w') as f:
-                json.dump(save_data, f)
+            self.dataset_file = new_dataset_file
+        with open(file_path, 'w') as f:
+            json.dump(save_data, f, cls=CustomJSONEncoder)
     
     def load_dataset(self):
         if self.dataset_file and os.path.exists(self.dataset_file):
@@ -54,10 +84,12 @@ class BaseTask:
 class TripleRetrievalTask(BaseTask):
 
     def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
-        super().__init__("Triple Retrieval", dataset_file, results_file)
-        self.text_presenter = KnowledgeGraphTextPresenter(**conversion_config)
-        self.model = LLM(**llm_config)
-        self.pseudonomizer = Pseudonymizer(**pseudonomizer_config)
+        super().__init__("Triple Retrieval", 
+                         conversion_config, 
+                         llm_config, 
+                         pseudonomizer_config, 
+                         dataset_file, 
+                         results_file)
 
     def run(self):
         self.results = deepcopy(self.data)
@@ -147,6 +179,13 @@ class TripleRetrievalTask(BaseTask):
         return prompt
     
 
+
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if hasattr(obj, 'to_dict'):
+            return obj.to_dict()
+        return super().default(obj)
+
 # sample_kg: (KnowledgeGraph -> KnowledgeGraph)
 # text_presenter: (KnowledgeGraph -> str representing the KG)
 
@@ -180,7 +219,8 @@ if __name__ == "__main__":
 
     seed_entities = random.sample(list(kg.core_nodes.keys()), 10)
 
-    triples = task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
-    breakpoint()
+    task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
+
+    task.save_dataset()
 
     task.run()
