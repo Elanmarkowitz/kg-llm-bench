@@ -150,6 +150,7 @@ class KnowledgeGraph:
             self.relations = data['relations']
             self.core_nodes = data['core_nodes']
             self.graph = data['graph']
+        return self
 
     # Print graph information
     def print_graph_info(self):
