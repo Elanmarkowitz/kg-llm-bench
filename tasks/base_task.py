@@ -46,6 +46,9 @@ class BaseTask:
     def run(self):
         raise NotImplementedError('You must implement the run method in your task class')
     
+    def construct_instances(self, kg: KnowledgeGraph, num_instances=10):
+        raise NotImplementedError('You must implement the construct_instances method in your task class')
+
     def save_results(self):
         self.save_data(file_path=self.results_file, save_data=self.results)
 
@@ -81,10 +84,11 @@ class BaseTask:
         if self.dataset_file and os.path.exists(self.dataset_file):
             with open(self.dataset_file, 'r') as f:
                 self.data = json.load(f)
+                
 class TripleRetrievalTask(BaseTask):
 
     def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
-        super().__init__("Triple Retrieval", 
+        super().__init__("TripleRetrieval", 
                          conversion_config, 
                          llm_config, 
                          pseudonomizer_config, 

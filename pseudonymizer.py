@@ -30,7 +30,6 @@ class Pseudonymizer:
                 raise ValueError(f'Duplicate entity label found: {entity.label}')
 
     def pseudonymize(self, knowledge_graph: KnowledgeGraph):
-        breakpoint()
         pseudo_kg = deepcopy(knowledge_graph)
         for entity in knowledge_graph.entities.values():
             if entity.label in self.mapping:
