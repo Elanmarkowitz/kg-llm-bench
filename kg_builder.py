@@ -6,7 +6,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import json
-
+from collections import deque
 
 # Class to represent each entity (node in the graph)
 class Entity:
@@ -182,6 +182,30 @@ class KnowledgeGraph:
 
         else:
             print(f"Entity ID {entity_id} not found in the graph.")
+
+    def get_shortest_path(self, ent1, ent2):
+        """Finds the shortest path between two entities using BFS."""
+        if ent1 not in self.graph or ent2 not in self.graph:
+            return None
+
+        queue = deque([(ent1, [ent1])])
+        visited = set()
+
+        while queue:
+            current_node, path = queue.popleft()
+            if current_node in visited:
+                continue
+
+            visited.add(current_node)
+
+            if current_node == ent2:
+                return path
+
+            for neighbor in self.graph.neighbors(current_node):
+                if neighbor not in visited:
+                    queue.append((neighbor, path + [neighbor]))
+
+        return None
 
 
 class KnowledgeGraphTextPresenter:

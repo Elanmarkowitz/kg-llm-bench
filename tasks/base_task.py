@@ -76,6 +76,8 @@ class BaseTask:
         save_data = deepcopy(self.data)
 
         for instance in save_data:
+            if instance is None: # To Do: check edge cases.
+                continue
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
                 id = instance['id']
@@ -109,6 +111,8 @@ class BaseTask:
             raise ValueError('Dataset file path not set. Please set the dataset file path before saving the dataset.')
         
         for instance in save_data:
+            if instance is None: # To Do: check for edge cases
+                continue
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
                 id = instance['id']
@@ -131,6 +135,8 @@ class BaseTask:
             with open(self.dataset_file, 'r') as f:
                 self.data = json.load(f)
                 for instance in self.data:
+                    if instance is None: # To Do:
+                        continue
                     if 'kg_path' in instance:
                         kg_path = instance['kg_path']
                         instance['kg'] = KnowledgeGraph().load_kg(kg_path)
@@ -148,6 +154,8 @@ class TripleRetrievalTask(BaseTask):
     def run(self):
         self.results = deepcopy(self.data)
         for instance in self.results:
+            if instance is None:  # To Do:
+                continue
             prompt = instance['prompt']
             response = self.model(prompt)
             instance['response'] = response
@@ -240,12 +248,12 @@ class TripleRetrievalTask(BaseTask):
         return prompt
     
 
-
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if hasattr(obj, 'to_dict'):
             return obj.to_dict()
         return super().default(obj)
+
 
 # sample_kg: (KnowledgeGraph -> KnowledgeGraph)
 # text_presenter: (KnowledgeGraph -> str representing the KG)
@@ -254,15 +262,15 @@ if __name__ == "__main__":
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('data/countries/entities.tsv')
-    kg.load_core_nodes('data/countries/nodes.tsv')
+    kg.load_entities('../data/countries/entities.tsv')
+    kg.load_core_nodes('../data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('data/countries/relations.tsv')
+    kg.load_relations('../data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('data/countries/edges.tsv')
-    kg.load_attributes('data/countries/attributes.tsv')
+    kg.load_edges('../data/countries/edges.tsv')
+    kg.load_attributes('../data/countries/attributes.tsv')
 
     # Print graph information
     # kg.print_graph_info()
@@ -274,7 +282,8 @@ if __name__ == "__main__":
     # Create an instance of KnowledgeGraphTextPresenter and extract triplets
     conversion_config = {'type': "list_of_edges"}
     llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
-    pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
+    pseudonomizer_config = {'pseudonym_file': '../data/countries/pseudonym_data/country_pseudonyms.tsv'}
+
 
     task = TripleRetrievalTask(conversion_config, llm_config, pseudonomizer_config)
 
@@ -282,7 +291,7 @@ if __name__ == "__main__":
 
     task.load_dataset()
 
-    breakpoint()
+    # breakpoint()
 
     task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
 
