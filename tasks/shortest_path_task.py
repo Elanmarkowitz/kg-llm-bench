@@ -39,19 +39,33 @@ class ShortestPathTask(BaseTask):
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
         shortest_path = kg.get_shortest_path(ent1, ent2)
+
         if not shortest_path:
             return None
+
+        edge_data = []
+        for e1, e2 in zip(shortest_path[:-1], shortest_path[1:]):
+            relation = kg.graph.get_edge_data(e1, e2)
+            edge_data.append((e1, relation, e2))
+
+        seed_entities = list(set(seed_entities + shortest_path))
 
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
+        # Add Edge data to the sampled_kg
+        for e1, relation, e2 in edge_data:
+            if not sampled_kg.has_edge(e1, e2):
+                sampled_kg.add_edge(e1, e2, relation=relation["relation"], relation_id=relation["relation_id"])
+
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
 
-        question = f"Your task is to find the shortest path from {ent1} to {ent2}. For example, if the shortest path between Croatia and Canada... You should list your answer in the form 'SHORTEST PATH: {ent1}, property, intermediate_entity'."
+        shortest_path = [kg.entities[node].label for node in shortest_path]
+
+        question = f"Your task is to find the shortest path from {shortest_path[0]} to {shortest_path[-1]}. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: [Argentina, Bolivia, Colombia Mexico]. \n you should list your answer in the form list. \n\n What is the shortest path from {shortest_path[0]} to {shortest_path[-1]}? \n Answer: SHORTEST PATH:"
 
         prompt = self.structure_prompt(question, text_kg)
-        shortest_path = [str(node) for node in shortest_path]
-        answer = f"SHORTEST PATH: {', '.join(shortest_path)}"
+        answer = f"SHORTEST PATH: {str(shortest_path)}"
 
         return {
             'id': instance_id,

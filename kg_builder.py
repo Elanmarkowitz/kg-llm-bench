@@ -183,6 +183,12 @@ class KnowledgeGraph:
         else:
             print(f"Entity ID {entity_id} not found in the graph.")
 
+    def add_edge(self, e1, e2, relation, relation_id):
+        self.graph.add_edge(e1, e2, relation=relation, relation_id=relation_id)
+
+    def has_edge(self, e1, e2):
+        return self.graph.has_edge(e1, e2)
+
     def get_shortest_path(self, ent1, ent2):
         """Finds the shortest path between two entities using BFS."""
         if ent1 not in self.graph or ent2 not in self.graph:

@@ -2,6 +2,7 @@ from copy import deepcopy
 import json
 import os
 import random
+import numpy as np
 from kg_builder import KnowledgeGraph, KnowledgeGraphTextPresenter, Triple
 from llm.llm import LLM
 from pseudonymizer import Pseudonymizer
@@ -249,10 +250,17 @@ class TripleRetrievalTask(BaseTask):
     
 
 class CustomJSONEncoder(json.JSONEncoder):
+
     def default(self, obj):
-        if hasattr(obj, 'to_dict'):
+        if isinstance(obj, np.integer):
+            return int(obj)  # Convert np.int64 to Python int
+        elif isinstance(obj, np.floating):
+            return float(obj)  # Convert np.float64 to Python float
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()  # Convert numpy arrays to lists
+        elif hasattr(obj, 'to_dict'): # Handle objects with a `to_dict` method
             return obj.to_dict()
-        return super().default(obj)
+        return super(CustomJSONEncoder, self).default(obj)
 
 
 # sample_kg: (KnowledgeGraph -> KnowledgeGraph)
