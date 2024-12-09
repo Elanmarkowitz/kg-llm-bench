@@ -189,13 +189,15 @@ class KnowledgeGraph:
     def has_edge(self, e1, e2):
         return self.graph.has_edge(e1, e2)
 
-    def get_shortest_path(self, ent1, ent2):
-        """Finds the shortest path between two entities using BFS."""
+    def get_shortest_paths(self, ent1, ent2):
+        """Finds all shortest paths between two entities using BFS."""
         if ent1 not in self.graph or ent2 not in self.graph:
-            return None
+            return []
 
         queue = deque([(ent1, [ent1])])
         visited = set()
+        shortest_paths = []
+        shortest_length = None
 
         while queue:
             current_node, path = queue.popleft()
@@ -205,13 +207,21 @@ class KnowledgeGraph:
             visited.add(current_node)
 
             if current_node == ent2:
-                return path
+                if shortest_length is None:
+                    shortest_length = len(path)
+                if len(path) == shortest_length:
+                    shortest_paths.append(path)
+                elif len(path) < shortest_length:
+                    shortest_paths = [path]
+                    shortest_length = len(path)
+                continue
 
             for neighbor in self.graph.neighbors(current_node):
                 if neighbor not in visited:
                     queue.append((neighbor, path + [neighbor]))
 
-        return None
+        return shortest_paths
+        
 
 
 class KnowledgeGraphTextPresenter:

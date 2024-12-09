@@ -1,4 +1,4 @@
-from base_task import BaseTask
+from tasks.base_task import BaseTask
 from copy import deepcopy
 import os
 import random
@@ -28,7 +28,18 @@ class ShortestPathTask(BaseTask):
         self.save_results()
 
     def evaluate_response(self, response, answer):
-        return 1.0 if response == answer else 0.0
+        #TODO: fix eval
+        for answer_option in answer:
+            response_path = response.replace("SHORTEST PATH:", "").strip()
+            response_path = response_path.strip('[]').split(',')
+            response_path = [node.strip().strip("'").strip('"') for node in response_path]
+
+            answer_path = answer_option.replace("SHORTEST PATH:", "").strip()
+            answer_path = answer_path.strip('[]').split(',')
+            answer_path = [node.strip().strip("'").strip('"') for node in answer_path]
+            if response_path == answer_path:
+                return 1.0
+        return 0.0
 
     def construct_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
         """Constructs instances for the task."""
@@ -38,41 +49,55 @@ class ShortestPathTask(BaseTask):
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
-        shortest_path = kg.get_shortest_path(ent1, ent2)
+        shortest_paths = kg.get_shortest_paths(ent1, ent2)
 
-        if not shortest_path:
+        if not shortest_paths:
             return None
 
-        edge_data = []
-        for e1, e2 in zip(shortest_path[:-1], shortest_path[1:]):
-            relation = kg.graph.get_edge_data(e1, e2)
-            edge_data.append((e1, relation, e2))
-
-        seed_entities = list(set(seed_entities + shortest_path))
+        seed_entities = list(set(seed_entities + [e for path in shortest_paths for e in path]))
 
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
-        # Add Edge data to the sampled_kg
-        for e1, relation, e2 in edge_data:
-            if not sampled_kg.has_edge(e1, e2):
-                sampled_kg.add_edge(e1, e2, relation=relation["relation"], relation_id=relation["relation_id"])
+        def add_path_to_graph(path):
+            edge_data = []
+            for e1, e2 in zip(path[:-1], path[1:]):
+                relation = kg.graph.get_edge_data(e1, e2)
+                edge_data.append((e1, relation, e2))
+            # Add Edge data to the sampled_kg
+            for e1, relation, e2 in edge_data:
+                if not sampled_kg.has_edge(e1, e2):
+                    sampled_kg.add_edge(e1, e2, relation=relation["relation"], relation_id=relation["relation_id"])
 
+        def path_is_present(path):
+            edge_data = []
+            for e1, e2 in zip(path[:-1], path[1:]):
+                relation = kg.graph.get_edge_data(e1, e2)
+                edge_data.append((e1, relation, e2))
+            # Add Edge data to the sampled_kg
+            for e1, relation, e2 in edge_data:
+                if not sampled_kg.has_edge(e1, e2):
+                    return False
+            return True
+
+        add_path_to_graph(shortest_paths[0])
+        shortest_paths = [shortest_paths[0]] + [path for path in shortest_paths[1:] if path_is_present(path)]
+            
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
 
-        shortest_path = [kg.entities[node].label for node in shortest_path]
+        answer_paths = [[kg.entities[node].label for node in path] for path in shortest_paths]
 
-        question = f"Your task is to find the shortest path from {shortest_path[0]} to {shortest_path[-1]}. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: [Argentina, Bolivia, Colombia Mexico]. \n you should list your answer in the form list. \n\n What is the shortest path from {shortest_path[0]} to {shortest_path[-1]}? \n Answer: SHORTEST PATH:"
+        question = f"Your task is to find the shortest path from {answer_paths[0][0]} to {answer_paths[0][-1]}. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0]} to {answer_paths[0][-1]}? \n Answer: SHORTEST PATH:"
 
         prompt = self.structure_prompt(question, text_kg)
-        answer = f"SHORTEST PATH: {str(shortest_path)}"
+        answer = [f"SHORTEST PATH: {str(path)}" for path in answer_paths]
 
         return {
             'id': instance_id,
             'prompt': prompt,
             'question': question,
             'text_kg': text_kg,
-            'shortest_path': shortest_path,
+            'shortest_paths': answer_paths,
             'answer': answer,
             'seed_entities': seed_entities,
             'kg': kg
@@ -94,20 +119,20 @@ if __name__ == '__main__':
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('../data/countries/entities.tsv')
-    kg.load_core_nodes('../data/countries/nodes.tsv')
+    kg.load_entities('data/countries/entities.tsv')
+    kg.load_core_nodes('data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('../data/countries/relations.tsv')
+    kg.load_relations('data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('../data/countries/edges.tsv')
-    kg.load_attributes('../data/countries/attributes.tsv')
+    kg.load_edges('data/countries/edges.tsv')
+    kg.load_attributes('data/countries/attributes.tsv')
 
 
     conversion_config = {'type': "list_of_edges"}
     llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
-    pseudonomizer_config = {'pseudonym_file': '../data/countries/pseudonym_data/country_pseudonyms.tsv'}
+    pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
 
 
     task = ShortestPathTask(conversion_config, llm_config, pseudonomizer_config)
