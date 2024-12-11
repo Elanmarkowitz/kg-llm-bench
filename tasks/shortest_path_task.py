@@ -45,9 +45,13 @@ class ShortestPathTask(BaseTask):
 
     def construct_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
         """Constructs instances for the task."""
-        for instance in range(num_instances):
+        instances = 0
+        while instances < num_instances:
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            self.data.append(self.construct_instance(kg, seed_entities, instance, max_edges))
+            instance = self.construct_instance(kg, seed_entities, instances, max_edges)
+            if instance:
+                self.data.append(instance)
+                instances += 1
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
@@ -147,5 +151,5 @@ if __name__ == '__main__':
     task.save_base_data()
     task.save_dataset()
 
-    task.run()
+    # task.run()
     print("Finished..")
