@@ -77,7 +77,7 @@ class BaseTask:
         save_data = deepcopy(self.data)
 
         for instance in save_data:
-            if instance is None: # To Do: check edge cases.
+            if instance is None: # Pass on None cases
                 continue
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
@@ -112,7 +112,7 @@ class BaseTask:
             raise ValueError('Dataset file path not set. Please set the dataset file path before saving the dataset.')
         
         for instance in save_data:
-            if instance is None: # To Do: check for edge cases
+            if instance is None:
                 continue
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
@@ -129,14 +129,14 @@ class BaseTask:
                 new_dataset_file = f"{base}_{counter}{ext}"
             self.dataset_file = new_dataset_file
         with open(file_path, 'w') as f:
-            json.dump(save_data, f, cls=CustomJSONEncoder)
+            json.dump(save_data, f, cls=CustomJSONEncoder, indent=4)
     
     def load_dataset(self):
         if self.dataset_file and os.path.exists(self.dataset_file):
             with open(self.dataset_file, 'r') as f:
                 self.data = json.load(f)
                 for instance in self.data:
-                    if instance is None: # To Do:
+                    if instance is None:
                         continue
                     if 'kg_path' in instance:
                         kg_path = instance['kg_path']
@@ -155,7 +155,7 @@ class TripleRetrievalTask(BaseTask):
     def run(self):
         self.results = deepcopy(self.data)
         for instance in self.results:
-            if instance is None:  # To Do:
+            if instance is None:
                 continue
             prompt = instance['prompt']
             response = self.model(prompt)

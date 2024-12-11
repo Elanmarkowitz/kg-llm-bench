@@ -4,7 +4,7 @@ import os
 import random
 from kg_builder import KnowledgeGraph
 from samplers import graph_samplers
-
+import ast
 
 class ShortestPathTask(BaseTask):
 
@@ -19,7 +19,7 @@ class ShortestPathTask(BaseTask):
     def run(self):
         self.results = deepcopy(self.data)
         for instance in self.results:
-            if instance is None: # To Do: check for the edge cases.
+            if instance is None: # Skip instances that were not constructed
                 continue
             prompt = instance['prompt']
             response = self.model(prompt)
@@ -28,17 +28,19 @@ class ShortestPathTask(BaseTask):
         self.save_results()
 
     def evaluate_response(self, response, answer):
-        #TODO: fix eval
-        for answer_option in answer:
-            response_path = response.replace("SHORTEST PATH:", "").strip()
-            response_path = response_path.strip('[]').split(',')
-            response_path = [node.strip().strip("'").strip('"') for node in response_path]
+        response = response.replace("SHORTEST PATH:", "").strip()
+        try:
+            response_list = ast.literal_eval(response)
+        except (SyntaxError, ValueError):
+            return 0.0
 
-            answer_path = answer_option.replace("SHORTEST PATH:", "").strip()
-            answer_path = answer_path.strip('[]').split(',')
-            answer_path = [node.strip().strip("'").strip('"') for node in answer_path]
-            if response_path == answer_path:
-                return 1.0
+        for answer_option in answer:
+            try:
+                answer_list = ast.literal_eval(answer_option.replace("SHORTEST PATH:", "").strip())
+                if response_list == answer_list:
+                    return 1.0
+            except (SyntaxError, ValueError):
+                continue
         return 0.0
 
     def construct_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
