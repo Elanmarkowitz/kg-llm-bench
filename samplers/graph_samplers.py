@@ -16,7 +16,7 @@ def sample_ego_graph_from_kg(kg: KnowledgeGraph, seed_entities, radius=1):
     kg_copy = deepcopy(kg)
     ego_graphs = []
     for seed in seed_entities:
-        ego_graph = nx.ego_graph(kg.graph, seed, radius=radius)
+        ego_graph = nx.ego_graph(kg.graph, seed, radius=radius, undirected=True)
         ego_graphs.append(ego_graph)
     
     # Combine all ego graphs into one subgraph
