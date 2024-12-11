@@ -183,9 +183,9 @@ class TripleRetrievalTask(BaseTask):
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
 
         triple_sample = random.choice([triple for triple in sampled_kg.graph.edges(data='relation_id')])
-        triple_sample = Triple(head=kg.entities[triple_sample[0]], 
-                               relation=kg.relations[triple_sample[2]], 
-                               tail=kg.entities[triple_sample[1]])
+        triple_sample = Triple(head=sampled_kg.entities[triple_sample[0]], 
+                               relation=sampled_kg.relations[triple_sample[2]], 
+                               tail=sampled_kg.entities[triple_sample[1]])
 
         if random.randint(0, 1) == 0:
             triple, corruption_type = triple_sample, "None"
@@ -207,7 +207,7 @@ class TripleRetrievalTask(BaseTask):
             'answer': answer,
             'corruption_type': corruption_type,
             'seed_entities': seed_entities,
-            'kg': kg # TODO: Find way to save kg
+            'kg': sampled_kg # TODO: Find way to save kg
         }
     
     def reformat_instances(self):
@@ -306,4 +306,4 @@ if __name__ == "__main__":
     task.save_base_data()
     task.save_dataset()
 
-    task.run()
+    # task.run()

@@ -80,7 +80,7 @@ class Triple:
 
 class KnowledgeGraph:
     def __init__(self):
-        self.graph = nx.DiGraph()  # Directed graph # TODO: Switch to MultiDiGraph
+        self.graph: nx.DiGraph = nx.DiGraph()  # Directed graph # TODO: Switch to MultiDiGraph
         self.entities: Dict[int, Entity] = {}  # Stores Entity objects by entity_id
         self.relations: Dict[int, Relation] = {}  # Stores Relation objects by relation_id
         self.core_nodes: Dict[int, Entity] = {} # Stores core nodes in the graph

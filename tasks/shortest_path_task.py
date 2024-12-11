@@ -102,7 +102,7 @@ class ShortestPathTask(BaseTask):
             'shortest_paths': answer_paths,
             'answer': answer,
             'seed_entities': seed_entities,
-            'kg': kg
+            'kg': sampled_kg
         }
 
     def reformat_instances(self):
