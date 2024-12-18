@@ -44,7 +44,7 @@ class AggByRelationTask(BaseTask):
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=2)
         
-        # filter ent-rel pairs with only one edge
+        # filter ent pairs with only one edge
         entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.graph.edges(ent)) > 1}
         sampled_kg.entities = {ent: sampled_kg.entities[ent] for ent in entities_with_multiple_edges}
         sampled_kg.graph = sampled_kg.graph.subgraph(entities_with_multiple_edges).copy()
