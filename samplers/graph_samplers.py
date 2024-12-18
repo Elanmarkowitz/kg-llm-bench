@@ -79,6 +79,15 @@ def prune_kg(kg: KnowledgeGraph,
     return kg_copy
 
 
+def filter_low_degree_entities(kg: KnowledgeGraph, threshold=2):
+    kg_copy = deepcopy(kg)
+    entities_with_multiple_edges = {ent for ent in kg.entities if len(kg_copy.graph.edges(ent)) >= threshold}
+    kg_copy.entities = {ent: kg_copy.entities[ent] for ent in entities_with_multiple_edges}
+    kg_copy.graph = kg_copy.graph.subgraph(entities_with_multiple_edges).copy()
+    refine_entities_and_relations_for_sample(kg_copy)
+    return kg_copy
+
+
 def refine_entities_and_relations_for_sample(kg: KnowledgeGraph) -> KnowledgeGraph:
     selected_nodes = kg.graph.nodes
     selected_relations = set(rel for _, _, rel in kg.graph.edges(data='relation'))
