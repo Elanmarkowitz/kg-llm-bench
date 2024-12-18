@@ -16,7 +16,7 @@ class Entity:
         self.label = label  # The name of the entity
 
     def __repr__(self):
-        return f"Entity(id={self.entity_id}, wikidata_id={self.wikidata_id}, label={self.label})"
+        return f"Entity(entity_id={self.entity_id}, wikidata_id={self.wikidata_id}, label={self.label})"
 
     def to_dict(self):
         return {

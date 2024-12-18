@@ -29,7 +29,7 @@ class BaseTask:
         
         self.model = LLM(**llm_config)
         self.text_presenter = KnowledgeGraphTextPresenter(**conversion_config)
-        if pseudonomizer_config is not None:
+        if pseudonomizer_config:
             self.pseudonomizer = Pseudonymizer(**pseudonomizer_config)
             self.text_presenter_type += "-pseudo"
         else: 
@@ -55,6 +55,13 @@ class BaseTask:
             self.results_file = self.dataset_instance_dir / 'results' / f'{self.llm_type}_results.json'
        
         self.base_data_file = self.task_dir / f'{self.task_name}_base_dataset.json'
+
+    def pseudonymize_kg(self, kg: KnowledgeGraph):
+        if self.pseudonomizer:
+            self.pseudonomizer.clear_mapping()
+            self.pseudonomizer.create_mapping(kg)
+            return self.pseudonomizer.pseudonymize(kg)
+        return kg
 
     def run(self):
         raise NotImplementedError('You must implement the run method in your task class')
@@ -180,6 +187,8 @@ class TripleRetrievalTask(BaseTask):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
+        sampled_kg = self.pseudonymize_kg(sampled_kg)
+
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
 
         triple_sample = random.choice([triple for triple in sampled_kg.graph.edges(data='relation_id')])
@@ -270,15 +279,15 @@ if __name__ == "__main__":
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('../data/countries/entities.tsv')
-    kg.load_core_nodes('../data/countries/nodes.tsv')
+    kg.load_entities('data/countries/entities.tsv')
+    kg.load_core_nodes('data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('../data/countries/relations.tsv')
+    kg.load_relations('data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('../data/countries/edges.tsv')
-    kg.load_attributes('../data/countries/attributes.tsv')
+    kg.load_edges('data/countries/edges.tsv')
+    kg.load_attributes('data/countries/attributes.tsv')
 
     # Print graph information
     # kg.print_graph_info()
@@ -290,7 +299,7 @@ if __name__ == "__main__":
     # Create an instance of KnowledgeGraphTextPresenter and extract triplets
     conversion_config = {'type': "list_of_edges"}
     llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
-    pseudonomizer_config = {'pseudonym_file': '../data/countries/pseudonym_data/country_pseudonyms.tsv'}
+    pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
 
 
     task = TripleRetrievalTask(conversion_config, llm_config, pseudonomizer_config)

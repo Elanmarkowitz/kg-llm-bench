@@ -19,24 +19,31 @@ class Pseudonymizer:
         random.shuffle(pseudonyms)
         return pseudonyms
     
-    def create_mapping(self, knowledge_graph: KnowledgeGraph):
+    def clear_mapping(self):
+        self.mapping.clear()
+
+    def create_mapping(self, knowledge_graph: KnowledgeGraph, append=False):
+        if self.mapping and not append:
+            raise ValueError('Mapping already exists. Please clear the mapping before creating a new one or set the append kwarg.')
         if len(self.pseudonyms) < len(knowledge_graph.core_nodes):
-            breakpoint()
             raise ValueError(f'Number of pseudonyms ({len(self.pseudonyms)}) must be greater than or equal to the number of nodes ({len(knowledge_graph.core_nodes)})')
-        for entity, pseudo in zip(knowledge_graph.core_nodes.values(), self.pseudonyms):
-            if entity.label not in self.mapping:
-                self.mapping[entity.label] = pseudo
+        core_nodes = list(knowledge_graph.core_nodes.values())
+        pseudos = random.sample(self.pseudonyms, len(core_nodes))
+        for entity, pseudo in zip(core_nodes, pseudos):
+            if entity.entity_id not in self.mapping:
+                self.mapping[entity.entity_id] = pseudo
             else:
-                raise ValueError(f'Duplicate entity label found: {entity.label}')
+                breakpoint()
+                raise ValueError(f'Duplicate entity label found: {entity.entity_id}')
 
     def pseudonymize(self, knowledge_graph: KnowledgeGraph):
         pseudo_kg = deepcopy(knowledge_graph)
         for entity in knowledge_graph.entities.values():
-            if entity.label in self.mapping:
-                entity.label = self.mapping[entity.label]
+            if entity.entity_id in self.mapping:
+                entity.entity_id = self.mapping[entity.entity_id]
         for entity in knowledge_graph.core_nodes.values():
-            if entity.label in self.mapping:
-                entity.label = self.mapping[entity.label]
+            if entity.entity_id in self.mapping:
+                entity.entity_id = self.mapping[entity.entity_id]
         return pseudo_kg
 
 # Example usage:
