@@ -1,6 +1,5 @@
 from tasks.base_task import BaseTask
 from copy import deepcopy
-import os
 import random
 from kg_builder import KnowledgeGraph
 from samplers import graph_samplers

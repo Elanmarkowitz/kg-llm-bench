@@ -1,6 +1,5 @@
 from tasks.base_task import BaseTask
 from copy import deepcopy
-import os
 import random
 from kg_builder import KnowledgeGraph
 from samplers import graph_samplers
@@ -51,18 +50,24 @@ class AggNeighborPropertiesTask(BaseTask):
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
-        count = 0
-        while count == 0:
-            anchor_ent = random.choice(list(sampled_kg.entities.keys())) # Get a random entity
+        anchor_relation_counts = []
 
-            relation = random.choice(list(sampled_kg.relations.values())).label # Get a random relation
+        for anchor_ent in sampled_kg.entities.keys():
+            for relation in sampled_kg.relations.values():
+                neighbors_with_relation = [
+                    neighbor for neighbor in sampled_kg.graph.neighbors(anchor_ent)
+                    if sampled_kg.graph.get_edge_data(anchor_ent, neighbor).get('relation') == relation.label
+                ]
+                count = len(neighbors_with_relation)
+                if count > 0:
+                    anchor_relation_counts.append((anchor_ent, relation.label, count))
 
-            neighbors_with_relation = [
-                neighbor for neighbor in sampled_kg.graph.neighbors(anchor_ent)
-                if sampled_kg.graph.get_edge_data(anchor_ent, neighbor).get('relation') == relation
-            ]
+        if not anchor_relation_counts:
+            raise ValueError("No suitable anchor entity and relation found")
 
-            count = len(neighbors_with_relation)
+        # Select a random option from the valid anchor_relation_counts
+        selected_option = random.choice(anchor_relation_counts)
+        anchor_ent, relation, count = selected_option
 
         question = f"Using the provided knowledge graph only answer the following question. How many neighbors of '{kg.entities[anchor_ent].label}' have a '{relation}' relation? Answer in the format 'Answer: <number>'."
         prompt = self.structure_prompt(question, text_kg)
@@ -97,19 +102,19 @@ if __name__ == '__main__':
     kg = KnowledgeGraph()
 
     # Load entities and nodes
-    kg.load_entities('../data/countries/entities.tsv')
-    kg.load_core_nodes('../data/countries/nodes.tsv')
+    kg.load_entities('data/countries/entities.tsv')
+    kg.load_core_nodes('data/countries/nodes.tsv')
 
     # Load relations
-    kg.load_relations('../data/countries/relations.tsv')
+    kg.load_relations('data/countries/relations.tsv')
 
     # Load edges and attributes
-    kg.load_edges('../data/countries/edges.tsv')
-    kg.load_attributes('../data/countries/attributes.tsv')
+    kg.load_edges('data/countries/edges.tsv')
+    kg.load_attributes('data/countries/attributes.tsv')
 
     conversion_config = {'type': "list_of_edges"}
     llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
-    pseudonomizer_config = {'pseudonym_file': '../data/countries/pseudonym_data/country_pseudonyms.tsv'}
+    pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
 
     task = AggNeighborPropertiesTask(conversion_config, llm_config, pseudonomizer_config)
     seed_entities = random.sample(list(kg.core_nodes.keys()), 2)
@@ -121,5 +126,5 @@ if __name__ == '__main__':
     task.save_base_data()
     task.save_dataset()
 
-    # task.run()
+    task.run()
     print("Finished..")
