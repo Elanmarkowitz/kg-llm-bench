@@ -41,6 +41,12 @@ class AggByRelationTask(BaseTask):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
             self.data.append(self.construct_instance(kg, seed_entities, instance, max_edges))
 
+    def construct_or_load_base_instances(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
+        """creates base instances (or loads it), save kg and kg_pseudonym"""
+
+    def construct_formatted_instances():
+        """formats the kg and saves the formatted dataset (i.e. with actual prompt)"""
+
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=2)
         
@@ -50,8 +56,6 @@ class AggByRelationTask(BaseTask):
         sampled_kg.graph = sampled_kg.graph.subgraph(entities_with_multiple_edges).copy()
 
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
-
-        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
         
         def agg_edges_by_relation_for(ent, direction='outgoing'):
             if direction == 'outgoing':
@@ -92,6 +96,7 @@ class AggByRelationTask(BaseTask):
         anchor_ent, relation, direction, count = selected_option
 
         question = f"Using the provided knowledge graph only answer the following question. How many {direction} relations of type '{relation}' does {kg.entities[anchor_ent].label} have? Answer in the format 'Answer: <number>'."
+        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
         prompt = self.structure_prompt(question, text_kg)
 
         answer = [str(count)]

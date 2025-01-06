@@ -18,6 +18,7 @@ class BaseTask:
                  conversion_config, 
                  llm_config, 
                  pseudonomizer_config, 
+                 base_dataset_file=None,
                  dataset_file=None, 
                  results_file=None):
         self.task_name = task_name
@@ -54,7 +55,14 @@ class BaseTask:
         if not self.results_file:
             self.results_file = self.dataset_instance_dir / 'results' / f'{self.llm_type}_results.json'
        
-        self.base_data_file = self.task_dir / f'{self.task_name}_base_dataset.json'
+        self.base_data_file = base_dataset_file
+        if not self.base_data_file:
+            self.base_data_file = self.task_dir / f'{self.task_name}_base_dataset.json'
+
+        # if base_dataset_file exists, load it
+        # if dataset_file exists, load it
+        # if results_file exists, throw error
+        # separate out the method for constructing base dataset and constructing formatted instances
 
     def pseudonymize_kg(self, kg: KnowledgeGraph):
         if self.pseudonomizer:
@@ -148,6 +156,8 @@ class BaseTask:
                     if 'kg_path' in instance:
                         kg_path = instance['kg_path']
                         instance['kg'] = KnowledgeGraph().load_kg(kg_path)
+        else:
+            raise ValueError(f"{self.dataset_file} does not exist")
                 
 class TripleRetrievalTask(BaseTask):
 
@@ -160,6 +170,8 @@ class TripleRetrievalTask(BaseTask):
                          results_file)
 
     def run(self):
+        if not self.llm_config:
+            raise ValueError("No LLM configured")
         self.results = deepcopy(self.data)
         for instance in self.results:
             if instance is None:
@@ -189,8 +201,6 @@ class TripleRetrievalTask(BaseTask):
 
         sampled_kg = self.pseudonymize_kg(sampled_kg)
 
-        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
-
         triple_sample = random.choice([triple for triple in sampled_kg.graph.edges(data='relation_id')])
         triple_sample = Triple(head=sampled_kg.entities[triple_sample[0]], 
                                relation=sampled_kg.relations[triple_sample[2]], 
@@ -203,6 +213,7 @@ class TripleRetrievalTask(BaseTask):
         
         question = f"Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
 
+        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
         prompt = self.structure_prompt(question, text_kg)
 
         answer = "Yes" if corruption_type == "None" else "No"
@@ -305,14 +316,23 @@ if __name__ == "__main__":
     task = TripleRetrievalTask(conversion_config, llm_config, pseudonomizer_config)
 
     seed_entities = random.sample(list(kg.core_nodes.keys()), 10)
+    
+    
+    try:
+        task.load_base_dataset()
+    except ValueError:
+        task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
+        task.save_base_data()
+    
+    try:
+        task.load_formatted_dataset()
+    except ValueError:
+        task.construct_formatted_instances()
+        task.save_dataset()
 
-    task.load_dataset()
-
-    # breakpoint()
-
-    task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
-
-    task.save_base_data()
-    task.save_dataset()
+    try:
+        task.run()
+    except ValueError:
+        print("No LLM configured, skipping run")
 
     # task.run()
