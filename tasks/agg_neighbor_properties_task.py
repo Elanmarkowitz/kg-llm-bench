@@ -6,10 +6,10 @@ from samplers import graph_samplers
 import re
 
 
-class AggByRelationTask(BaseTask):
-    """This task involves doing aggregations (count) by relationship for an entity"""
+class AggNeighborPropertiesTask(BaseTask):
+    """This task involves aggregating neighbor properties for an entity"""
     def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
-        super().__init__("AggByRelation",
+        super().__init__("AggNeighborProperties",
                          conversion_config,
                          llm_config,
                          pseudonomizer_config,
@@ -19,7 +19,7 @@ class AggByRelationTask(BaseTask):
     def run(self):
         self.results = deepcopy(self.data)
         for instance in self.results:
-            if instance is None: # To Do: check for the edge cases.
+            if instance is None:
                 continue
             prompt = instance['prompt']
             response = self.model(prompt)
@@ -40,62 +40,36 @@ class AggByRelationTask(BaseTask):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
             self.data.append(self.construct_instance(kg, seed_entities, instance, max_edges))
 
-    def construct_or_load_base_instances(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
-        """creates base instances (or loads it), save kg and kg_pseudonym"""
-
-    def construct_formatted_instances():
-        """formats the kg and saves the formatted dataset (i.e. with actual prompt)"""
-
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=2)
-        
-        # filter ent pairs with only one edge
+
         entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.graph.edges(ent)) > 1}
         sampled_kg.entities = {ent: sampled_kg.entities[ent] for ent in entities_with_multiple_edges}
         sampled_kg.graph = sampled_kg.graph.subgraph(entities_with_multiple_edges).copy()
 
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
-        
-        def agg_edges_by_relation_for(ent, direction='outgoing'):
-            if direction == 'outgoing':
-                edges = sampled_kg.graph.out_edges(ent)
-            elif direction == 'incoming':
-                edges = sampled_kg.graph.in_edges(ent)
-            else:
-                raise ValueError("Direction must be either 'incoming' or 'outgoing'")
-            
-            aggregated_edges = {}  # maps from relation to edges for anchor ent
-            for edge in edges:
-                if direction == 'outgoing':
-                    target = edge[1]
-                else:
-                    target = edge[0]
-                edge_data = sampled_kg.graph.get_edge_data(edge[0], edge[1])
-                relation = edge_data['relation']
-                if relation not in aggregated_edges:
-                    aggregated_edges[relation] = []
-                aggregated_edges[relation].append((ent, target, edge_data))
-            return aggregated_edges
-        
-        anchor_relation_direction_count = []
-        for ent in sampled_kg.entities.keys():
-            agg_edges = agg_edges_by_relation_for(ent, 'outgoing')
-            for rel, edges in agg_edges.items():
-                anchor_relation_direction_count.append((ent, rel, 'outgoing', len(edges)))
-            agg_edges = agg_edges_by_relation_for(ent, 'incoming')
-            for rel, edges in agg_edges.items():
-                anchor_relation_direction_count.append((ent, rel, 'incoming', len(edges)))
 
-        valid_options = [item for item in anchor_relation_direction_count if item[-1] > 1]
-
-        if not valid_options:
-            raise ValueError("No suitable aggregation relations")
-        
-        selected_option = random.choice(valid_options)
-        anchor_ent, relation, direction, count = selected_option
-
-        question = f"Using the provided knowledge graph only answer the following question. How many {direction} relations of type '{relation}' does {kg.entities[anchor_ent].label} have? Answer in the format 'Answer: <number>'."
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
+        anchor_relation_counts = []
+
+        for anchor_ent in sampled_kg.entities.keys():
+            for relation in sampled_kg.relations.values():
+                neighbors_with_relation = [
+                    neighbor for neighbor in sampled_kg.graph.neighbors(anchor_ent)
+                    if sampled_kg.graph.get_edge_data(anchor_ent, neighbor).get('relation') == relation.label
+                ]
+                count = len(neighbors_with_relation)
+                if count > 0:
+                    anchor_relation_counts.append((anchor_ent, relation.label, count))
+
+        if not anchor_relation_counts:
+            raise ValueError("No suitable anchor entity and relation found")
+
+        # Select a random option from the valid anchor_relation_counts
+        selected_option = random.choice(anchor_relation_counts)
+        anchor_ent, relation, count = selected_option
+
+        question = f"Using the provided knowledge graph only answer the following question. How many neighbors of '{kg.entities[anchor_ent].label}' have a '{relation}' relation? Answer in the format 'Answer: <number>'."
         prompt = self.structure_prompt(question, text_kg)
 
         answer = [str(count)]
@@ -106,7 +80,6 @@ class AggByRelationTask(BaseTask):
             'question': question,
             'anchor_ent': anchor_ent,
             'relation': relation,
-            'direction': direction,
             'text_kg': text_kg,
             'answer': answer,
             'seed_entities': seed_entities,
@@ -143,7 +116,7 @@ if __name__ == '__main__':
     llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
     pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
 
-    task = AggByRelationTask(conversion_config, llm_config, pseudonomizer_config)
+    task = AggNeighborPropertiesTask(conversion_config, llm_config, pseudonomizer_config)
     seed_entities = random.sample(list(kg.core_nodes.keys()), 2)
 
     task.load_dataset()
@@ -153,5 +126,5 @@ if __name__ == '__main__':
     task.save_base_data()
     task.save_dataset()
 
-    # task.run()
+    task.run()
     print("Finished..")
