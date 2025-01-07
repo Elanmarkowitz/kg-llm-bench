@@ -120,6 +120,7 @@ class BaseTask:
         print(f"Saving base dataset to {self.base_data_file}")
         save_path = self._save_data(file_path=self.base_data_file, save_data=self.base_data)
         self.base_data_file = save_path
+        self.load_base_dataset()  # load so that we have kg_path and pseudo_kg_path
 
     def load_base_dataset(self):
         print("Loading base data")
@@ -135,7 +136,7 @@ class BaseTask:
 
     def _save_data(self, file_path, save_data):
         save_id = str(uuid.uuid4())[:6]
-        save_data = deepcopy(save_data) or deepcopy(self.data)
+        save_data = deepcopy(save_data)
 
         if not file_path:
             raise ValueError('No filepath given')
