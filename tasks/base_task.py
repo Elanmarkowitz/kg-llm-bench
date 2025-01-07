@@ -81,6 +81,7 @@ class BaseTask:
                                  num_seed_entities=10, 
                                  max_edges=100):
         """Constructs instances for the task."""
+        print("Constructing Base Data")
         for instance in tqdm(range(num_instances)):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
             self.base_data.append(self.construct_instance(kg, seed_entities, max_edges, instance))
@@ -144,15 +145,17 @@ class BaseTask:
                 continue
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
-                id = instance['id']
-                kg_path = self.task_dir/'kg'/f"kg_{save_id}_{id:04d}.pkl"
-                instance['kg_path'] = kg.save_kg(kg_path)
+                if 'kg_path' not in instance:
+                    id = instance['id']
+                    kg_path = self.task_dir/'kg'/f"kg_{save_id}_{id:04d}.pkl"
+                    instance['kg_path'] = kg.save_kg(kg_path)
 
             if 'pseudo_kg' in instance:
                 pseudo_kg: KnowledgeGraph = instance.pop('pseudo_kg')
-                id = instance['id']
-                pseudo_kg_path = self.task_dir/'pseudo_kg'/f"kg_{save_id}_{id:04d}.pkl"
-                instance['pseudo_kg_path'] = pseudo_kg.save_kg(pseudo_kg_path)
+                if 'pseudo_kg_path' not in instance:
+                    id = instance['id']
+                    pseudo_kg_path = self.task_dir/'pseudo_kg'/f"kg_{save_id}_{id:04d}.pkl"
+                    instance['pseudo_kg_path'] = pseudo_kg.save_kg(pseudo_kg_path)
 
         if os.path.exists(file_path):
             file_path = self.get_next_filepath(file_path)
@@ -303,12 +306,12 @@ class TripleRetrievalTask(BaseTask):
         self.formatted_data = deepcopy(self.base_data)
         for instance in self.formatted_data:
             assert 'kg_path' in instance
-            kg = instance['kg']
+            kg = instance.pop('kg')
             triple: Triple = Triple.from_dict(instance['triple'])
             if self.pseudonomizer and 'pseudonomizer_mapping' in instance:
                 self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
                 if 'pseudo_kg' in instance:
-                    kg = instance['pseudo_kg']
+                    kg = instance.pop('pseudo_kg')
                 else:
                     kg = self.pseudonomizer.pseudonymize(kg)
                 triple.head = self.pseudonomizer.map_entity(triple.head)
