@@ -3,7 +3,7 @@ from copy import deepcopy
 import pandas as pd
 import random
 
-from kg_builder import KnowledgeGraph
+from kg_builder import Entity, KnowledgeGraph
 
 class Pseudonymizer:
     def __init__(self, pseudonym_file, seed=1234):
@@ -45,6 +45,17 @@ class Pseudonymizer:
             if entity.entity_id in self.mapping:
                 entity.entity_id = self.mapping[entity.entity_id]
         return pseudo_kg
+    
+    def map_entity(self, entity: Entity) -> Entity:
+        pseudo_ent = deepcopy(entity)
+        pseudo_ent.label = self.mapping.get(entity.entity_id, entity.label)
+        return pseudo_ent
+    
+    def copy_mapping(self):
+        return deepcopy(self.mapping)
+    
+    def load_mapping(self, mapping):
+        self.mapping = mapping
 
 # Example usage:
 # pseudonymizer = Pseudonymizer('country_pseudonyms.tsv')

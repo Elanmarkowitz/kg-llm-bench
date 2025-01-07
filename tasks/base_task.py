@@ -1,13 +1,17 @@
 from copy import deepcopy
 import json
 import os
+from pathlib import Path
 import random
+import re
+import uuid
+from tqdm import tqdm
 import numpy as np
 from kg_builder import KnowledgeGraph, KnowledgeGraphTextPresenter, Triple
 from llm.llm import LLM
 from pseudonymizer import Pseudonymizer
 from samplers import graph_samplers
-from pathlib import PosixPath
+from pathlib import Path
 
 class BaseTask:
     """Tasks are the main function that runs things. They handle sampling the kg, pseudonimizing, creating task question, 
@@ -37,19 +41,20 @@ class BaseTask:
             self.pseudonomizer = None
         
         self.results = []
-        self.data = []
-        self.task_dir = PosixPath('benchmark_data') / task_name
+        self.base_data = []
+        self.formatted_data = []
+
+        self.task_dir = Path('benchmark_data') / task_name
         os.makedirs(self.task_dir, exist_ok=True)
+        os.makedirs(self.task_dir/'kg', exist_ok=True)
+        os.makedirs(self.task_dir/'pseudo_kg', exist_ok=True)
 
         self.dataset_instance_dir = self.task_dir / self.text_presenter_type
-
-        os.makedirs(os.path.join(self.dataset_instance_dir, 'results'), exist_ok=True)
-        os.makedirs(os.path.join(self.task_dir, 'kg'), exist_ok=True)
-        os.makedirs(os.path.join(self.dataset_instance_dir, 'kg'), exist_ok=True)
+        os.makedirs(self.dataset_instance_dir/'results', exist_ok=True)
 
         self.dataset_file = dataset_file
         if not self.dataset_file:
-            self.dataset_file = os.path.join(self.dataset_instance_dir, f'{task_name}_dataset.json')
+            self.dataset_file = self.dataset_instance_dir / f'{task_name}_dataset.json'
 
         self.results_file = results_file
         if not self.results_file:
@@ -70,61 +75,69 @@ class BaseTask:
             self.pseudonomizer.create_mapping(kg)
             return self.pseudonomizer.pseudonymize(kg)
         return kg
-
-    def run(self):
-        raise NotImplementedError('You must implement the run method in your task class')
     
-    def construct_instances(self, kg: KnowledgeGraph, num_instances=10):
-        raise NotImplementedError('You must implement the construct_instances method in your task class')
+    def construct_base_instances(self, kg: KnowledgeGraph,
+                                 num_instances=10, 
+                                 num_seed_entities=10, 
+                                 max_edges=100):
+        """Constructs instances for the task."""
+        for instance in tqdm(range(num_instances)):
+            seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
+            self.base_data.append(self.construct_instance(kg, seed_entities, max_edges, instance))
+    
+    def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
+        raise NotImplementedError('You must implement the construct_instance method in your task class')
 
-    def reformat_instances(self):
+    def construct_formatted_instances(self):
         """Should reformat self.data using self.text_presenter and self.pseudonomizer"""
         raise NotImplementedError('You must implement the reformat_instances method in your task class')
+    
+    def run(self):
+        if not self.llm_config:
+            raise ValueError("No LLM configured")
+        self.results = deepcopy(self.formatted_data)
+        for instance in self.results:
+            if instance is None:
+                continue
+            prompt = instance['prompt']
+            response = self.model(prompt)
+            instance['response'] = response
+            instance['score'] = self.evaluate_response(response, instance['answer'])
+        self.save_results()
 
     def save_results(self):
-        self.save_data(file_path=self.results_file, save_data=self.results)
+        print(f"Saving results to {self.results_file}")
+        save_path = self._save_data(file_path=self.results_file, save_data=self.results)
+        self.results_file = save_path
 
-    def save_dataset(self):
-        self.save_data(file_path=self.dataset_file, save_data=self.data)
+    def save_formatted_dataset(self):
+        print(f"Saving formatted dataset to {self.dataset_file}")
+        save_path = self._save_data(file_path=self.dataset_file, save_data=self.formatted_data)
+        self.dataset_file = save_path
 
-    def save_base_data(self):
-        file_path = self.base_data_file
-        save_data = deepcopy(self.data)
+    def save_base_dataset(self):
+        print(f"Saving base dataset to {self.base_data_file}")
+        save_path = self._save_data(file_path=self.base_data_file, save_data=self.base_data)
+        self.base_data_file = save_path
 
-        for instance in save_data:
-            if instance is None: # Pass on None cases
-                continue
-            if 'kg' in instance:
-                kg: KnowledgeGraph = instance.pop('kg')
-                id = instance['id']
-                kg_path = os.path.join(self.task_dir, 'kg', f"kg_{id:04d}.pkl") #TODO: We need a way to have different kg folders if we create new versions of a task
-                instance['kg_path'] = kg.save_kg(kg_path)
-            
-            if 'text_kg' in instance:
-                instance.pop('text_kg')
-            
-            if 'prompt' in instance:
-                instance.pop('prompt')
+    def load_base_dataset(self):
+        print("Loading base data")
+        self.base_data = self._load_data(self.base_data_file)
 
-        if os.path.exists(file_path):
-            filename = os.path.split(file_path)[-1]
-            base, ext = os.path.splitext(filename)
-            counter = 1
-            new_dataset_file = f"{base}_{counter}{ext}"
-            while os.path.exists(new_dataset_file):
-                counter += 1
-                new_dataset_file = f"{base}_{counter}{ext}"
-            self.base_data_file = self.task_dir / new_dataset_file
-            file_path = self.base_data_file
-        with open(file_path, 'w') as f:
-            json.dump(save_data, f, cls=CustomJSONEncoder, indent=4)
+    def load_formatted_dataset(self):
+        print("Loading formatted data")
+        self.formatted_data = self._load_data(self.dataset_file)
 
-    def save_data(self, file_path=None, save_data=None):
-        file_path = file_path or self.dataset_file
+    def load_results(self):
+        print("Loading results data")
+        self.results = self._load_data(self.results_file)
+
+    def _save_data(self, file_path, save_data):
+        save_id = str(uuid.uuid4())[:6]
         save_data = deepcopy(save_data) or deepcopy(self.data)
 
         if not file_path:
-            raise ValueError('Dataset file path not set. Please set the dataset file path before saving the dataset.')
+            raise ValueError('No filepath given')
         
         for instance in save_data:
             if instance is None:
@@ -132,32 +145,84 @@ class BaseTask:
             if 'kg' in instance:
                 kg: KnowledgeGraph = instance.pop('kg')
                 id = instance['id']
-                kg_path = os.path.join(self.dataset_instance_dir, 'kg', f"kg_{id:04d}.pkl")
+                kg_path = self.task_dir/'kg'/f"kg_{save_id}_{id:04d}.pkl"
                 instance['kg_path'] = kg.save_kg(kg_path)
 
+            if 'pseudo_kg' in instance:
+                pseudo_kg: KnowledgeGraph = instance.pop('pseudo_kg')
+                id = instance['id']
+                pseudo_kg_path = self.task_dir/'pseudo_kg'/f"kg_{save_id}_{id:04d}.pkl"
+                instance['pseudo_kg_path'] = pseudo_kg.save_kg(pseudo_kg_path)
+
         if os.path.exists(file_path):
-            base, ext = os.path.splitext(file_path)
-            counter = 1
-            new_dataset_file = f"{base}_{counter}{ext}"
-            while os.path.exists(new_dataset_file):
-                counter += 1
-                new_dataset_file = f"{base}_{counter}{ext}"
-            self.dataset_file = new_dataset_file
+            file_path = self.get_next_filepath(file_path)
         with open(file_path, 'w') as f:
             json.dump(save_data, f, cls=CustomJSONEncoder, indent=4)
+        return file_path
     
-    def load_dataset(self):
-        if self.dataset_file and os.path.exists(self.dataset_file):
-            with open(self.dataset_file, 'r') as f:
-                self.data = json.load(f)
-                for instance in self.data:
-                    if instance is None:
-                        continue
-                    if 'kg_path' in instance:
-                        kg_path = instance['kg_path']
-                        instance['kg'] = KnowledgeGraph().load_kg(kg_path)
+    @staticmethod
+    def get_next_filepath(path: Path) -> Path:
+        """
+        Get the next available filename by incrementing a number suffix.
+        If the file doesn't exist, returns the original path.
+        If the file exists, finds the next available number.
+        """
+        if not path.exists():
+            return path
+        
+        parent = path.parent
+        stem = path.stem
+        suffix = path.suffix
+        
+        # Check if stem already ends with _## (any number of digits)
+        pattern = r"(.+?)_(\d+)$"
+        match = re.match(pattern, stem)
+        
+        if match:
+            # If filename already has a number, start from that base
+            base = match.group(1)
+            # Find all existing numbered files with same base
+            existing_files = sorted([
+                int(re.match(pattern, p.stem).group(2))
+                for p in parent.glob(f"{base}_[0-9]*{suffix}")
+                if re.match(pattern, p.stem)
+            ])
         else:
-            raise ValueError(f"{self.dataset_file} does not exist")
+            base = stem
+            # Find all existing numbered files
+            existing_files = sorted([
+                int(re.match(pattern, p.stem).group(2))
+                for p in parent.glob(f"{base}_[0-9]*{suffix}")
+                if re.match(pattern, p.stem)
+            ])
+        
+        # Find first available number
+        if not existing_files:
+            return parent / f"{base}_01{suffix}"
+        
+        # Find first gap in sequence, or use max + 1
+        for i, num in enumerate(existing_files, start=1):
+            if i != num:
+                return parent / f"{base}_{i:02d}{suffix}"
+        return parent / f"{base}_{(max(existing_files) + 1):02d}{suffix}"
+
+    def _load_data(self, filepath):
+        if not filepath or not os.path.exists(filepath):
+            raise ValueError(f"{filepath} does not exist, cannot load")
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+            for instance in data:
+                if instance is None:
+                    continue
+                if 'kg_path' in instance:
+                    kg_path = instance['kg_path']
+                    instance['kg'] = KnowledgeGraph().load_kg(kg_path)
+                if 'pseudo_kg_path' in instance:
+                    pseudo_kg_path = instance['pseudo_kg_path']
+                    instance['pseudo_kg'] = KnowledgeGraph().load_kg(pseudo_kg_path)
+        return data
+        
+            
                 
 class TripleRetrievalTask(BaseTask):
 
@@ -168,38 +233,16 @@ class TripleRetrievalTask(BaseTask):
                          pseudonomizer_config, 
                          dataset_file, 
                          results_file)
-
-    def run(self):
-        if not self.llm_config:
-            raise ValueError("No LLM configured")
-        self.results = deepcopy(self.data)
-        for instance in self.results:
-            if instance is None:
-                continue
-            prompt = instance['prompt']
-            response = self.model(prompt)
-            instance['response'] = response
-            instance['score'] = self.evaluate_response(response, instance['answer'])
-        self.save_results()
     
     def evaluate_response(self, response, answer):
         return 1.0 if response == answer else 0.0
-
-    def construct_instances(self, kg: KnowledgeGraph, 
-                            num_instances=10, 
-                            num_seed_entities=10, 
-                            max_edges=100):
-        """Constructs instances for the task."""
-        for instance in range(num_instances):
-            seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            self.data.append(self.construct_instance(kg, seed_entities, max_edges, instance))
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
         # Retrieve triples based on seed entities
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
-        sampled_kg = self.pseudonymize_kg(sampled_kg)
+        pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
         triple_sample = random.choice([triple for triple in sampled_kg.graph.edges(data='relation_id')])
         triple_sample = Triple(head=sampled_kg.entities[triple_sample[0]], 
@@ -213,29 +256,22 @@ class TripleRetrievalTask(BaseTask):
         
         question = f"Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
 
-        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
-        prompt = self.structure_prompt(question, text_kg)
-
         answer = "Yes" if corruption_type == "None" else "No"
 
         return {
             'id': instance_id,
-            'prompt': prompt,
             'question': question,
-            'text_kg': text_kg,
             'triple': triple,
             'answer': answer,
             'corruption_type': corruption_type,
             'seed_entities': seed_entities,
-            'kg': sampled_kg # TODO: Find way to save kg
+            'kg': sampled_kg,
+            'pseudo_kg': pseudo_kg,
+            'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
     
-    def reformat_instances(self):
-        """Reformats self.data using self.text_presenter."""
-        for instance in self.data:
-            kg = instance['kg']
-            text_kg = self.text_presenter.to_list_of_edges(kg)
-            instance['text_kg'] = text_kg
+    def question(self, triple):
+        return f"Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
 
     def corrupt_triplet(self, triple: Triple, kg: KnowledgeGraph):
         corrupted_triplet = deepcopy(triple)
@@ -262,6 +298,27 @@ class TripleRetrievalTask(BaseTask):
             corrupted_triplet.relation = random.choice(candidate_relations)
 
         return corrupted_triplet, corruption_type
+
+    def construct_formatted_instances(self):
+        self.formatted_data = deepcopy(self.base_data)
+        for instance in self.formatted_data:
+            assert 'kg_path' in instance
+            kg = instance['kg']
+            triple: Triple = Triple.from_dict(instance['triple'])
+            if self.pseudonomizer and 'pseudonomizer_mapping' in instance:
+                self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
+                if 'pseudo_kg' in instance:
+                    kg = instance['pseudo_kg']
+                else:
+                    kg = self.pseudonomizer.pseudonymize(kg)
+                triple.head = self.pseudonomizer.map_entity(triple.head)
+                triple.tail = self.pseudonomizer.map_entity(triple.tail)
+                # answer is Yes/No so no change needed
+                
+            text_kg = self.text_presenter.convert(kg)
+            instance['text_kg'] = text_kg
+            instance['prompt'] = self.structure_prompt(self.question(triple), text_kg)
+            # answer is Yes/No so no change needed
 
     def structure_prompt(self, question, text_kg):
         intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
@@ -321,18 +378,17 @@ if __name__ == "__main__":
     try:
         task.load_base_dataset()
     except ValueError:
-        task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
-        task.save_base_data()
+        task.construct_base_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
+        task.save_base_dataset()
     
     try:
         task.load_formatted_dataset()
     except ValueError:
         task.construct_formatted_instances()
-        task.save_dataset()
+        task.save_formatted_dataset()
 
     try:
         task.run()
     except ValueError:
         print("No LLM configured, skipping run")
 
-    # task.run()

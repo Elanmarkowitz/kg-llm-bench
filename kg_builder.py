@@ -25,6 +25,7 @@ class Entity:
             'label': self.label
         }
 
+    @classmethod
     def from_dict(cls, data):
         return cls(data['entity_id'], data['wikidata_id'], data['label'])
 
@@ -141,7 +142,7 @@ class KnowledgeGraph:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'wb') as file:
             pickle.dump(data, file)
-        return file_path
+        return str(file_path)
 
     def load_kg(self, file_path):
         with open(file_path, 'rb') as file:
