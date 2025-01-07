@@ -236,6 +236,12 @@ class KnowledgeGraph:
                     queue.append((neighbor, path + [neighbor]))
 
         return shortest_paths
+    
+    def __repr__(self):
+        num_edges = len(self.graph.edges)
+        num_entities = len(self.entities)
+        num_relations = len(self.relations)
+        return f"KnowledgeGraph(num_edges={num_edges}, num_entities={num_entities}, num_relations={num_relations})"
         
 
 
