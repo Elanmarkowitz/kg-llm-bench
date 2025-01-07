@@ -188,6 +188,20 @@ class KnowledgeGraph:
 
     def has_edge(self, e1, e2):
         return self.graph.has_edge(e1, e2)
+    
+        
+    def get_neighbors(self, ent, fwd=True, bkw=True):
+            assert fwd or bkw
+            results = set()
+            if bkw: 
+                predecessors = set(self.graph.predecessors(ent))
+                results = results.union(predecessors)
+    
+            if fwd:
+                successors = set(self.graph.successors(ent))
+                results = results.union(successors)
+        
+            return results
 
     def get_shortest_paths(self, ent1, ent2):
         """Finds all shortest paths between two entities using BFS."""
