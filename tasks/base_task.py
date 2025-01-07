@@ -82,9 +82,11 @@ class BaseTask:
                                  max_edges=100):
         """Constructs instances for the task."""
         print("Constructing Base Data")
-        for instance in tqdm(range(num_instances)):
+        for instance_id in tqdm(range(num_instances)):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            self.base_data.append(self.construct_instance(kg, seed_entities, max_edges, instance))
+            self.base_data.append(
+                self.construct_instance(kg, seed_entities, max_edges=max_edges, instance_id=instance_id)
+            )
     
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
         raise NotImplementedError('You must implement the construct_instance method in your task class')
