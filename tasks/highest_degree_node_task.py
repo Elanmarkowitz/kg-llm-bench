@@ -33,8 +33,11 @@ class HighestDegreeNodeTask(BaseTask):
         extracted_string = match.group(1) if match else None
         if extracted_string is None:
             return 0  # or some other logic to handle no string found
-        answer = answer[0].replace("Answer:", "").strip()
-        return 1 if extracted_string == answer else 0
+        for ans in answer:
+            if extracted_string == ans:
+                return 1
+        return 0
+
 
     def construct_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
         """Constructs instances for the task."""
@@ -51,18 +54,21 @@ class HighestDegreeNodeTask(BaseTask):
         # Determine the highest degree node by randomly selecting the direction of the edge
         edge_direction = random.choice(['outgoing', 'incoming', 'total'])
         if edge_direction == 'outgoing':
-            highest_degree_node = max(sampled_kg.graph.nodes, key=lambda n: sampled_kg.graph.out_degree(n))
+            max_degree = max(sampled_kg.graph.out_degree(n) for n in sampled_kg.graph.nodes)
+            highest_degree_nodes = [n for n in sampled_kg.graph.nodes if sampled_kg.graph.out_degree(n) == max_degree]
         elif edge_direction == 'incoming':
-            highest_degree_node = max(sampled_kg.graph.nodes, key=lambda n: sampled_kg.graph.in_degree(n))
+            max_degree = max(sampled_kg.graph.in_degree(n) for n in sampled_kg.graph.nodes)
+            highest_degree_nodes = [n for n in sampled_kg.graph.nodes if sampled_kg.graph.in_degree(n) == max_degree]
         else:
-            highest_degree_node = max(sampled_kg.graph.nodes, key=lambda n: sampled_kg.graph.degree(n))
+            max_degree = max(sampled_kg.graph.degree(n) for n in sampled_kg.graph.nodes)
+            highest_degree_nodes = [n for n in sampled_kg.graph.nodes if sampled_kg.graph.degree(n) == max_degree]
 
-        highest_degree_label = kg.entities[highest_degree_node].label
+        highest_degree_labels = [kg.entities[node].label for node in highest_degree_nodes]
 
         question = f"Using the provided knowledge graph only answer the following question. Which entity has the highest number of {edge_direction} relations in the provided knowledge graph? Answer in the format 'Answer: <entity>'."
         prompt = self.structure_prompt(question, text_kg)
 
-        answer = [f"Answer: {highest_degree_label}"]
+        answer = highest_degree_labels
 
         return {
             'id': instance_id,
@@ -70,6 +76,8 @@ class HighestDegreeNodeTask(BaseTask):
             'question': question,
             'text_kg': text_kg,
             'answer': answer,
+            'max_degree': max_degree,
+            'edge_direction': edge_direction,
             'seed_entities': seed_entities,
             'kg': sampled_kg
         }
