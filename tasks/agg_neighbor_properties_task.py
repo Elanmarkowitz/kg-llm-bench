@@ -1,7 +1,7 @@
 from tasks.base_task import BaseTask
 from copy import deepcopy
 import random
-from kg_builder import Entity, KnowledgeGraph
+from kg_builder import Entity, KnowledgeGraph, Relation
 from samplers import graph_samplers
 import re
 
@@ -60,22 +60,22 @@ class AggNeighborPropertiesTask(BaseTask):
         selected_option = random.choice(options)
         anchor_ent, relation, count = selected_option
 
-        question = self.question(anchor_ent, relation)
-        text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
-        prompt = self.structure_prompt(question, text_kg)
+        question = self.question(sampled_kg.entities[anchor_ent], relation)
+
+        pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
         answer = [str(count)]
 
         return {
             'id': instance_id,
-            'prompt': prompt,
             'question': question,
             'anchor_ent': sampled_kg.entities[anchor_ent],
             'relation': relation,
-            'text_kg': text_kg,
             'answer': answer,
             'seed_entities': seed_entities,
-            'kg': sampled_kg
+            'kg': sampled_kg,
+            'pseudo_kg': pseudo_kg,
+            'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
 
     def ent_has_relation(self, sampled_kg, anchor_ent, relation):
@@ -129,8 +129,8 @@ class AggNeighborPropertiesTask(BaseTask):
             instance['question'] = question
             # answer is a count so no change needed
 
-    def question(self, anchor_ent, relation):
-        return f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{kg.entities[anchor_ent].label}' have an outgoing property of type '{relation}' in the knowledge graph? Answer in the format 'Answer: <number>'."
+    def question(self, anchor_ent: Entity, relation: str):
+        return f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{anchor_ent.label}' have an outgoing property of type '{relation}' in the knowledge graph? You must answer in the format 'Answer: <number>'."
 
     def structure_prompt(self, question, text_kg):
         intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
