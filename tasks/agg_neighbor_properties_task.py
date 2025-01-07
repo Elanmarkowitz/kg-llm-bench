@@ -1,7 +1,7 @@
 from tasks.base_task import BaseTask
 from copy import deepcopy
 import random
-from kg_builder import KnowledgeGraph
+from kg_builder import Entity, KnowledgeGraph
 from samplers import graph_samplers
 import re
 
@@ -59,7 +59,7 @@ class AggNeighborPropertiesTask(BaseTask):
         selected_option = random.choice(options)
         anchor_ent, relation, count = selected_option
 
-        question = f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{kg.entities[anchor_ent].label}' have an outgoing property of type '{relation}' in the knowledge graph? Answer in the format 'Answer: <number>'."
+        question = self.question(anchor_ent, relation)
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
         prompt = self.structure_prompt(question, text_kg)
 
@@ -100,13 +100,36 @@ class AggNeighborPropertiesTask(BaseTask):
                 
         return False
 
+    def construct_formatted_instances(self):
+        self.formatted_data = deepcopy(self.base_data)
+        for instance in self.formatted_data:
+            assert 'kg_path' in instance
+            kg = instance.pop('kg')
+            instance['anchor_ent'] = Entity.from_dict(instance['anchor_ent'])
+            if self.pseudonomizer:
+                if 'pseudo_kg' in instance:
+                    kg = instance.pop('pseudo_kg')
+                else:
+                    if not 'pseudonomizer_mapping' in instance:
+                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
+                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
+                    kg = self.pseudonomizer.pseudonymize(kg)
+                    # task specific conversions
+                    instance['anchor_ent'] = self.pseudonomizer.map_entity(instance['anchor'])
+                # answer is Yes/No so no change needed
+            
+            question = self.question(instance['anchor_ent'], instance['relation'])
+            text_kg = self.text_presenter.convert(kg)
 
-    def reformat_instances(self):
-        """Reformats self.data using self.text_presenter."""
-        for instance in self.data:
-            kg = instance['kg']
-            text_kg = self.text_presenter.to_list_of_edges(kg)
+            text_kg = self.text_presenter.convert(kg)
             instance['text_kg'] = text_kg
+            question = self.question(instance['anchor_ent'], instance['relation'])
+            instance['prompt'] = self.structure_prompt(question, text_kg)
+            instance['question'] = question
+            # answer is a count so no change needed
+
+    def question(self, anchor_ent, relation):
+        return f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{kg.entities[anchor_ent].label}' have an outgoing property of type '{relation}' in the knowledge graph? Answer in the format 'Answer: <number>'."
 
     def structure_prompt(self, question, text_kg):
         intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
@@ -134,12 +157,22 @@ if __name__ == '__main__':
     task = AggNeighborPropertiesTask(conversion_config, llm_config, pseudonomizer_config)
     seed_entities = random.sample(list(kg.core_nodes.keys()), 2)
 
-    task.load_dataset()
+    try:
+        task.load_base_dataset()
+    except ValueError:
+        task.construct_base_instances(kg, num_instances=10, num_seed_entities=1, max_edges=500)
+        task.save_base_dataset()
+    
+    try:
+        task.load_formatted_dataset()
+    except ValueError:
+        task.construct_formatted_instances()
+        task.save_formatted_dataset()
 
-    task.construct_instances(kg, num_instances=10, num_seed_entities=1, max_edges=500)
-
-    task.save_base_data()
-    task.save_dataset()
+    try:
+        task.run()
+    except ValueError:
+        print("No LLM configured, skipping run")
 
     # task.run()
     print("Finished..")
