@@ -89,7 +89,7 @@ def filter_low_degree_entities(kg: KnowledgeGraph, threshold=2):
 
 
 def refine_entities_and_relations_for_sample(kg: KnowledgeGraph) -> KnowledgeGraph:
-    selected_nodes = kg.graph.nodes
+    selected_nodes = set(source for source,_ in kg.graph.edges).union(set([dest for _,dest in kg.graph.edges]))
     selected_relations = set(rel for _, _, rel in kg.graph.edges(data='relation'))
     kg.entities = {idx: ent for idx, ent in kg.entities.items() if idx in selected_nodes}
     kg.core_nodes = {idx: ent for idx, ent in kg.core_nodes.items() if idx in selected_nodes}

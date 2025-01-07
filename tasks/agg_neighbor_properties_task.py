@@ -52,11 +52,14 @@ class AggNeighborPropertiesTask(BaseTask):
         text_kg = self.text_presenter.to_list_of_edges(sampled_kg)
         anchor_relation_counts = []
 
-        for anchor_ent in sampled_kg.entities.keys():
+        for anchor_ent in sampled_kg.core_nodes.keys():
+            # get neighbors
+            neighbors = sampled_kg.get_neighbors(anchor_ent, fwd=True, bkw=True)
             for relation in sampled_kg.relations.values():
+                # get count of neighbors that have an edge of type relation
                 neighbors_with_relation = [
-                    neighbor for neighbor in sampled_kg.graph.neighbors(anchor_ent)
-                    if sampled_kg.graph.get_edge_data(anchor_ent, neighbor).get('relation') == relation.label
+                    neighbor for neighbor in neighbors  # note this is only outgoing edges
+                    if self.ent_has_relation(sampled_kg, neighbor, relation)
                 ]
                 count = len(neighbors_with_relation)
                 if count > 0:
@@ -66,10 +69,14 @@ class AggNeighborPropertiesTask(BaseTask):
             raise ValueError("No suitable anchor entity and relation found")
 
         # Select a random option from the valid anchor_relation_counts
-        selected_option = random.choice(anchor_relation_counts)
+        counts_set =  set([count for _,_,count in anchor_relation_counts])
+        selected_count = random.choice(list(counts_set))
+        options = [(anchor, relation, count) for anchor, relation, count in anchor_relation_counts
+                   if count == selected_count]
+        selected_option = random.choice(options)
         anchor_ent, relation, count = selected_option
 
-        question = f"Using the provided knowledge graph only answer the following question. How many neighbors of '{kg.entities[anchor_ent].label}' have a '{relation}' relation? Answer in the format 'Answer: <number>'."
+        question = f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{kg.entities[anchor_ent].label}' have an outgoing property of type '{relation}' in the knowledge graph? Answer in the format 'Answer: <number>'."
         prompt = self.structure_prompt(question, text_kg)
 
         answer = [str(count)]
@@ -85,6 +92,29 @@ class AggNeighborPropertiesTask(BaseTask):
             'seed_entities': seed_entities,
             'kg': sampled_kg
         }
+
+    def ent_has_relation(self, sampled_kg, anchor_ent, relation):
+        """
+        Return true if the anchor ent has an outgoing edge of type relation
+        
+        Args:
+            sampled_kg: Knowledge graph object containing the DiGraph
+            anchor_ent: The entity node to check neighbors for
+            relation: Relation object containing the label to match
+        
+        Returns:
+            bool: True if the entity has at least one outgoing edge of the specified relation type
+        """
+        # Get all successors (nodes with incoming edges from anchor_ent)
+        successors = sampled_kg.graph.successors(anchor_ent)
+        
+        # Check each successor for the specified relation
+        for neighbor in successors:
+            edge_data = sampled_kg.graph.get_edge_data(anchor_ent, neighbor)
+            if edge_data and edge_data.get('relation') == relation.label:
+                return True
+                
+        return False
 
     def reformat_instances(self):
         """Reformats self.data using self.text_presenter."""
@@ -121,10 +151,10 @@ if __name__ == '__main__':
 
     task.load_dataset()
 
-    task.construct_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
+    task.construct_instances(kg, num_instances=10, num_seed_entities=1, max_edges=500)
 
     task.save_base_data()
     task.save_dataset()
 
-    task.run()
+    # task.run()
     print("Finished..")
