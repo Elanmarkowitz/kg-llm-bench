@@ -308,11 +308,13 @@ class TripleRetrievalTask(BaseTask):
             assert 'kg_path' in instance
             kg = instance.pop('kg')
             triple: Triple = Triple.from_dict(instance['triple'])
-            if self.pseudonomizer and 'pseudonomizer_mapping' in instance:
-                self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
+            if self.pseudonomizer:
                 if 'pseudo_kg' in instance:
                     kg = instance.pop('pseudo_kg')
                 else:
+                    if not 'pseudonomizer_mapping' in instance:
+                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
+                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
                     kg = self.pseudonomizer.pseudonymize(kg)
                 triple.head = self.pseudonomizer.map_entity(triple.head)
                 triple.tail = self.pseudonomizer.map_entity(triple.tail)
@@ -321,6 +323,7 @@ class TripleRetrievalTask(BaseTask):
             text_kg = self.text_presenter.convert(kg)
             instance['text_kg'] = text_kg
             instance['prompt'] = self.structure_prompt(self.question(triple), text_kg)
+            instance['question'] = self.question(triple)
             # answer is Yes/No so no change needed
 
     def structure_prompt(self, question, text_kg):
