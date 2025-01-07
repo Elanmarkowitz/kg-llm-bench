@@ -35,7 +35,7 @@ class AggNeighborPropertiesTask(BaseTask):
 
         anchor_relation_counts = []
 
-        for anchor_ent in sampled_kg.core_nodes.keys():
+        for anchor_ent in sampled_kg.entities.keys():
             # get neighbors
             neighbors = sampled_kg.get_neighbors(anchor_ent, fwd=True, bkw=True)
             for relation in sampled_kg.relations.values():
