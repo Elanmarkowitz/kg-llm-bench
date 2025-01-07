@@ -26,10 +26,11 @@ class AggNeighborPropertiesTask(BaseTask):
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=2)
-
-        entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.graph.edges(ent)) > 1}
+        
+        entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.get_neighbors(ent)) > 1}
         sampled_kg.entities = {ent: sampled_kg.entities[ent] for ent in entities_with_multiple_edges}
         sampled_kg.graph = sampled_kg.graph.subgraph(entities_with_multiple_edges).copy()
+        sampled_kg = graph_samplers.refine_entities_and_relations_for_sample(sampled_kg)
 
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
@@ -69,7 +70,7 @@ class AggNeighborPropertiesTask(BaseTask):
             'id': instance_id,
             'prompt': prompt,
             'question': question,
-            'anchor_ent': anchor_ent,
+            'anchor_ent': sampled_kg.entities[anchor_ent],
             'relation': relation,
             'text_kg': text_kg,
             'answer': answer,
