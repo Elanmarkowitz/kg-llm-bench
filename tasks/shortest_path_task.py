@@ -34,7 +34,7 @@ class ShortestPathTask(BaseTask):
                 continue
         return 0.0
 
-    def construct_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
+    def construct_base_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
         """Constructs instances for the task."""
         print("Constructing base data")
         instances = 0
@@ -43,7 +43,7 @@ class ShortestPathTask(BaseTask):
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
             instance = self.construct_instance(kg, seed_entities, instances, max_edges)
             if instance:
-                self.data.append(instance)
+                self.base_data.append(instance)
                 instances += 1
                 pbar.update()
 
@@ -107,7 +107,7 @@ class ShortestPathTask(BaseTask):
             kg = instance.pop('kg')
 
             # task specific read instructions
-            instance['answer_paths'] = [[Entity.from_dict(e) for e in path] for path in instance['answer_paths']]
+            instance['shortest_paths'] = [[Entity.from_dict(e) for e in path] for path in instance['shortest_paths']]
 
             if self.pseudonomizer:
                 if 'pseudo_kg' in instance:
@@ -118,11 +118,11 @@ class ShortestPathTask(BaseTask):
                     self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
                     kg = self.pseudonomizer.pseudonymize(kg)
                     # task specific pseudonomize conversions
-                    instance['answer_paths'] = [[self.pseudonomizer.map_entity(e) for e in path] for path in instance['answer_paths']]
+                    instance['shortest_paths'] = [[self.pseudonomizer.map_entity(e) for e in path] for path in instance['shortest_paths']]
             
             # construct answer, question, text_kg, and prompt
-            instance['answer'] = self.answer(instance['answer_paths'])
-            question = self.question(instance['answer_paths'])
+            instance['answer'] = self.answer(instance['shortest_paths'])
+            question = self.question(instance['shortest_paths'])
             text_kg = self.text_presenter.convert(kg)
 
             instance['text_kg'] = text_kg
