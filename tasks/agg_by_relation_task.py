@@ -27,7 +27,7 @@ class AggByRelationTask(BaseTask):
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=2)
         
         # filter ent pairs with only one edge
-        entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.graph.edges(ent)) > 1}
+        entities_with_multiple_edges = {ent for ent in sampled_kg.entities if len(sampled_kg.get_neighbors(ent)) > 1}
         sampled_kg.entities = {ent: sampled_kg.entities[ent] for ent in entities_with_multiple_edges}
         sampled_kg.graph = sampled_kg.graph.subgraph(entities_with_multiple_edges).copy()
 
@@ -68,6 +68,10 @@ class AggByRelationTask(BaseTask):
         if not valid_options:
             raise ValueError("No suitable aggregation relations")
         
+        # select answer from possible answers prior to choosing question inputs (creates more diversity)
+        answer_options = set([item[-1] for item in anchor_relation_direction_count])
+        selected_answer = random.choice(list(answer_options))
+        valid_options = [item for item in anchor_relation_direction_count if item[-1] == selected_answer]
         selected_option = random.choice(valid_options)
         anchor_ent, relation, direction, count = selected_option
         anchor_ent = sampled_kg.entities[anchor_ent]
@@ -152,7 +156,7 @@ if __name__ == '__main__':
     # try:
     #     task.load_base_dataset()
     # except ValueError:
-    task.construct_base_instances(kg, num_instances=10, num_seed_entities=1, max_edges=100)
+    task.construct_base_instances(kg, num_instances=10, num_seed_entities=1, max_edges=200)
     task.save_base_dataset()
     
     try:
