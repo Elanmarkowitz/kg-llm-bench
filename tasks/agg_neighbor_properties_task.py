@@ -122,9 +122,7 @@ class AggNeighborPropertiesTask(BaseTask):
             question = self.question(instance['anchor_ent'], instance['relation'])
             text_kg = self.text_presenter.convert(kg)
 
-            text_kg = self.text_presenter.convert(kg)
             instance['text_kg'] = text_kg
-            question = self.question(instance['anchor_ent'], instance['relation'])
             instance['prompt'] = self.structure_prompt(question, text_kg)
             instance['question'] = question
             # answer is a count so no change needed
