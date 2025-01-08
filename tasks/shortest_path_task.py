@@ -130,16 +130,13 @@ class ShortestPathTask(BaseTask):
             instance['question'] = question
             # answer is a count so no change needed
 
-    @staticmethod
-    def question(answer_paths: List[List[Entity]]):
+    def question(self, answer_paths: List[List[Entity]]):
         return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"
 
-    @staticmethod
-    def answer(answer_paths: List[List[Entity]]):
-        return [f"SHORTEST PATH: {str(path)}" for path in answer_paths]
+    def answer(self, answer_paths: List[List[Entity]]):
+        return [f"SHORTEST PATH: {str(self.ent_path_to_label_path(path))}" for path in answer_paths]
 
-    @staticmethod
-    def ent_path_to_label_path(path: List[Entity]):
+    def ent_path_to_label_path(self, path: List[Entity]):
         return [e.label for e in path]
 
     def structure_prompt(self, question, text_kg):
@@ -169,11 +166,11 @@ if __name__ == '__main__':
 
     task = ShortestPathTask(conversion_config, llm_config, pseudonomizer_config)
 
-    try:
-        task.load_base_dataset()
-    except ValueError:
-        task.construct_base_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
-        task.save_base_dataset()
+    # try:
+    #     task.load_base_dataset()
+    # except ValueError:
+    task.construct_base_instances(kg, num_instances=10, num_seed_entities=10, max_edges=100)
+    task.save_base_dataset()
     
     try:
         task.load_formatted_dataset()
