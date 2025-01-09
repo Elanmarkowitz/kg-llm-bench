@@ -1,6 +1,6 @@
 from typing import List
 from tqdm import tqdm
-from tasks.base_task import BaseTask
+from tasks.base_task import BaseTask, InstanceConstructionError
 from copy import deepcopy
 import os
 import random
@@ -38,10 +38,11 @@ class ShortestPathTask(BaseTask):
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
+        
         shortest_paths = kg.get_shortest_paths(ent1, ent2, depth=7)
 
         if not shortest_paths:
-            raise ValueError("No shortest path found between seed entities")
+            raise InstanceConstructionError("No shortest path found between seed entities")
 
         seed_entities = list(set(seed_entities + [e for path in shortest_paths for e in path]))
 

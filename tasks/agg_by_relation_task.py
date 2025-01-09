@@ -1,4 +1,4 @@
-from tasks.base_task import BaseTask
+from tasks.base_task import BaseTask, InstanceConstructionError
 from copy import deepcopy
 import random
 from kg_builder import Entity, KnowledgeGraph
@@ -68,7 +68,7 @@ class AggByRelationTask(BaseTask):
         valid_options = [item for item in anchor_relation_direction_count if item[-1] > 1]
 
         if not valid_options:
-            raise ValueError("No suitable aggregation relations")
+            raise InstanceConstructionError("No suitable aggregation relations")
         
         # select answer from possible answers prior to choosing question inputs (creates more diversity)
         answer_options = set([item[-1] for item in anchor_relation_direction_count])

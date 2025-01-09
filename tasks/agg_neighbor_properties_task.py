@@ -1,4 +1,4 @@
-from tasks.base_task import BaseTask
+from tasks.base_task import BaseTask, InstanceConstructionError
 from copy import deepcopy
 import random
 from kg_builder import Entity, KnowledgeGraph, Relation
@@ -52,7 +52,7 @@ class AggNeighborPropertiesTask(BaseTask):
                     anchor_relation_counts.append((anchor_ent, relation.label, count))
 
         if not anchor_relation_counts:
-            raise ValueError("No suitable anchor entity and relation found")
+            raise InstanceConstructionError("No suitable anchor entity and relation found")
 
         # Select a random option from the valid anchor_relation_counts
         counts_set =  set([count for _,_,count in anchor_relation_counts])

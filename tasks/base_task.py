@@ -13,6 +13,10 @@ from pseudonymizer import Pseudonymizer
 from samplers import graph_samplers
 from pathlib import Path
 
+class InstanceConstructionError(Exception):
+    """Custom exception to be raised when instance construction fails."""
+    pass
+
 class BaseTask:
     """Tasks are the main function that runs things. They handle sampling the kg, pseudonimizing, creating task question, 
     creating the question, making the llm request, and evaluating the response."""
@@ -89,7 +93,7 @@ class BaseTask:
                 self.base_data.append(instance)
                 instances += 1
                 pbar.update()
-            except ValueError:
+            except InstanceConstructionError:
                 print("Failed to construct instance, retrying")
     
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
