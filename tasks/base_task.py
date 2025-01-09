@@ -52,22 +52,20 @@ class BaseTask:
         self.dataset_instance_dir = self.task_dir / self.text_presenter_type
         os.makedirs(self.dataset_instance_dir/'results', exist_ok=True)
 
-        self.dataset_file = dataset_file
-        if not self.dataset_file:
+        if dataset_file:
+            self.dataset_file = self.dataset_instance_dir / dataset_file
+        else:
             self.dataset_file = self.dataset_instance_dir / f'{task_name}_dataset.json'
-
-        self.results_file = results_file
-        if not self.results_file:
+        
+        if results_file:
+            self.results_file = self.dataset_instance_dir / 'results' / results_file
+        else:
             self.results_file = self.dataset_instance_dir / 'results' / f'{self.llm_type}_results.json'
        
-        self.base_data_file = base_dataset_file
-        if not self.base_data_file:
+        if base_dataset_file:
+            self.base_data_file = self.task_dir / base_dataset_file
+        else:
             self.base_data_file = self.task_dir / f'{self.task_name}_base_dataset.json'
-
-        # if base_dataset_file exists, load it
-        # if dataset_file exists, load it
-        # if results_file exists, throw error
-        # separate out the method for constructing base dataset and constructing formatted instances
 
     def pseudonymize_kg(self, kg: KnowledgeGraph):
         if self.pseudonomizer:
@@ -81,12 +79,18 @@ class BaseTask:
                                  num_seed_entities=10, 
                                  max_edges=100):
         """Constructs instances for the task."""
-        print("Constructing Base Data")
-        for instance_id in tqdm(range(num_instances)):
+        print("Constructing base data")
+        instances = 0
+        pbar = tqdm(total=num_instances)
+        while instances < num_instances:
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            self.base_data.append(
-                self.construct_instance(kg, seed_entities, max_edges=max_edges, instance_id=instance_id)
-            )
+            try:
+                instance = self.construct_instance(kg, seed_entities, instances, max_edges)
+                self.base_data.append(instance)
+                instances += 1
+                pbar.update()
+            except ValueError:
+                print("Failed to construct instance, retrying")
     
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
         raise NotImplementedError('You must implement the construct_instance method in your task class')
@@ -232,11 +236,13 @@ class BaseTask:
                 
 class TripleRetrievalTask(BaseTask):
 
-    def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
+    def __init__(self, conversion_config, llm_config, pseudonomizer_config, 
+                 base_dataset_file=None, dataset_file=None, results_file=None):
         super().__init__("TripleRetrieval", 
                          conversion_config, 
                          llm_config, 
                          pseudonomizer_config, 
+                         base_dataset_file,
                          dataset_file, 
                          results_file)
     

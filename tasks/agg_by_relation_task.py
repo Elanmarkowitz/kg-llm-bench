@@ -8,11 +8,13 @@ import re
 
 class AggByRelationTask(BaseTask):
     """This task involves doing aggregations (count) by relationship for an entity"""
-    def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
+    def __init__(self, conversion_config, llm_config, pseudonomizer_config, 
+                 base_dataset_file=None, dataset_file=None, results_file=None):
         super().__init__("AggByRelation",
                          conversion_config,
                          llm_config,
                          pseudonomizer_config,
+                         base_dataset_file,
                          dataset_file,
                          results_file)
 

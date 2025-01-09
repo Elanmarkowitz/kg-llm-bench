@@ -10,11 +10,13 @@ import ast
 
 class ShortestPathTask(BaseTask):
 
-    def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
+    def __init__(self, conversion_config, llm_config, pseudonomizer_config, 
+                 base_dataset_file=None, dataset_file=None, results_file=None):
         super().__init__("ShortestPath",
                          conversion_config,
                          llm_config,
                          pseudonomizer_config,
+                         base_dataset_file,
                          dataset_file,
                          results_file)
 
@@ -34,25 +36,12 @@ class ShortestPathTask(BaseTask):
                 continue
         return 0.0
 
-    def construct_base_instances(self, kg: KnowledgeGraph, num_instances=10, num_seed_entities=2, max_edges=100):
-        """Constructs instances for the task."""
-        print("Constructing base data")
-        instances = 0
-        pbar = tqdm(total=num_instances)
-        while instances < num_instances:
-            seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
-            instance = self.construct_instance(kg, seed_entities, instances, max_edges)
-            if instance:
-                self.base_data.append(instance)
-                instances += 1
-                pbar.update()
-
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
         shortest_paths = kg.get_shortest_paths(ent1, ent2)
 
         if not shortest_paths:
-            return None
+            raise ValueError("No shortest path found between seed entities")
 
         seed_entities = list(set(seed_entities + [e for path in shortest_paths for e in path]))
 

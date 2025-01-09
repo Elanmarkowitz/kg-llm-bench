@@ -9,11 +9,13 @@ import re
 class HighestDegreeNodeTask(BaseTask):
     """This task involves finding the entity with the highest degree (incoming, outgoing, or total) relations."""
 
-    def __init__(self, conversion_config, llm_config, pseudonomizer_config, dataset_file=None, results_file=None):
+    def __init__(self, conversion_config, llm_config, pseudonomizer_config, 
+                 base_dataset_file=None, dataset_file=None, results_file=None):
         super().__init__("HighestDegreeNode",
                          conversion_config,
                          llm_config,
                          pseudonomizer_config,
+                         base_dataset_file,
                          dataset_file,
                          results_file)
 
@@ -70,6 +72,8 @@ class HighestDegreeNodeTask(BaseTask):
 
         answer = highest_degree_labels
 
+        pseudo_kg = self.pseudonymize_kg(sampled_kg)
+
         return {
             'id': instance_id,
             'prompt': prompt,
@@ -79,7 +83,9 @@ class HighestDegreeNodeTask(BaseTask):
             'max_degree': max_degree,
             'edge_direction': edge_direction,
             'seed_entities': seed_entities,
-            'kg': sampled_kg
+            'kg': sampled_kg,
+            'pseudo_kg': pseudo_kg,
+            'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
 
     def reformat_instances(self):
