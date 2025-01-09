@@ -94,7 +94,7 @@ class BaseTask:
     def construct_formatted_instances(self):
         """Should reformat self.data using self.text_presenter and self.pseudonomizer"""
         raise NotImplementedError('You must implement the reformat_instances method in your task class')
-    
+
     def run(self):
         if not self.llm_config:
             raise ValueError("No LLM configured")
@@ -227,6 +227,17 @@ class BaseTask:
                     pseudo_kg_path = instance['pseudo_kg_path']
                     instance['pseudo_kg'] = KnowledgeGraph().load_kg(pseudo_kg_path)
         return data
+    
+    def reevaluate(self):
+        self.load_results()
+        for instance in self.results:
+            if instance is None:
+                continue
+            prompt = instance['prompt']
+            response = self.model(prompt)
+            instance['response'] = response
+            instance['score'] = self.evaluate_response(response, instance['answer'])
+        self.save_results()
         
             
                 
