@@ -40,10 +40,10 @@ class Pseudonymizer:
         pseudo_kg = deepcopy(knowledge_graph)
         for entity in knowledge_graph.entities.values():
             if entity.entity_id in self.mapping:
-                entity.entity_id = self.mapping[entity.entity_id]
+                entity.label = self.mapping[entity.entity_id]
         for entity in knowledge_graph.core_nodes.values():
             if entity.entity_id in self.mapping:
-                entity.entity_id = self.mapping[entity.entity_id]
+                entity.label = self.mapping[entity.entity_id]
         return pseudo_kg
     
     def map_entity(self, entity: Entity) -> Entity:
