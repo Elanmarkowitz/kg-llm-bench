@@ -209,7 +209,7 @@ class KnowledgeGraph:
         if ent1 not in self.graph or ent2 not in self.graph:
             return []
 
-        queue = deque([(ent1, [ent1])])
+        queue = deque([(ent1, [ent1], 0)])
         visited = set()
         shortest_paths = []
         shortest_length = None
