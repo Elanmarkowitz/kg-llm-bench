@@ -85,7 +85,7 @@ class BaseTask:
         while instances < num_instances:
             seed_entities = random.sample(list(kg.core_nodes.keys()), num_seed_entities)
             try:
-                instance = self.construct_instance(kg, seed_entities, instances, max_edges)
+                instance = self.construct_instance(kg, seed_entities, instance_id=instances, max_edges=max_edges)
                 self.base_data.append(instance)
                 instances += 1
                 pbar.update()
@@ -260,13 +260,13 @@ class TripleRetrievalTask(BaseTask):
     def evaluate_response(self, response, answer):
         return 1.0 if response == answer else 0.0
 
-    def construct_instance(self, kg: KnowledgeGraph, seed_entities, max_edges=100, instance_id=0):
+    def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         # Retrieve triples based on seed entities
         sampled_kg = graph_samplers.sample_ego_graph_from_kg(kg, seed_entities, radius=1)
         sampled_kg = graph_samplers.prune_kg(sampled_kg, max_edges=max_edges, max_degree=20)
 
         pseudo_kg = self.pseudonymize_kg(sampled_kg)
-
+        
         triple_sample = random.choice([triple for triple in sampled_kg.graph.edges(data='relation_id')])
         triple_sample = Triple(head=sampled_kg.entities[triple_sample[0]], 
                                relation=sampled_kg.relations[triple_sample[2]], 
