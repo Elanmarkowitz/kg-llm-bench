@@ -27,6 +27,7 @@ task_classes = {
 
 # Iterate over the task configurations and construct the base datasets
 for task_config in config['task_configs']:
+    random.seed(task_config['seed'])
     task_type = task_config['type']
     task_class = task_classes.get(task_type)
     

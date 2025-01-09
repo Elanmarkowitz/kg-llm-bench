@@ -6,9 +6,7 @@ import random
 from kg_builder import Entity, KnowledgeGraph
 
 class Pseudonymizer:
-    def __init__(self, pseudonym_file, seed=1234):
-        self.seed = 1234
-        random.seed(self.seed)
+    def __init__(self, pseudonym_file):
         self.pseudonym_file = pseudonym_file
         self.pseudonyms = self.load_pseudonyms(pseudonym_file)
         self.mapping = {}

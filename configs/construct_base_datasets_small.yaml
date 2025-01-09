@@ -6,23 +6,28 @@ task_configs:
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200
+    seed: 41
   - type: ShortestPathTask
     base_dataset_file: 'ShortestPath_small.json'
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200
+    seed: 42
   - type: HighestDegreeNodeTask
     base_dataset_file: 'HighestDegree_small.json'
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200
+    seed: 43
   - type: AggByRelationTask
     base_dataset_file: AggByRelation_small.json
     num_instances: 100
     num_seed_entities: 1
     max_edges: 200
+    seed: 44
   - type: AggNeighborPropertiesTask
     base_dataset_file: AggNeighborProperties_small.json
     num_instances: 100
     num_seed_entities: 1
     max_edges: 200
+    seed: 45
