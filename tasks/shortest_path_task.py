@@ -38,7 +38,7 @@ class ShortestPathTask(BaseTask):
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         ent1, ent2 = seed_entities[:2]
-        shortest_paths = kg.get_shortest_paths(ent1, ent2)
+        shortest_paths = kg.get_shortest_paths(ent1, ent2, depth=7)
 
         if not shortest_paths:
             raise ValueError("No shortest path found between seed entities")
@@ -120,7 +120,7 @@ class ShortestPathTask(BaseTask):
             # answer is a count so no change needed
 
     def question(self, answer_paths: List[List[Entity]]):
-        return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"
+        return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. You can use both incoming and outgoing edges. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"
 
     def answer(self, answer_paths: List[List[Entity]]):
         return [f"SHORTEST PATH: {str(self.ent_path_to_label_path(path))}" for path in answer_paths]

@@ -204,7 +204,7 @@ class KnowledgeGraph:
         
             return results
 
-    def get_shortest_paths(self, ent1, ent2):
+    def get_shortest_paths(self, ent1, ent2, depth=None):
         """Finds all shortest paths between two entities using BFS."""
         if ent1 not in self.graph or ent2 not in self.graph:
             return []
@@ -213,9 +213,9 @@ class KnowledgeGraph:
         visited = set()
         shortest_paths = []
         shortest_length = None
-
+        
         while queue:
-            current_node, path = queue.popleft()
+            current_node, path, current_depth = queue.popleft()
             if current_node in visited:
                 continue
 
@@ -231,9 +231,12 @@ class KnowledgeGraph:
                     shortest_length = len(path)
                 continue
 
-            for neighbor in self.graph.neighbors(current_node):
+            if depth is not None and current_depth >= depth:
+                continue
+            
+            for neighbor in self.get_neighbors(current_node, fwd=True, bkw=True):
                 if neighbor not in visited:
-                    queue.append((neighbor, path + [neighbor]))
+                    queue.append((neighbor, path + [neighbor], current_depth + 1))
 
         return shortest_paths
     
