@@ -40,7 +40,7 @@ class ShortestPathTask(BaseTask):
         ent1, ent2 = seed_entities[:2]
         
         shortest_paths = kg.get_shortest_paths(ent1, ent2, depth=7)
-
+        
         if not shortest_paths:
             raise InstanceConstructionError("No shortest path found between seed entities")
 
@@ -53,23 +53,23 @@ class ShortestPathTask(BaseTask):
             edge_data = []
             for e1, e2 in zip(path[:-1], path[1:]):
                 relation = kg.graph.get_edge_data(e1, e2)
-                edge_data.append((e1, relation, e2))
+                if relation:
+                    edge_data.append((e1, relation, e2))
+                else:
+                    relation = kg.graph.get_edge_data(e2, e1)
+                    edge_data.append((e2, relation, e1))
             # Add Edge data to the sampled_kg
             for e1, relation, e2 in edge_data:
                 if not sampled_kg.has_edge(e1, e2):
                     sampled_kg.add_edge(e1, e2, relation=relation["relation"], relation_id=relation["relation_id"])
 
         def path_is_present(path):
-            edge_data = []
             for e1, e2 in zip(path[:-1], path[1:]):
-                relation = kg.graph.get_edge_data(e1, e2)
-                edge_data.append((e1, relation, e2))
-            # Add Edge data to the sampled_kg
-            for e1, relation, e2 in edge_data:
-                if not sampled_kg.has_edge(e1, e2):
+                if not sampled_kg.has_edge(e1, e2) and not sampled_kg.has_edge(e2, e1):
                     return False
             return True
 
+        # ensure first shortest path is present in the sampled_kg, then filter out onces that no longer exist
         add_path_to_graph(shortest_paths[0])
         shortest_paths = [shortest_paths[0]] + [path for path in shortest_paths[1:] if path_is_present(path)]
 
