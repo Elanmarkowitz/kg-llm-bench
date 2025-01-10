@@ -54,7 +54,7 @@ class BaseTask:
         os.makedirs(self.task_dir/'pseudo_kg', exist_ok=True)
 
         self.dataset_instance_dir = self.task_dir / self.text_presenter_type
-        os.makedirs(self.dataset_instance_dir/'results', exist_ok=True)
+        os.makedirs(self.dataset_instance_dir/self.llm_type, exist_ok=True)
 
         if dataset_file:
             self.dataset_file = self.dataset_instance_dir / dataset_file
@@ -62,9 +62,9 @@ class BaseTask:
             self.dataset_file = self.dataset_instance_dir / f'{task_name}_dataset.json'
         
         if results_file:
-            self.results_file = self.dataset_instance_dir / 'results' / results_file
+            self.results_file = self.dataset_instance_dir / self.llm_type / results_file
         else:
-            self.results_file = self.dataset_instance_dir / 'results' / f'{self.llm_type}_results.json'
+            self.results_file = self.dataset_instance_dir / self.llm_type / f'{self.llm_type}_results.json'
        
         if base_dataset_file:
             self.base_data_file = self.task_dir / base_dataset_file
@@ -125,7 +125,7 @@ class BaseTask:
         if not self.llm_config:
             raise ValueError("No LLM configured")
         self.results = deepcopy(self.formatted_data)
-        for instance in self.results:
+        for instance in tqdm(self.results):
             if instance is None:
                 continue
             prompt = instance['prompt']
