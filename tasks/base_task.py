@@ -76,7 +76,8 @@ class BaseTask:
             self.pseudonomizer.clear_mapping()
             self.pseudonomizer.create_mapping(kg)
             return self.pseudonomizer.pseudonymize(kg)
-        return kg
+        else:
+            raise ValueError("No pseudonomizer configured")
     
     def construct_base_instances(self, kg: KnowledgeGraph,
                                  num_instances=10, 
