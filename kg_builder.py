@@ -92,7 +92,7 @@ class KnowledgeGraph:
         for _, row in df.iterrows():
             entity = Entity(row['entityID'], row['wikidataID'], row['label'])
             self.entities[row['entityID']] = entity
-            self.graph.add_node(row['entityID'], label=row['label'], wikidata_id=row['wikidataID'])
+            self.graph.add_node(row['entityID'], label=row['label'], wikidata_id=row['wikidataID']) # TODO: Fix to enable pseudonomization on this, or remove labels
 
     # Load relations from relations.tsv
     def load_relations(self, file_path):
@@ -171,7 +171,7 @@ class KnowledgeGraph:
             print("Edges in the subgraph:", ego_g.edges(data=True))
 
             # Prepare node labels using human-readable labels
-            node_labels = {node: self.graph.nodes[node]['label'] for node in ego_g.nodes}
+            node_labels = {node: self.entities[node].label for node in ego_g.nodes}
             # Visualize the ego graph
             plt.figure(figsize=(8, 6))
             pos = nx.spring_layout(ego_g)  # Layout for visualization
@@ -273,7 +273,7 @@ class KnowledgeGraphTextPresenter:
         """gets the triplets in the kg"""
         triplets = []
         for head, tail, relation in kg.graph.edges(data='relation'):
-            triplets.append((kg.graph.nodes[head]['label'], relation, kg.graph.nodes[tail]['label']))
+            triplets.append((kg.entities[head].label, relation, kg.entities[tail].label))
         return triplets
         
         # if entity_id in kg.graph.nodes:
