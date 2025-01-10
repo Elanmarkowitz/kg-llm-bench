@@ -89,36 +89,14 @@ class ShortestPathTask(BaseTask):
             'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
 
-    def construct_formatted_instances(self):
-        """formats the kg and saves the formatted dataset (i.e. with actual prompt)"""
-        self.formatted_data = deepcopy(self.base_data)
-        for instance in self.formatted_data:
-            assert 'kg_path' in instance
-            kg = instance.pop('kg')
-
-            # task specific read instructions
-            instance['shortest_paths'] = [[Entity.from_dict(e) for e in path] for path in instance['shortest_paths']]
-
-            if self.pseudonomizer:
-                if 'pseudo_kg' in instance:
-                    kg = instance.pop('pseudo_kg')
-                else:
-                    if not 'pseudonomizer_mapping' in instance:
-                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
-                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
-                    kg = self.pseudonomizer.pseudonymize(kg)
-                    # task specific pseudonomize conversions
-                    instance['shortest_paths'] = [[self.pseudonomizer.map_entity(e) for e in path] for path in instance['shortest_paths']]
-            
-            # construct answer, question, text_kg, and prompt
-            instance['answer'] = self.answer(instance['shortest_paths'])
-            question = self.question(instance['shortest_paths'])
-            text_kg = self.text_presenter.convert(kg)
-
-            instance['text_kg'] = text_kg
-            instance['prompt'] = self.structure_prompt(question, text_kg)
-            instance['question'] = question
-            # answer is a count so no change needed
+    def format_instance(self, instance, text_kg):
+        instance['shortest_paths'] = [[Entity.from_dict(e) for e in path] for path in instance['shortest_paths']]
+        if self.pseudonomizer:
+            instance['shortest_paths'] = [[self.pseudonomizer.map_entity(e) for e in path] for path in instance['shortest_paths']]
+        instance['answer'] = self.answer(instance['shortest_paths'])
+        question = self.question(instance['shortest_paths'])
+        instance['prompt'] = self.structure_prompt(question, text_kg)
+        instance['question'] = question
 
     def question(self, answer_paths: List[List[Entity]]):
         return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. You can use both incoming and outgoing edges. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"

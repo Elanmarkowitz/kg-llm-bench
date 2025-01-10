@@ -96,35 +96,13 @@ class AggByRelationTask(BaseTask):
             'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
 
-    def construct_formatted_instances(self):
-        """formats the kg and saves the formatted dataset (i.e. with actual prompt)"""
-        self.formatted_data = deepcopy(self.base_data)
-        for instance in self.formatted_data:
-            assert 'kg_path' in instance
-            kg = instance.pop('kg')
-
-            # task specific read instructions
-            instance['anchor_ent'] = Entity.from_dict(instance['anchor_ent'])
-            
-            if self.pseudonomizer:
-                if 'pseudo_kg' in instance:
-                    kg = instance.pop('pseudo_kg')
-                else:
-                    if not 'pseudonomizer_mapping' in instance:
-                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
-                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
-                    kg = self.pseudonomizer.pseudonymize(kg)
-                    # task specific pseudonomize conversions
-                    instance['anchor_ent'] = self.pseudonomizer.map_entity(instance['anchor'])
-            
-            # construct question, text_kg, and prompt
-            question = self.question(instance['anchor_ent'], instance['relation'], instance['direction'])
-            text_kg = self.text_presenter.convert(kg)
-
-            instance['text_kg'] = text_kg
-            instance['prompt'] = self.structure_prompt(question, text_kg)
-            instance['question'] = question
-            # answer is a count so no change needed
+    def format_instance(self, instance, text_kg):
+        anchor_ent = Entity.from_dict(instance['anchor_ent'])
+        if self.pseudonomizer:
+            anchor_ent = self.pseudonomizer.map_entity(anchor_ent)
+        question = self.question(anchor_ent, instance['relation'], instance['direction'])
+        instance['prompt'] = self.structure_prompt(question, text_kg)
+        instance['question'] = question
 
     def question(self, anchor_ent, relation, direction):
         return f"Using the provided knowledge graph only answer the following question. How many {direction} relations of type '{relation}' does {anchor_ent.label} have? Answer in the format 'Answer: <number>'."

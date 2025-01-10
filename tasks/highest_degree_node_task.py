@@ -69,30 +69,13 @@ class HighestDegreeNodeTask(BaseTask):
             'pseudonomizer_mapping': self.pseudonomizer.copy_mapping()
         }
 
-    def construct_formatted_instances(self):
-        self.formatted_data = deepcopy(self.base_data)
-        for instance in self.formatted_data:
-            instance['answer'] = [Entity.from_dict(entity) for entity in instance['answer']]
-            assert 'kg_path' in instance
-            kg = instance.pop('kg')
-            if self.pseudonomizer:
-                if 'pseudo_kg' in instance:
-                    kg = instance.pop('pseudo_kg')
-                else:
-                    if not 'pseudonomizer_mapping' in instance:
-                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
-                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
-                    kg = self.pseudonomizer.pseudonymize(kg)
-                instance['answer'] = [self.pseudonomizer.map_entity(entity) for entity in instance['answer']]
-
-            
-            question = instance['question']
-            text_kg = self.text_presenter.convert(kg)
-
-            instance['text_kg'] = text_kg
-            instance['prompt'] = self.structure_prompt(question, text_kg)
-            instance['question'] = question
-            # answer is a list of entity labels so no change needed
+    def format_instance(self, instance, text_kg):
+        instance['answer'] = [Entity.from_dict(entity) for entity in instance['answer']]
+        if self.pseudonomizer:
+            instance['answer'] = [self.pseudonomizer.map_entity(entity) for entity in instance['answer']]
+        question = instance['question']
+        instance['prompt'] = self.structure_prompt(question, text_kg)
+        instance['question'] = question
 
     def question(self, edge_direction):
         return f"Using the provided knowledge graph only answer the following question. Which entity has the highest number of {edge_direction} relations in the provided knowledge graph? Answer in the format 'Answer: <entity>'."

@@ -101,6 +101,23 @@ class BaseTask:
         raise NotImplementedError('You must implement the construct_instance method in your task class')
 
     def construct_formatted_instances(self):
+        self.formatted_data = deepcopy(self.base_data)
+        for instance in self.formatted_data:
+            assert 'kg_path' in instance
+            kg = instance.pop('kg')
+            if self.pseudonomizer:
+                if not 'pseudonomizer_mapping' in instance:
+                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
+                self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
+                if 'pseudo_kg' in instance:
+                    kg = instance.pop('pseudo_kg')
+                else:
+                    kg = self.pseudonomizer.pseudonymize(kg)
+                # answer is Yes/No so no change needed
+            text_kg = self.text_presenter.convert(kg)
+            self.format_instance(instance, text_kg)
+
+    def format_instance(self, instance, text_kg):
         """Should reformat self.data using self.text_presenter and self.pseudonomizer"""
         raise NotImplementedError('You must implement the reformat_instances method in your task class')
 
@@ -327,29 +344,13 @@ class TripleRetrievalTask(BaseTask):
 
         return corrupted_triplet, corruption_type
 
-    def construct_formatted_instances(self):
-        self.formatted_data = deepcopy(self.base_data)
-        for instance in self.formatted_data:
-            assert 'kg_path' in instance
-            kg = instance.pop('kg')
-            triple: Triple = Triple.from_dict(instance['triple'])
-            if self.pseudonomizer:
-                if 'pseudo_kg' in instance:
-                    kg = instance.pop('pseudo_kg')
-                else:
-                    if not 'pseudonomizer_mapping' in instance:
-                        raise ValueError("Pseudonomizer config set but no pseudonomizer mapping in the base data")
-                    self.pseudonomizer.load_mapping(instance['pseudonomizer_mapping'])
-                    kg = self.pseudonomizer.pseudonymize(kg)
-                triple.head = self.pseudonomizer.map_entity(triple.head)
-                triple.tail = self.pseudonomizer.map_entity(triple.tail)
-                # answer is Yes/No so no change needed
-                
-            text_kg = self.text_presenter.convert(kg)
-            instance['text_kg'] = text_kg
-            instance['prompt'] = self.structure_prompt(self.question(triple), text_kg)
-            instance['question'] = self.question(triple)
-            # answer is Yes/No so no change needed
+    def format_instance(self, instance, text_kg):
+        triple: Triple = Triple.from_dict(instance['triple'])
+        if self.pseudonomizer: # assumes mapping already in place
+            triple.head = self.pseudonomizer.map_entity(triple.head)
+            triple.tail = self.pseudonomizer.map_entity(triple.tail)
+        instance['prompt'] = self.structure_prompt(self.question(triple), text_kg)
+        instance['question'] = self.question(triple)
 
     def structure_prompt(self, question, text_kg):
         intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
@@ -418,8 +419,8 @@ if __name__ == "__main__":
         task.construct_formatted_instances()
         task.save_formatted_dataset()
 
-    try:
-        task.run()
-    except ValueError:
-        print("No LLM configured, skipping run")
+    # try:
+    #     task.run()
+    # except ValueError:
+    #     print("No LLM configured, skipping run")
 
