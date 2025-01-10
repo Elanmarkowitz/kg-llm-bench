@@ -50,6 +50,7 @@ for task_config in config['task_configs']:
                 try:
                     task.load_results()
                     print(f"Skipping: Results already exist for {task.results_file}")
+                    continue
                 except ValueError:
                     print("No results found, running task")
                 print(f"Running task: {task_type} with LLM: {llm_config['model']}")
