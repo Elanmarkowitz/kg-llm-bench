@@ -106,7 +106,7 @@ class AggNeighborPropertiesTask(BaseTask):
     def format_instance(self, instance, text_kg):
         instance['anchor_ent'] = Entity.from_dict(instance['anchor_ent'])
         if self.pseudonomizer:
-            instance['anchor_ent'] = self.pseudonomizer.map_entity(instance['anchor'])
+            instance['anchor_ent'] = self.pseudonomizer.map_entity(instance['anchor_ent'])
         question = self.question(instance['anchor_ent'], instance['relation'])
         instance['text_kg'] = text_kg
         instance['prompt'] = self.structure_prompt(question, text_kg)

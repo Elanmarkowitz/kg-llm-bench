@@ -53,7 +53,11 @@ class Pseudonymizer:
         return deepcopy(self.mapping)
     
     def load_mapping(self, mapping):
-        self.mapping = mapping
+        self.mapping = {}
+        for k,v in mapping.items():
+            if isinstance(k, str):
+                k = int(k)
+            self.mapping[k] = v
 
 # Example usage:
 # pseudonymizer = Pseudonymizer('country_pseudonyms.tsv')
