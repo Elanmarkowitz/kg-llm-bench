@@ -62,6 +62,16 @@ class ShortestPathTask(BaseTask):
             for e1, relation, e2 in edge_data:
                 if not sampled_kg.has_edge(e1, e2):
                     sampled_kg.add_edge(e1, e2, relation=relation["relation"], relation_id=relation["relation_id"])
+                    
+                    # add missing entities and core nodes if removed during pruning
+                    if e1 in kg.entities and e1 not in sampled_kg.entities:
+                        sampled_kg.entities[e1] = deepcopy(kg.entities[e1])
+                    if e2 in kg.entities and e2 not in sampled_kg.entities:
+                        sampled_kg.entities[e2] = deepcopy(kg.entities[e2])
+                    if e1 in kg.core_nodes and e1 not in sampled_kg.core_nodes:
+                        sampled_kg.core_nodes[e1] = deepcopy(kg.core_nodes[e1])
+                    if e2 in kg.core_nodes and e2 not in sampled_kg.core_nodes:
+                        sampled_kg.core_nodes[e2] = deepcopy(kg.core_nodes[e2])
 
         def path_is_present(path):
             for e1, e2 in zip(path[:-1], path[1:]):
