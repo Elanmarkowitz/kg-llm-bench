@@ -12,3 +12,5 @@ dependencies:
   - pandas
   - matplotlib
   - pyyaml
+  - google-generativeai
+
