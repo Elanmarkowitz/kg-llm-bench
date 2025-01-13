@@ -25,7 +25,7 @@ class HighestDegreeNodeTask(BaseTask):
         if extracted_string is None:
             return 0  # or some other logic to handle no string found
         for ans in answer:
-            if extracted_string == ans.label:
+            if extracted_string == ans:
                 return 1
         return 0
 
@@ -55,7 +55,6 @@ class HighestDegreeNodeTask(BaseTask):
 
         pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
-        pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
         return {
             'id': instance_id,
