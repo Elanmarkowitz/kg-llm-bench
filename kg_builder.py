@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import json
 from collections import deque
 
+import yaml
+
 # Class to represent each entity (node in the graph)
 class Entity:
     def __init__(self, entity_id, wikidata_id, label):
@@ -305,6 +307,32 @@ class KnowledgeGraphTextPresenter:
         text = "Edges: [\n" + ",\n".join(self.get_triplet_sentences(triplets)) + "\n]\n"
         
         return text
+    
+    def to_structured_yaml(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to a structured YAML format."""
+        structured_data = {}
+
+        for head, relation, tail in self.get_triplets(kg):
+            if head not in structured_data:
+                structured_data[head] = {}
+            if relation not in structured_data[head]:
+                structured_data[head][relation] = []
+            structured_data[head][relation].append(tail)
+
+        return yaml.dump(structured_data, default_flow_style=False)
+    
+    def to_structured_json(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to a structured JSON format."""
+        structured_data = {}
+
+        for head, relation, tail in self.get_triplets(kg):
+            if head not in structured_data:
+                structured_data[head] = {}
+            if relation not in structured_data[head]:
+                structured_data[head][relation] = []
+            structured_data[head][relation].append(tail)
+
+        return json.dumps(structured_data, indent=2)
 
 
 if __name__ == "__main__":
