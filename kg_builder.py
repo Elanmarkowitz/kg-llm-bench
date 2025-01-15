@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 import json
 from collections import deque
 
+from rdflib import Graph, URIRef, Literal, Namespace
+from rdflib.namespace import RDF, RDFS
+
+import urllib
 import yaml
 
 # Class to represent each entity (node in the graph)
@@ -165,7 +169,7 @@ class KnowledgeGraph:
         nx.draw(self.graph, with_labels=True, node_color='lightblue', font_weight='bold')
 
     # Method to get and visualize ego graph with radius 1
-    def get_ego_graph(self, entity_id, radius=1):
+    def viz_ego_graph(self, entity_id, radius=1):
         if entity_id in self.graph.nodes:
             ego_g = nx.ego_graph(self.graph, entity_id, radius=radius)
             print(f"Ego Graph centered on entity {entity_id} with radius {radius}:")
@@ -255,7 +259,10 @@ class KnowledgeGraphTextPresenter:
     TextPresenter handles turning a kg into in-context text version
     """
     FORMAT_DESCRIPTION = {
-        "list_of_edges": "The knowledge graph is presented as a list of directed edges of the form (subject, relation, object)."
+        "list_of_edges": "The knowledge graph is presented as a list of directed edges of the form (subject, relation, object).",
+        "structured_yaml": "The knowledge graph is presented as a structured YAML format. Each entity is a key, and the value is a dictionary of relations and objects.",
+        "structured_json": "The knowledge graph is presented as a structured JSON format. Each entity is a key, and the value is a dictionary of relations and objects.",
+        "rdf_turtle": "The knowledge graph is presented as an RDF Turtle format."
     }
 
     def __init__(self, type="list_of_edges"):
@@ -266,8 +273,22 @@ class KnowledgeGraphTextPresenter:
 
     def convert(self, kg: KnowledgeGraph):
         """Converts a knowledge graph into a textual representation"""
-        if self.type == "list_of_edges":
-            text = self.to_list_of_edges(kg)
+        match self.type:
+            case "list_of_edges":
+                text = self.to_list_of_edges(kg)
+            case "structured_yaml":
+                text = self.to_structured_yaml(kg)
+            case "structured_json":
+                text = self.to_structured_json(kg)
+            case "rdf_turtle":
+                text = self.to_rdf_turtle(kg)
+            case "rdf_turtle2":
+                text = self.to_rdf_turtle2(kg)
+            case "rdf_turtle3":
+                text = self.to_rdf_turtle3(kg)
+            case _:
+                raise ValueError(f"Unknown text format: {self.type}")
+        
         return text
 
     # Method to generate triplets (head, relation, tail) from the ego graph
@@ -277,13 +298,6 @@ class KnowledgeGraphTextPresenter:
         for head, tail, relation in kg.graph.edges(data='relation'):
             triplets.append((kg.entities[head].label, relation, kg.entities[tail].label))
         return triplets
-        
-        # if entity_id in kg.graph.nodes:
-        #     ego_g = nx.ego_graph(self.kg.graph, entity_id, radius=radius)
-        #     triplets = []
-        # else:
-        #     print(f"Entity ID {entity_id} not found in the graph.")
-        #     return []
 
     # Method to convert triplets into human-readable sentences
     def get_triplet_sentences(self, triplets):
@@ -333,6 +347,78 @@ class KnowledgeGraphTextPresenter:
             structured_data[head][relation].append(tail)
 
         return json.dumps(structured_data, indent=2)
+    
+    def to_rdf_turtle(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to RDF Turtle format with URI encoded labels."""
+        g = Graph()
+        ex = Namespace("http://example.org/countries#")
+        g.bind("ex", ex)
+        g.bind("rdf", RDF)
+        g.bind("rdfs", RDFS)
+
+        for head, relation, tail in self.get_triplets(kg):
+            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
+            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(relation))}")
+            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
+
+            g.add((head_uri, relation_uri, tail_uri))
+
+        return g.serialize(format="turtle")
+    
+    def to_rdf_turtle2(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to RDF Turtle format using node IDs and URI encoded relations."""
+        g = Graph()
+        ex = Namespace("http://example.org/countries#")
+        g.bind("ex", ex)
+        g.bind("rdf", RDF)
+        g.bind("rdfs", RDFS)
+
+        # Add entity definitions with rdfs:label
+        for entity_id, entity in kg.entities.items():
+            entity_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(entity_id))}")
+            g.add((entity_uri, RDF.type, ex.Country))
+            g.add((entity_uri, RDFS.label, Literal(entity.label)))
+
+        # Add edges using entity IDs
+        for head, tail, relation in kg.graph.edges(data='relation'):
+            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
+            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(relation))}")
+            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
+
+            g.add((head_uri, relation_uri, tail_uri))
+
+        return g.serialize(format="turtle")
+    
+    def to_rdf_turtle3(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to RDF Turtle format using node IDs and relation IDs."""
+        g = Graph()
+        ex = Namespace("http://example.org/countries#")
+        g.bind("ex", ex)
+        g.bind("rdf", RDF)
+        g.bind("rdfs", RDFS)
+
+        # Add entity definitions with rdfs:label
+        for entity_id, entity in kg.entities.items():
+            entity_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(entity_id))}")
+            g.add((entity_uri, RDF.type, ex.Country))
+            g.add((entity_uri, RDFS.label, Literal(entity.label)))
+
+        # Add relation definitions with rdfs:label
+        for relation_id, relation in kg.relations.items():
+            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote('R' + str(relation_id))}")
+            g.add((relation_uri, RDF.type, RDF.Property))
+            g.add((relation_uri, RDFS.label, Literal(relation.label)))
+
+        # Add edges using entity IDs and relation IDs
+        for head, tail, relation_id in kg.graph.edges(data='relation_id'):
+            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
+            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote('R' + str(relation_id))}")
+            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
+
+            g.add((head_uri, relation_uri, tail_uri))
+
+        return g.serialize(format="turtle")
+
 
 
 if __name__ == "__main__":
@@ -349,29 +435,11 @@ if __name__ == "__main__":
     kg.load_edges('data/countries/edges.tsv')
     kg.load_attributes('data/countries/attributes.tsv')
 
-    # Print graph information
-    # kg.print_graph_info()
-
-    # Visualize the graph
-    # kg.visualize_graph()
-    # kg.get_ego_graph(3393, radius=1)
-
     # Create an instance of KnowledgeGraphTextPresenter and extract triplets
-    presenter = KnowledgeGraphTextPresenter(kg)
-
-    # Get triplets
-    triplets = presenter.get_triplets(entity_id=3393, radius=1)
-    print("Triplets (head, relation, tail):")
-    for triplet in triplets:
-        print(triplet)
-
-    # Get sentences from triplets
-    sentences = presenter.get_triplet_sentences(entity_id=3393, radius=1)
-    print("\nTriplet Sentences:")
-    for sentence in sentences:
-        print(sentence)
+    presenter = KnowledgeGraphTextPresenter("rdf_turtle3")
 
     # Get textual summary of the knowledge graph subset
-    summary = presenter.get_summary(entity_id=3393, radius=1)
+    text_kg = presenter.convert(kg)
     print("\nTextual Summary of Knowledge Graph Subset:")
-    print(summary)
+    print(text_kg)
+    breakpoint()
