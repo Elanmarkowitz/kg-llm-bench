@@ -286,6 +286,14 @@ class KnowledgeGraphTextPresenter:
                 text = self.to_rdf_turtle2(kg)
             case "rdf_turtle3":
                 text = self.to_rdf_turtle3(kg)
+            case "json_ld1":
+                text = self.to_json_ld1(kg)
+            case "json_ld2":
+                text = self.to_json_ld2(kg)
+            case "json_ld3":
+                text = self.to_json_ld3(kg)
+            case "nt":
+                text = self.to_nt(kg)
             case _:
                 raise ValueError(f"Unknown text format: {self.type}")
         
