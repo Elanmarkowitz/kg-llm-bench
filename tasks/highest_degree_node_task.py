@@ -25,7 +25,11 @@ class HighestDegreeNodeTask(BaseTask):
         if extracted_string is None:
             return 0  # or some other logic to handle no string found
         for ans in answer:
-            if extracted_string == ans:
+            if isinstance(ans, dict): #TODO: loading should handle Entity type objects
+                label = Entity.from_dict(ans).label
+            else: # Entity object
+                label = ans.label
+            if extracted_string == label:
                 return 1
         return 0
 

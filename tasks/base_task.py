@@ -33,7 +33,7 @@ class BaseTask:
         self.llm_config = llm_config
         self.conversion_config = conversion_config
         self.text_presenter_type = conversion_config['type']
-        self.llm_type = llm_config['model']
+        self.llm_type = llm_config['model'] if 'model' in llm_config else None
         self.pseudonomizer_config = pseudonomizer_config
         
         self.model = LLM(**llm_config)
@@ -54,18 +54,21 @@ class BaseTask:
         os.makedirs(self.task_dir/'pseudo_kg', exist_ok=True)
 
         self.dataset_instance_dir = self.task_dir / self.text_presenter_type
-        os.makedirs(self.dataset_instance_dir/self.llm_type, exist_ok=True)
+        if self.llm_type:
+            os.makedirs(self.dataset_instance_dir/self.llm_type, exist_ok=True)
 
         if dataset_file:
             self.dataset_file = self.dataset_instance_dir / dataset_file
         else:
             self.dataset_file = self.dataset_instance_dir / f'{task_name}_dataset.json'
         
-        if results_file:
+        if results_file and self.llm_type is not None:
             self.results_file = self.dataset_instance_dir / self.llm_type / results_file
-        else:
+        elif self.llm_type is not None:
             self.results_file = self.dataset_instance_dir / self.llm_type / f'{self.llm_type}_results.json'
-       
+        else:
+            self.results_file = None
+
         if base_dataset_file:
             self.base_data_file = self.task_dir / base_dataset_file
         else:
