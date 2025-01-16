@@ -19,4 +19,4 @@ def llm(model_name, prompt, max_tokens=150, temperature=0):
         max_tokens=max_tokens,
         temperature=temperature
     )
-    return response.choices[0].message.content
+    return response.choices[0].message.content, dict(response.usage)

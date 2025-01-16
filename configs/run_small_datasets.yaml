@@ -1,6 +1,8 @@
 llm_configs:
   - model: 'gpt-4o-mini'
     provider: 'openai'
+#  - model: 'gemini-1.5-flash-8b'
+#    provider: 'google'
 pseudonomizer_configs:
   - 'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'
   - null
