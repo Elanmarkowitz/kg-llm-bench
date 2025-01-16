@@ -280,8 +280,8 @@ class KnowledgeGraphTextPresenter:
                 text = self.to_structured_yaml(kg)
             case "structured_json":
                 text = self.to_structured_json(kg)
-            case "rdf_turtle":
-                text = self.to_rdf_turtle(kg)
+            case "rdf_turtle1":
+                text = self.to_rdf_turtle1(kg)
             case "rdf_turtle2":
                 text = self.to_rdf_turtle2(kg)
             case "rdf_turtle3":
@@ -348,76 +348,114 @@ class KnowledgeGraphTextPresenter:
 
         return json.dumps(structured_data, indent=2)
     
-    def to_rdf_turtle(self, kg: KnowledgeGraph):
-        """Converts the knowledge graph to RDF Turtle format with URI encoded labels."""
+    def make_rdflib_graph(self, kg: KnowledgeGraph, use_entity_ids=False, use_relation_ids=False):
         g = Graph()
         ex = Namespace("http://example.org/countries#")
         g.bind("ex", ex)
         g.bind("rdf", RDF)
         g.bind("rdfs", RDFS)
 
-        for head, relation, tail in self.get_triplets(kg):
-            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
-            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(relation))}")
-            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
+        if use_entity_ids:
+            # Add entity definitions with rdfs:label
+            for entity_id, entity in kg.entities.items():
+                entity_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(entity_id))}")
+                g.add((entity_uri, RDF.type, ex.Country))
+                g.add((entity_uri, RDFS.label, Literal(entity.label)))
+
+        if use_relation_ids:
+            # Add relation definitions with rdfs:label
+            for relation_id, relation in kg.relations.items():
+                relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote('R' + str(relation_id))}")
+                g.add((relation_uri, RDF.type, RDF.Property))
+                g.add((relation_uri, RDFS.label, Literal(relation.label)))
+
+        # Add edges using entity IDs and relation IDs
+        for head, tail, edge_data in kg.graph.edges(data=True):
+            head = str(head) if use_entity_ids else str(kg.entities[head].label)
+            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(head)}")
+            
+            relation = 'R' + str(edge_data['relation_id']) if use_relation_ids else str(edge_data['relation'])
+            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(relation)}")
+            
+            tail = str(tail) if use_entity_ids else str(kg.entities[tail].label)
+            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(tail)}")
 
             g.add((head_uri, relation_uri, tail_uri))
+
+        return g
+
+
+    def to_rdf_turtle1(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to RDF Turtle format with URI encoded labels."""
+        g = self.make_rdflib_graph(kg, use_entity_ids=False, use_relation_ids=False)
 
         return g.serialize(format="turtle")
     
     def to_rdf_turtle2(self, kg: KnowledgeGraph):
         """Converts the knowledge graph to RDF Turtle format using node IDs and URI encoded relations."""
-        g = Graph()
-        ex = Namespace("http://example.org/countries#")
-        g.bind("ex", ex)
-        g.bind("rdf", RDF)
-        g.bind("rdfs", RDFS)
-
-        # Add entity definitions with rdfs:label
-        for entity_id, entity in kg.entities.items():
-            entity_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(entity_id))}")
-            g.add((entity_uri, RDF.type, ex.Country))
-            g.add((entity_uri, RDFS.label, Literal(entity.label)))
-
-        # Add edges using entity IDs
-        for head, tail, relation in kg.graph.edges(data='relation'):
-            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
-            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(relation))}")
-            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
-
-            g.add((head_uri, relation_uri, tail_uri))
+        g = self.make_rdflib_graph(kg, use_entity_ids=True, use_relation_ids=False)
 
         return g.serialize(format="turtle")
     
     def to_rdf_turtle3(self, kg: KnowledgeGraph):
         """Converts the knowledge graph to RDF Turtle format using node IDs and relation IDs."""
-        g = Graph()
-        ex = Namespace("http://example.org/countries#")
-        g.bind("ex", ex)
-        g.bind("rdf", RDF)
-        g.bind("rdfs", RDFS)
-
-        # Add entity definitions with rdfs:label
-        for entity_id, entity in kg.entities.items():
-            entity_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(entity_id))}")
-            g.add((entity_uri, RDF.type, ex.Country))
-            g.add((entity_uri, RDFS.label, Literal(entity.label)))
-
-        # Add relation definitions with rdfs:label
-        for relation_id, relation in kg.relations.items():
-            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote('R' + str(relation_id))}")
-            g.add((relation_uri, RDF.type, RDF.Property))
-            g.add((relation_uri, RDFS.label, Literal(relation.label)))
-
-        # Add edges using entity IDs and relation IDs
-        for head, tail, relation_id in kg.graph.edges(data='relation_id'):
-            head_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(head))}")
-            relation_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote('R' + str(relation_id))}")
-            tail_uri = URIRef(f"http://example.org/countries#{urllib.parse.quote(str(tail))}")
-
-            g.add((head_uri, relation_uri, tail_uri))
+        g = self.make_rdflib_graph(kg, use_entity_ids=True, use_relation_ids=True)
 
         return g.serialize(format="turtle")
+    
+    def to_json_ld1(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to JSON-LD format with URI encoded labels."""
+        g = self.make_rdflib_graph(kg, use_entity_ids=False, use_relation_ids=False)
+
+        context = {
+            "@context": {
+                "ex": "http://example.org/countries#",
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+                "label": "rdfs:label",
+                "type": "@type"
+            }
+        }
+
+        return g.serialize(format="json-ld", indent=2, context=context)
+    
+    def to_json_ld2(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to JSON-LD format using node IDs and URI encoded relations."""
+        g = self.make_rdflib_graph(kg, use_entity_ids=True, use_relation_ids=False)
+
+        context = {
+            "@context": {
+                "ex": "http://example.org/countries#",
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+                "label": "rdfs:label",
+                "type": "@type"
+            }
+        }
+
+        return g.serialize(format="json-ld", indent=2, context=context)
+    
+    def to_json_ld3(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to JSON-LD format using node IDs and relation IDs."""
+        g = self.make_rdflib_graph(kg, use_entity_ids=True, use_relation_ids=True)
+
+        context = {
+            "@context": {
+                "ex": "http://example.org/countries#",
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+                "label": "rdfs:label",
+                "type": "@type"
+            }
+        }
+
+        return g.serialize(format="json-ld", indent=2, context=context)
+    
+    def to_nt(self, kg: KnowledgeGraph):
+        """Converts the knowledge graph to N-Triples format."""
+        g = self.make_rdflib_graph(kg, use_entity_ids=False, use_relation_ids=False)
+
+        return g.serialize(format="nt")
 
 
 
