@@ -1,6 +1,9 @@
 import yaml
 import random
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 from kg_builder import KnowledgeGraph
 from tasks import TripleRetrievalTask, ShortestPathTask, HighestDegreeNodeTask, AggByRelationTask, AggNeighborPropertiesTask
 from tasks.base_task import BaseTask

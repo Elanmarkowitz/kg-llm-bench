@@ -134,9 +134,10 @@ class BaseTask:
             if instance is None:
                 continue
             prompt = instance['prompt']
-            response = self.model(prompt)
+            response, llm_usage = self.model(prompt)
             instance['response'] = response
             instance['score'] = self.evaluate_response(response, instance['answer'])
+            instance['usage_tokens'] = llm_usage
         self.save_results()
 
     def save_results(self):
@@ -265,9 +266,10 @@ class BaseTask:
             if instance is None:
                 continue
             prompt = instance['prompt']
-            response = self.model(prompt)
+            response, llm_usage = self.model(prompt)
             instance['response'] = response
             instance['score'] = self.evaluate_response(response, instance['answer'])
+            instance['usage_tokens'] = llm_usage
         self.save_results()
         
             

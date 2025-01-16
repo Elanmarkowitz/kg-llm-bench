@@ -29,4 +29,10 @@ def llm(model_name, prompt, max_tokens=150, temperature=0):
         generation_config=generation_config,
     )
     response = model.generate_content(prompt, generation_config=generation_config)
-    return response.text
+    usage_token = {
+        "prompt_tokens": response.usage_metadata.prompt_token_count,
+        "completion_tokens": response.usage_metadata.candidates_token_count,
+        "total_tokens": response.usage_metadata.total_token_count,
+        'cached_content_token': response.usage_metadata.cached_content_token_count
+    }
+    return response.text, usage_token
