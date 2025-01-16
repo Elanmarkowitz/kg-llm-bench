@@ -1,0 +1,32 @@
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+
+def llm(model_name, prompt, max_tokens=150, temperature=0):
+    """
+    Calls the Gemini API with the specified model and prompt.
+
+    Parameters:
+    - model_name (str): The name of the model to use.
+    - prompt (str): The prompt to send to the model.
+    - max_tokens (int): The maximum number of tokens to generate.
+    - temperature (float): The sampling temperature.
+
+    Returns:
+    - response (str): The response from the Gemini API.
+    """
+
+    generation_config = {
+        "temperature": temperature,
+        "max_output_tokens": max_tokens,
+        "response_mime_type": "text/plain",
+    }
+
+    model = genai.GenerativeModel(
+        model_name=model_name,
+        generation_config=generation_config,
+    )
+    response = model.generate_content(prompt, generation_config=generation_config)
+    return response.text
