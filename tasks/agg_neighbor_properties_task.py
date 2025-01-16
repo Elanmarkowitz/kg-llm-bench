@@ -135,7 +135,8 @@ if __name__ == '__main__':
     kg.load_attributes('data/countries/attributes.tsv')
 
     conversion_config = {'type': "list_of_edges"}
-    llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
+    # llm_config = {'model': 'gpt-4o-mini', 'provider': 'openai'}
+    llm_config = {'model': 'gemini-1.5-flash-8b', 'provider': 'google'}
     pseudonomizer_config = {'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'}
 
     task = AggNeighborPropertiesTask(conversion_config, llm_config, pseudonomizer_config)

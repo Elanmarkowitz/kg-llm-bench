@@ -59,7 +59,6 @@ class HighestDegreeNodeTask(BaseTask):
 
         pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
-        pseudo_kg = self.pseudonymize_kg(sampled_kg)
 
         return {
             'id': instance_id,
