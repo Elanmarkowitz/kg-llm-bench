@@ -54,6 +54,8 @@ class BaseTask:
         os.makedirs(self.task_dir/'pseudo_kg', exist_ok=True)
 
         self.dataset_instance_dir = self.task_dir / self.text_presenter_type
+        if self.text_presenter_type:
+            os.makedirs(self.dataset_instance_dir, exist_ok=True)
         if self.llm_type:
             os.makedirs(self.dataset_instance_dir/self.llm_type, exist_ok=True)
 
