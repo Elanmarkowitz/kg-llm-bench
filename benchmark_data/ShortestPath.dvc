@@ -1,0 +1,6 @@
+outs:
+- md5: 0c7d41dc05340bf8f8ab4c4c2fdf6910.dir
+  size: 43792723
+  nfiles: 204
+  hash: md5
+  path: ShortestPath
