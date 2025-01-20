@@ -1,20 +1,20 @@
 pseudonomizer_configs:
-  - 'pseudonym_file': 'data/countries/pseudonym_data/country_pseudonyms.tsv'
+  - pseudonym_file: data/countries/pseudonym_data/country_pseudonyms.tsv
 task_configs:
   - type: TripleRetrievalTask
-    base_dataset_file: 'TripleRetrieval_small.json'
+    base_dataset_file: TripleRetrieval_small.json
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200
     seed: 41
   - type: ShortestPathTask
-    base_dataset_file: 'ShortestPath_small.json'
+    base_dataset_file: ShortestPath_small.json
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200
     seed: 42
   - type: HighestDegreeNodeTask
-    base_dataset_file: 'HighestDegree_small.json'
+    base_dataset_file: HighestDegree_small.json
     num_instances: 100
     num_seed_entities: 10
     max_edges: 200

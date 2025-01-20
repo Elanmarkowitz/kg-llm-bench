@@ -15,4 +15,6 @@ dependencies:
   - google-generativeai
   - rdflib
   - python-dotenv
+  - google-generativeai
+  - grpcio
 

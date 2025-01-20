@@ -1,7 +1,11 @@
 import google.generativeai as genai
 import os
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", None)
+
+if GEMINI_API_KEY is not None:
+    genai.configure(api_key=GEMINI_API_KEY)
 
 
 def llm(model_name, prompt, max_tokens=150, temperature=0):

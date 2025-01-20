@@ -262,7 +262,13 @@ class KnowledgeGraphTextPresenter:
         "list_of_edges": "The knowledge graph is presented as a list of directed edges of the form (subject, relation, object).",
         "structured_yaml": "The knowledge graph is presented as a structured YAML format. Each entity is a key, and the value is a dictionary of relations and objects.",
         "structured_json": "The knowledge graph is presented as a structured JSON format. Each entity is a key, and the value is a dictionary of relations and objects.",
-        "rdf_turtle": "The knowledge graph is presented as an RDF Turtle format."
+        "rdf_turtle1": "The knowledge graph is presented as RDF Turtle format with URI encoded labels.",
+        "rdf_turtle2": "The knowledge graph is presented as RDF Turtle format using node IDs and URI encoded relations.",
+        "rdf_turtle3": "The knowledge graph is presented as RDF Turtle format using node IDs and relation IDs.",
+        "json_ld1": "The knowledge graph is presented as JSON-LD format with URI encoded labels.",
+        "json_ld2": "The knowledge graph is presented as JSON-LD format using node IDs and URI encoded relations.",
+        "json_ld3": "The knowledge graph is presented as JSON-LD format using node IDs and relation IDs.",
+        "nt": "The knowledge graph is presented as N-Triples format."
     }
 
     def __init__(self, type="list_of_edges"):
