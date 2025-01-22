@@ -17,4 +17,5 @@ dependencies:
   - python-dotenv
   - google-generativeai
   - grpcio
+  - langchain-aws
 
