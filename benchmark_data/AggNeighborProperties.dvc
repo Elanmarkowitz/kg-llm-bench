@@ -1,6 +1,5 @@
 outs:
-- md5: edb69f13fa26c56f34488189a247797d.dir
-  size: 28567242
-  nfiles: 203
+- md5: 886a99bb05297aab85473b64f121b289.dir
+  nfiles: 221
   hash: md5
   path: AggNeighborProperties
