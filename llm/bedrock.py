@@ -1,6 +1,6 @@
 import boto3
-from langchain_aws import ChatBedrock
-from langchain_core.messages import HumanMessage
+from langchain_aws.chat_models.bedrock_converse import ChatBedrockConverse
+from langchain_core.messages import HumanMessage, SystemMessage
 import argparse
 import os
 from botocore.exceptions import ClientError
@@ -27,12 +27,12 @@ def init_bedrock_client(region=None):
     region = region or os.getenv('AWS_DEFAULT_REGION') or 'us-east-1'
     
     try:
+        # Create the Bedrock Runtime client
         client = boto3.client(
             service_name='bedrock-runtime',
             region_name=region
         )
-        # Test the client with a simple API call
-        client.list_tags_for_resource(resourceARN='arn:aws:bedrock:' + region)
+        
         return client
     except ClientError as e:
         if 'AccessDeniedException' in str(e):
@@ -48,7 +48,7 @@ def init_bedrock_client(region=None):
         else:
             raise e
 
-def llm(model_name, prompt, max_tokens=150, temperature=0):
+def llm(model_name, prompt, max_tokens=150, temperature=0, system_prompt=None):
     """
     Calls the AWS Bedrock API with the specified model and prompt using LangChain.
 
@@ -63,6 +63,7 @@ def llm(model_name, prompt, max_tokens=150, temperature=0):
     - prompt (str): The prompt to send to the model.
     - max_tokens (int): Maximum number of tokens to generate.
     - temperature (float): Controls randomness in the response (0-1).
+    - system_prompt (str, optional): System prompt to set context for the conversation.
 
     Returns:
     - tuple: (response_text, usage_stats)
@@ -72,26 +73,36 @@ def llm(model_name, prompt, max_tokens=150, temperature=0):
         bedrock_client = init_bedrock_client()
         
         # Initialize the LangChain AWS Bedrock chat model
-        chat = ChatBedrock(
-            model_id=model_name,
+        chat = ChatBedrockConverse(
+            model=model_name,
             client=bedrock_client,
-            model_kwargs={
-                "max_tokens": max_tokens,
-                "temperature": temperature,
-            }
+            max_tokens=max_tokens,
+            temperature=temperature
         )
         
-        # Create message and get response
-        message = HumanMessage(content=prompt)
-        response = chat([message])
+        # Prepare messages
+        messages = []
+        if system_prompt:
+            messages.append(SystemMessage(content=system_prompt))
+        messages.append(HumanMessage(content=prompt))
+        
+        # Get response
+        response = chat.invoke(messages)
         
         # Extract completion and usage stats
         completion = response.content
         
-        # Get token usage if available
+        # Get token usage from usage_metadata
         usage = {}
-        if hasattr(response, 'additional_kwargs') and 'usage' in response.additional_kwargs:
-            usage = response.additional_kwargs['usage']
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            usage = {
+                'prompt_tokens': response.usage_metadata.get('input_tokens', 0),
+                'completion_tokens': response.usage_metadata.get('output_tokens', 0),
+                'total_tokens': response.usage_metadata.get('total_tokens', 0)
+            }
+            # If total_tokens not provided, calculate it
+            if not usage['total_tokens']:
+                usage['total_tokens'] = usage['prompt_tokens'] + usage['completion_tokens']
         else:
             usage = {
                 'prompt_tokens': 0,
@@ -109,6 +120,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test AWS Bedrock models')
     parser.add_argument('--model', type=str, help='Model to use (e.g., anthropic.claude-v2)')
     parser.add_argument('--prompt', type=str, help='Prompt to send to the model')
+    parser.add_argument('--system-prompt', type=str, help='Optional system prompt to set context')
     parser.add_argument('--max-tokens', type=int, default=150, help='Maximum tokens to generate')
     parser.add_argument('--temperature', type=float, default=0, help='Temperature (0-1)')
     parser.add_argument('--region', type=str, help='AWS region (default: us-east-1)')
@@ -121,7 +133,9 @@ if __name__ == "__main__":
     
     try:
         print(f"\nSending prompt to {args.model}...")
-        print(f"Prompt: {args.prompt}")
+        if args.system_prompt:
+            print(f"System prompt: {args.system_prompt}")
+        print(f"User prompt: {args.prompt}")
         print(f"Max tokens: {args.max_tokens}")
         print(f"Temperature: {args.temperature}")
         print(f"Region: {args.region or os.getenv('AWS_DEFAULT_REGION') or 'us-east-1'}")
@@ -131,7 +145,8 @@ if __name__ == "__main__":
             model_name=args.model,
             prompt=args.prompt,
             max_tokens=args.max_tokens,
-            temperature=args.temperature
+            temperature=args.temperature,
+            system_prompt=args.system_prompt
         )
         
         print("\nResponse:")
