@@ -1,0 +1,5 @@
+outs:
+- md5: 70682c6b821aa0e45a5e5c4a61f765bd.dir
+  nfiles: 221
+  hash: md5
+  path: ShortestPath

@@ -1,0 +1,6 @@
+outs:
+- md5: 53217938c4ae1dec900b4a7c110a7770.dir
+  size: 82367920
+  nfiles: 221
+  hash: md5
+  path: AggByRelation

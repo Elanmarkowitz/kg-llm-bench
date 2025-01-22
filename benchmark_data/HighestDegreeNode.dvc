@@ -1,0 +1,5 @@
+outs:
+- md5: 38c2e103cac41c03680ac6a4fada661c.dir
+  nfiles: 221
+  hash: md5
+  path: HighestDegreeNode

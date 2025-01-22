@@ -1,0 +1,5 @@
+outs:
+- md5: 886a99bb05297aab85473b64f121b289.dir
+  nfiles: 221
+  hash: md5
+  path: AggNeighborProperties
