@@ -1,7 +1,7 @@
 [core]
     remote = storage
     autostage = true
-    hardlink_lock = true
+    hardlink_lock = True
 ['remote "storage"']
     url = gdrive://1rpzHcD4xlfsMDoIpD2jLMOtDOX9fFFXP
     gdrive_client_id = 1026509041825-4uldisrptg3995h5e2degup26kq2r0o7.apps.googleusercontent.com

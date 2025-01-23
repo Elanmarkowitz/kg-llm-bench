@@ -5,6 +5,9 @@ import argparse
 import os
 from botocore.exceptions import ClientError
 
+from dotenv import load_dotenv
+load_dotenv()
+
 def init_bedrock_client(region=None):
     """
     Initialize the Bedrock client with proper credentials and region.
