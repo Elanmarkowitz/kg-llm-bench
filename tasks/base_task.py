@@ -265,12 +265,18 @@ class BaseTask:
         for instance in self.results:
             if instance is None:
                 continue
-            prompt = instance['prompt']
-            response, llm_usage = self.model(prompt)
-            instance['response'] = response
-            instance['score'] = self.evaluate_response(response, instance['answer'])
-            instance['usage_tokens'] = llm_usage
+            response = instance['response']
+            answer = instance['answer']
+            instance['score'] = self.evaluate_response(response, answer)
         self.save_results()
+
+    def structure_prompt(self, question, text_kg):
+        intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions. If the answer includes entities, always respond using the entity label rather than entity ID (if applicable)."
+        prompt = f"{intro}\n\nKnowledge Graph:\n{text_kg}\n\n{question}"
+        return prompt
+
+    def evaluate_response(self, response, answer):
+        raise NotImplementedError('You must implement the evaluate_response method in your task class')
         
             
                 
@@ -287,7 +293,12 @@ class TripleRetrievalTask(BaseTask):
                          results_file)
     
     def evaluate_response(self, response, answer):
-        return 1.0 if response == answer else 0.0
+        # Extract just the Yes/No part from the response and answer
+        response_normalized = response.strip().lower().split()[0]
+        answer_normalized = answer.strip().lower()
+        
+        # Check if response starts with yes/no and matches expected answer
+        return 1.0 if response_normalized == answer_normalized else 0.0
 
     def construct_instance(self, kg: KnowledgeGraph, seed_entities, instance_id=0, max_edges=100):
         # Retrieve triples based on seed entities
@@ -306,7 +317,7 @@ class TripleRetrievalTask(BaseTask):
         else:
             triple, corruption_type = self.corrupt_triplet(triple_sample, sampled_kg)
         
-        question = f"Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
+        question = self.question(triple)
 
         answer = "Yes" if corruption_type == "None" else "No"
 
@@ -323,7 +334,7 @@ class TripleRetrievalTask(BaseTask):
         }
     
     def question(self, triple):
-        return f"Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
+        return f"Your answer must consist of either \"Yes\" or \"No\", nothing else. Is the following triplet fact present in the knowledge graph (Yes/No)? ({triple.head.label}, {triple.relation.label}, {triple.tail.label})"
 
     def corrupt_triplet(self, triple: Triple, kg: KnowledgeGraph):
         corrupted_triplet = deepcopy(triple)
@@ -358,11 +369,6 @@ class TripleRetrievalTask(BaseTask):
             triple.tail = self.pseudonomizer.map_entity(triple.tail)
         instance['prompt'] = self.structure_prompt(self.question(triple), text_kg)
         instance['question'] = self.question(triple)
-
-    def structure_prompt(self, question, text_kg):
-        intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
-        prompt = f"{intro}\n\nKnowledge Graph:\n{text_kg}\n\n{question}"
-        return prompt
     
 
 class CustomJSONEncoder(json.JSONEncoder):

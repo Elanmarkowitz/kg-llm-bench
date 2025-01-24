@@ -81,12 +81,7 @@ class HighestDegreeNodeTask(BaseTask):
         instance['question'] = question
 
     def question(self, edge_direction):
-        return f"Using the provided knowledge graph only answer the following question. Which entity has the highest number of {edge_direction} relations in the provided knowledge graph? Answer in the format 'Answer: <entity>'."
-
-    def structure_prompt(self, question, text_kg):
-        intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
-        prompt = f"{intro}\n\nKnowledge Graph:\n{text_kg}\n\n{question}"
-        return prompt
+        return f"Using the provided knowledge graph only answer the following question. Which entity has the highest number of {edge_direction} edges in the provided knowledge graph? If there is a tie, choose one. Answer with the entity label using the format 'Answer: <entity label>'. For example, if the answer is Belgium, respond with \"Answer: Belgium\". Your response must begin with 'Answer:' and then give the entity by its label. Do not output anything else."
 
 
 if __name__ == '__main__':

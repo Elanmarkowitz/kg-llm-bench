@@ -109,7 +109,7 @@ class ShortestPathTask(BaseTask):
         instance['question'] = question
 
     def question(self, answer_paths: List[List[Entity]]):
-        return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. You can use both incoming and outgoing edges. For example, if the shortest path between Argentina and Mexico is through Bolivia and Colombia, then answer should be SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']. \n you should list your answer in the form list. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"
+        return f"Your task is to find the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}. For example, if the shortest path in the knowledge graph between Argentina and Mexico is through Bolivia and Colombia, then your response should be \"SHORTEST PATH: ['Argentina', 'Bolivia', 'Colombia', 'Mexico']\". Your response must begin with 'SHORTEST_PATH:' followed by the list of entities in the path following the format shown before. Note that you can use both incoming and outgoing edges to form a path. \n\n What is the shortest path from {answer_paths[0][0].label} to {answer_paths[0][-1].label}? \n Answer: SHORTEST PATH:"
 
     def answer(self, answer_paths: List[List[Entity]]):
         return [f"SHORTEST PATH: {str(self.ent_path_to_label_path(path))}" for path in answer_paths]
@@ -117,10 +117,6 @@ class ShortestPathTask(BaseTask):
     def ent_path_to_label_path(self, path: List[Entity]):
         return [e.label for e in path]
 
-    def structure_prompt(self, question, text_kg):
-        intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
-        prompt = f"{intro}\n\nKnowledge Graph:\n{text_kg}\n\n{question}"
-        return prompt
 
 if __name__ == '__main__':
     kg = KnowledgeGraph()

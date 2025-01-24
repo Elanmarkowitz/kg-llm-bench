@@ -1,0 +1,33 @@
+pseudonomizer_configs:
+  - pseudonym_file: data/countries/pseudonym_data/country_pseudonyms.tsv
+task_configs:
+  - type: TripleRetrievalTask
+    base_dataset_file: TripleRetrieval_sample.json
+    num_instances: 10
+    num_seed_entities: 10
+    max_edges: 200
+    seed: 51
+  - type: ShortestPathTask
+    base_dataset_file: ShortestPath_sample.json
+    num_instances: 10
+    num_seed_entities: 10
+    max_edges: 200
+    seed: 52
+  - type: HighestDegreeNodeTask
+    base_dataset_file: HighestDegree_sample.json
+    num_instances: 10
+    num_seed_entities: 10
+    max_edges: 200
+    seed: 53
+  - type: AggByRelationTask
+    base_dataset_file: AggByRelation_sample.json
+    num_instances: 10
+    num_seed_entities: 1
+    max_edges: 200
+    seed: 54
+  - type: AggNeighborPropertiesTask
+    base_dataset_file: AggNeighborProperties_sample.json
+    num_instances: 10
+    num_seed_entities: 1
+    max_edges: 200
+    seed: 55

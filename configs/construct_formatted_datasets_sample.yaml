@@ -1,0 +1,27 @@
+pseudonomizer_configs:
+  - pseudonym_file: data/countries/pseudonym_data/country_pseudonyms.tsv
+  - null
+task_configs:
+  - type: TripleRetrievalTask
+    base_dataset_file: TripleRetrieval_sample.json
+  - type: ShortestPathTask
+    base_dataset_file: ShortestPath_sample.json
+  - type: HighestDegreeNodeTask
+    base_dataset_file: HighestDegree_sample.json
+  - type: AggByRelationTask
+    base_dataset_file: AggByRelation_sample.json
+  - type: AggNeighborPropertiesTask
+    base_dataset_file: AggNeighborProperties_sample.json
+conversion_configs:
+  - type: list_of_edges
+  - type: structured_yaml
+  - type: structured_json
+  - type: rdf_turtle3
+  - type: json_ld3
+  # - type: structured_yaml
+  # - type: structured_json
+  # - type: TURTLE
+  # - type: GraphSON
+  # - type: NetworkX_edge_list
+  # - type: GML
+  # - type: relation_database_csvs

@@ -4,6 +4,8 @@ from langchain_core.messages import HumanMessage, SystemMessage
 import argparse
 import os
 from botocore.exceptions import ClientError
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+import requests.exceptions
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -51,6 +53,19 @@ def init_bedrock_client(region=None):
         else:
             raise e
 
+@retry(
+    retry=retry_if_exception_type((
+        ClientError,  # AWS specific errors
+        requests.exceptions.Timeout,  # Request timeouts
+        requests.exceptions.RequestException,  # General request errors
+        Exception  # Catch-all for other potential errors
+    )),
+    wait=wait_exponential(multiplier=1, min=4, max=60),  # Wait 4-60 seconds, doubling each time
+    stop=stop_after_attempt(5),  # Stop after 5 attempts
+    reraise=True,  # Reraise the last exception
+    before_sleep=lambda retry_state: print(f"Retrying after error: {retry_state.outcome.exception()}. "
+                                         f"Attempt {retry_state.attempt_number} of 5")
+)
 def llm(model_name, prompt, max_tokens=150, temperature=0, system_prompt=None):
     """
     Calls the AWS Bedrock API with the specified model and prompt using LangChain.

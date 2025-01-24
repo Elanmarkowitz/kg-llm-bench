@@ -113,12 +113,8 @@ class AggNeighborPropertiesTask(BaseTask):
         instance['question'] = question
 
     def question(self, anchor_ent: Entity, relation: str):
-        return f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{anchor_ent.label}' have an outgoing property of type '{relation}' in the knowledge graph? You must answer in the format 'Answer: <number>'."
+        return f"Using the provided knowledge graph only answer the following question. How many of the directly connected entities to '{anchor_ent.label}' have an outgoing property of type '{relation}' in the knowledge graph? You must respond in the format 'Answer: <number>'. Do not output anything other than 'Answer: <number>'"
 
-    def structure_prompt(self, question, text_kg):
-        intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions."
-        prompt = f"{intro}\n\nKnowledge Graph:\n{text_kg}\n\n{question}"
-        return prompt
 
 if __name__ == '__main__':
     kg = KnowledgeGraph()

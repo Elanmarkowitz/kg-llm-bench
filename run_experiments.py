@@ -1,6 +1,8 @@
 import yaml
 import random
+import argparse
 from pathlib import Path
+from statistics import mean
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -8,8 +10,14 @@ from kg_builder import KnowledgeGraph
 from tasks import TripleRetrievalTask, ShortestPathTask, HighestDegreeNodeTask, AggByRelationTask, AggNeighborPropertiesTask
 from tasks.base_task import BaseTask
 
+# Set up argument parser
+parser = argparse.ArgumentParser(description='Run knowledge graph experiments')
+parser.add_argument('--reevaluate', action='store_true', help='Reevaluate existing responses')
+parser.add_argument('--config', type=str, default='configs/run_small_datasets.yaml', help='Path to the configuration file')
+args = parser.parse_args()
+
 # Load the configuration file
-with open('configs/run_small_datasets.yaml', 'r') as file:
+with open(args.config, 'r') as file:
     config = yaml.safe_load(file)
 
 # Load the knowledge graph
@@ -52,7 +60,14 @@ for task_config in config['task_configs']:
                 
                 try:
                     task.load_results()
-                    print(f"Skipping: Results already exist for {task.results_file}")
+                    if args.reevaluate:
+                        original_score = mean([r['score'] for r in task.results])
+                        print(f"Reevaluating results for {task.results_file}")
+                        task.reevaluate()
+                        new_score = mean([r['score'] for r in task.results])
+                        print(f"Original score: {original_score}, New score: {new_score}")
+                    else:
+                        print(f"Skipping: Results already exist for {task.results_file}")
                     continue
                 except ValueError:
                     print("No results found, running task")

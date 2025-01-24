@@ -3,9 +3,15 @@ import random
 from pathlib import Path
 from kg_builder import KnowledgeGraph
 from tasks import TripleRetrievalTask, ShortestPathTask, HighestDegreeNodeTask, AggByRelationTask, AggNeighborPropertiesTask
+import argparse
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Construct base datasets for knowledge graph tasks.')
+parser.add_argument('--config', type=str, default='configs/construct_base_datasets_small.yaml', help='Path to the configuration file')
+args = parser.parse_args()
 
 # Load the configuration file
-with open('configs/construct_base_datasets_small.yaml', 'r') as file:
+with open(args.config, 'r') as file:
     config = yaml.safe_load(file)
 
 # Load the knowledge graph
