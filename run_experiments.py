@@ -71,8 +71,11 @@ for task_config in config['task_configs']:
                     continue
                 except ValueError:
                     print("No results found, running task")
-                print(f"Running task: {task_type} with LLM: {llm_config['model']}")
-                task.run()
+                if args.reevaluate_only:
+                    print(f"Skipping: No results found for {task.results_file}")
+                else:
+                    print(f"Running task: {task_type} with LLM: {llm_config['model']}")
+                    task.run()
                 
                 print(f"Finished running task: {task_type} with LLM: {llm_config['model']}")
 
