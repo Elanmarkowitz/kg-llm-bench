@@ -1,5 +1,6 @@
 outs:
-- md5: 38c2e103cac41c03680ac6a4fada661c.dir
-  nfiles: 221
+- md5: 3e9e7fb33e7de6d893b9813dee80cf69.dir
+  nfiles: 261
   hash: md5
   path: HighestDegreeNode
+  size: 316644587
