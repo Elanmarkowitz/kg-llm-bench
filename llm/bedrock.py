@@ -60,8 +60,8 @@ def init_bedrock_client(region=None):
         requests.exceptions.RequestException,  # General request errors
         Exception  # Catch-all for other potential errors
     )),
-    wait=wait_exponential(multiplier=1, min=4, max=60),  # Wait 4-60 seconds, doubling each time
-    stop=stop_after_attempt(5),  # Stop after 5 attempts
+    wait=wait_exponential(multiplier=1, min=4, max=100),  # Wait 4-60 seconds, doubling each time
+    stop=stop_after_attempt(10),  # Stop after 5 attempts
     reraise=True,  # Reraise the last exception
     before_sleep=lambda retry_state: print(f"Retrying after error: {retry_state.outcome.exception()}. "
                                          f"Attempt {retry_state.attempt_number} of 5")
