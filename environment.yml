@@ -18,4 +18,5 @@ dependencies:
   - google-generativeai
   - grpcio
   - langchain-aws
+  - seaborn
 
