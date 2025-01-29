@@ -21,10 +21,12 @@ class ShortestPathTask(BaseTask):
                          results_file)
 
     def evaluate_response(self, response, answer):
-        response = response.replace("SHORTEST PATH:", "").strip()
+        response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
         try:
             response_list = ast.literal_eval(response)
         except (SyntaxError, ValueError):
+            response_list = response.strip('[]').split(',')
+            response_list = [item.strip().strip("'") for item in response_list]
             return 0.0
 
         for answer_option in answer:
