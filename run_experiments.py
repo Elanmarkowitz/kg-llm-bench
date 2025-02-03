@@ -13,6 +13,7 @@ from tasks.base_task import BaseTask
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run knowledge graph experiments')
 parser.add_argument('--reevaluate', action='store_true', help='Reevaluate existing responses')
+parser.add_argument('--reevaluate_only', action='store_true', help='Only reevaluate existing responses, do not run experiemnts')
 parser.add_argument('--config', type=str, default='configs/run_small_datasets.yaml', help='Path to the configuration file')
 args = parser.parse_args()
 
@@ -60,7 +61,7 @@ for task_config in config['task_configs']:
                 
                 try:
                     task.load_results()
-                    if args.reevaluate:
+                    if args.reevaluate or args.reevaluate_only:
                         original_score = mean([r['score'] for r in task.results])
                         print(f"Reevaluating results for {task.results_file}")
                         task.reevaluate()
@@ -72,7 +73,7 @@ for task_config in config['task_configs']:
                 except ValueError:
                     print("No results found, running task")
                 if args.reevaluate_only:
-                    print(f"Skipping: No results found for {task.results_file}")
+                    print(f"Skipping: Not running new task {task.results_file} when --revaluate_only set")
                 else:
                     print(f"Running task: {task_type} with LLM: {llm_config['model']}")
                     task.run()
