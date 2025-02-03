@@ -230,6 +230,184 @@ class ResultsAnalyzer:
         print("\nMax scores:")
         print(df.groupby(['task', 'pseudonymized'])['avg_score'].max().unstack())
 
+    def plot_radar(self, output_file: str = "model_radar_plot.pdf"):
+        """Generate a radar plot comparing models across different tasks.
+        Uses the best performing format for each task."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Get the best score for each task-model combination across formats
+        best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
+        
+        # Pivot the data for plotting
+        pivot_data = best_scores.pivot(index='model', columns='task', values='avg_score')
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        for idx, model in enumerate(pivot_data.index):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], alpha=0.7)
+            ax.fill(angles, values, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add legend
+        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        
+        plt.title("Model Performance Across Tasks\n(Best Format per Task)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_format_radar(self, output_file: str = "format_radar_plot.pdf"):
+        """Generate radar plots comparing format performance relative to the mean.
+        Shows how each format performs relative to the average across formats for each task."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate mean score for each task-model combination across formats
+        task_model_means = df.groupby(['task', 'model'])['avg_score'].mean()
+        
+        # Calculate the difference from mean for each format
+        df['score_diff'] = df.apply(
+            lambda row: row['avg_score'] - task_model_means[row['task'], row['model']], 
+            axis=1
+        )
+        
+        # Get the average difference for each task-format combination
+        format_diffs = df.groupby(['task', 'format'])['score_diff'].mean().reset_index()
+        
+        # Pivot the data for plotting
+        pivot_data = format_diffs.pivot(index='format', columns='task', values='score_diff')
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (format_name, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[format_name].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Plot the format line
+            ax.plot(angles, values, 'o-', linewidth=2, label=format_name, color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend
+        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        
+        plt.title("Format Performance Relative to Mean\nAcross Tasks and Models", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_radar_best_overall_format(self, output_file: str = "model_radar_best_format_plot.pdf"):
+        """Generate a radar plot comparing models across different tasks.
+        Uses the single best performing format overall for each model."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate average score for each model-format combination across all tasks
+        format_means = df.groupby(['model', 'format'])['avg_score'].mean()
+        
+        # Find the best format for each model
+        best_formats = format_means.groupby('model').idxmax().apply(lambda x: x[1])
+        
+        # Filter data to only include each model's best format
+        best_format_data = []
+        for model in best_formats.index:
+            model_data = df[
+                (df['model'] == model) & 
+                (df['format'] == best_formats[model])
+            ]
+            best_format_data.append(model_data)
+        
+        best_format_df = pd.concat(best_format_data)
+        
+        # Create pivot table for plotting
+        pivot_data = best_format_df.pivot_table(
+            values='avg_score',
+            index='model',
+            columns='task',
+            aggfunc='mean'
+        )
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Get the best format for this model for the legend
+            best_format = best_formats[model]
+            label = f"{model.split('/')[-1]}\n(using {best_format})"
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=label, color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        
+        plt.title("Model Performance Across Tasks\n(Using Best Overall Format per Model)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
 def main():
     print("Starting results analysis...")
     analyzer = ResultsAnalyzer()
@@ -250,6 +428,11 @@ def main():
     
     print("\nGenerating heatmap plot...")
     analyzer.plot_heatmap()
+    
+    print("\nGenerating radar plots...")
+    analyzer.plot_radar()  # Best format per task
+    analyzer.plot_radar_best_overall_format()  # Best overall format
+    analyzer.plot_format_radar()  # Format comparison
     
     print("\nGenerating summary statistics...")
     analyzer.print_summary()
