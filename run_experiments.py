@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser(description='Run knowledge graph experiments')
 parser.add_argument('--reevaluate', action='store_true', help='Reevaluate existing responses')
 parser.add_argument('--reevaluate_only', action='store_true', help='Only reevaluate existing responses, do not run experiemnts')
 parser.add_argument('--config', type=str, default='configs/run_small_datasets.yaml', help='Path to the configuration file')
+parser.add_argument('--batch', action='store_true', help='Run in batch mode using BatchBedrock')
 args = parser.parse_args()
 
 # Load the configuration file
@@ -48,6 +49,12 @@ for task_config in config['task_configs']:
         continue
     
     for llm_config in config['llm_configs']:
+        # If in batch mode and using Bedrock, switch to BatchBedrock
+        if args.batch and llm_config.get('provider') == 'bedrock':
+            llm_config = llm_config.copy()
+            llm_config['provider'] = 'batch_bedrock'
+            print(f"Using batch mode for {llm_config['model']}")
+        
         for conversion_config in config['conversion_configs']:
             for pseudonomizer_config in config['pseudonomizer_configs']:
                 task: BaseTask = task_class(conversion_config, llm_config, pseudonomizer_config,
