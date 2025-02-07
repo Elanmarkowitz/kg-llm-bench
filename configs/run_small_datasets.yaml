@@ -1,18 +1,18 @@
 llm_configs:
-  # - model: gpt-4o-mini
-  #   provider: openai
-  # - model: us.amazon.nova-lite-v1:0
-  #   provider: bedrock
-  # - model: us.amazon.nova-pro-v1:0
-  #   provider: bedrock
-  # - model: us.meta.llama3-2-1b-instruct-v1:0
-  #   provider: bedrock
-  - model: us.meta.llama3-3-70b-instruct-v1:0
-    provider: bedrock
-  # - model: us.anthropic.claude-3-5-sonnet-20241022-v2:0
-  #   provider: bedrock
-#  - model: gemini-1.5-flash-8b
-#    provider: google
+#  - model: gpt-4o-mini
+#    provider: openai
+#  - model: us.amazon.nova-lite-v1:0
+#    provider: bedrock
+#  - model: us.amazon.nova-pro-v1:0
+#    provider: bedrock
+#  - model: us.meta.llama3-2-1b-instruct-v1:0
+#    provider: bedrock
+   - model: us.meta.llama3-3-70b-instruct-v1:0
+     provider: bedrock
+#  - model: us.anthropic.claude-3-5-sonnet-20241022-v2:0
+#    provider: bedrock
+   - model: gemini-1.5-flash
+     provider: google
 pseudonomizer_configs:
   - pseudonym_file: data/countries/pseudonym_data/country_pseudonyms.tsv
   - null
@@ -43,7 +43,6 @@ conversion_configs:
   - type: structured_json
   - type: rdf_turtle3
   - type: json_ld3
-  
   # - type: TURTLE
   # - type: GraphSON
   # - type: NetworkX_edge_list
