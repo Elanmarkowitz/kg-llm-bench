@@ -1,6 +1,6 @@
 outs:
-- md5: fa00eab5a6f34fc88e7ca9566e13ba4a.dir
-  size: 417662081
-  nfiles: 331
+- md5: cf7baf565617d07199dbad8cf4deb927.dir
+  size: 235132437
+  nfiles: 271
   hash: md5
   path: AggByRelation

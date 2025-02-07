@@ -1,6 +1,6 @@
 outs:
-- md5: 7f880c7fef81f884f7e01cdf92363b6f.dir
-  nfiles: 331
+- md5: 5021027756bcd2ae3d4715e2879936b8.dir
+  nfiles: 271
   hash: md5
   path: ShortestPath
-  size: 518429781
+  size: 295990221

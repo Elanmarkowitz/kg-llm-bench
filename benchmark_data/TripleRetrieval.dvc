@@ -1,6 +1,6 @@
 outs:
-- md5: 6aedfecb8d7e65c3e70dce7742906df8.dir
-  nfiles: 231
+- md5: d39cdc877fdbfddac2c5ff9d2f143afd.dir
+  nfiles: 261
   hash: md5
   path: TripleRetrieval
-  size: 50791949
+  size: 96175204
