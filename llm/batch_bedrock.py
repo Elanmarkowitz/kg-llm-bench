@@ -77,14 +77,10 @@ class BatchBedrock:
         
         # Create model input
         model_input = {
-            "max_tokens": max_tokens,
+            "prompt": prompt,
             "temperature": temperature,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [{"type": "text", "text": prompt}]
-                }
-            ]
+            "top_p": 1.0,  # Default value for top_p, can be adjusted as needed
+            "max_gen_len": max_tokens
         }
         
         if system_prompt:

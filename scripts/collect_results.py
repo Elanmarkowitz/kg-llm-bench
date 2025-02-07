@@ -19,14 +19,28 @@ def init_clients(region: Optional[str] = None):
     s3 = boto3.client('s3')
     return bedrock, s3
 
-def download_results(s3_client, uri: str, local_path: Path):
+def download_results(s3_client, uri: str, local_path: Path, metadata: Dict):
     """Download results from S3."""
     bucket = uri.split('/')[2]
-    key = '/'.join(uri.split('/')[3:])
+    base_key = '/'.join(uri.split('/')[3:])
+    base_key = base_key.rstrip('/')  # Remove trailing slash if present
+    
     try:
-        breakpoint()
-        s3_client.download_file(bucket, key, str(local_path))
+        # Extract job ID from job ARN (last part after final /)
+        dir_key = f"{base_key}/{metadata['job_arn'].split('/')[-1]}"
+            
+        # Download manifest file
+        manifest_key = f"{dir_key}/manifest.json.out"
+        manifest_path = local_path.with_name('manifest.json.out')
+        s3_client.download_file(bucket, manifest_key, str(manifest_path))
+        
+        # Download records file
+        records_key = f"{dir_key}/records.jsonl.out"
+        records_path = local_path.with_name('records.jsonl.out')
+        s3_client.download_file(bucket, records_key, str(records_path))
+        
         return True
+            
     except ClientError as e:
         print(f"Error downloading from S3: {e}")
         return False
@@ -35,33 +49,49 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
     """Process batch results and map them back to record IDs."""
     processed_results = {}
     
-    with open(results_file, 'r') as f:
-        for line in f:
-            result = json.loads(line)
-            record_id = result['recordId']
-            
-            # Extract completion from modelOutput
-            if 'modelOutput' in result:
-                try:
-                    model_output = json.loads(result['modelOutput'])
-                    completion = model_output.get('completion', '')
-                    usage = model_output.get('usage', {})
-                except json.JSONDecodeError:
-                    completion = ''
-                    usage = {}
-                
+    # Process manifest file
+    manifest_file = results_file.with_name('manifest.json.out')
+    if manifest_file.exists():
+        with open(manifest_file, 'r') as f:
+            manifest_data = json.load(f)
+            for item in manifest_data:
+                record_id = item['recordId']
                 processed_results[record_id] = {
-                    'completion': completion,
-                    'usage': usage,
+                    'completion': item.get('completion', ''),
+                    'usage': item.get('usage', {}),
                     'status': 'completed'
                 }
-            else:
-                processed_results[record_id] = {
-                    'completion': '',
-                    'usage': {},
-                    'status': 'failed',
-                    'error': result.get('error', 'Unknown error')
-                }
+    
+    # Process records file
+    records_file = results_file.with_name('records.jsonl.out')
+    if records_file.exists():
+        with open(records_file, 'r') as f:
+            for line in f:
+                result = json.loads(line)
+                record_id = result['recordId']
+                
+                # Extract completion from modelOutput
+                if 'modelOutput' in result:
+                    try:
+                        model_output = json.loads(result['modelOutput'])
+                        completion = model_output.get('completion', '')
+                        usage = model_output.get('usage', {})
+                    except json.JSONDecodeError:
+                        completion = ''
+                        usage = {}
+                    
+                    processed_results[record_id] = {
+                        'completion': completion,
+                        'usage': usage,
+                        'status': 'completed'
+                    }
+                else:
+                    processed_results[record_id] = {
+                        'completion': '',
+                        'usage': {},
+                        'status': 'failed',
+                        'error': result.get('error', 'Unknown error')
+                    }
     
     return processed_results
 
@@ -95,8 +125,6 @@ def process_submitted_batch(bedrock_client, s3_client, batch_path: Path):
     """Process a submitted batch and collect results if complete."""
     with open(batch_path / 'metadata.json', 'r') as f:
         metadata = json.load(f)
-
-    breakpoint()
     
     if 'job_arn' not in metadata:
         print(f"No job ARN found for batch: {batch_path}")
@@ -111,10 +139,10 @@ def process_submitted_batch(bedrock_client, s3_client, batch_path: Path):
         if job_status == 'Completed':
             print(f"Processing completed batch: {batch_path}")
             
-            # Download results
+            # Download results - create a dummy results file path just for the download function
             results_file = batch_path / 'results.jsonl'
-            if download_results(s3_client, metadata['s3_output_uri'], results_file):
-                # Process results
+            if download_results(s3_client, metadata['s3_output_uri'], results_file, metadata):
+                # Process results using the actual manifest and records files
                 results = process_batch_results(results_file, metadata)
                 
                 # Update task results
@@ -156,11 +184,8 @@ def main():
     
     for batch_path in submitted_dir.iterdir():
         if batch_path.is_dir():
-            try:
-                process_submitted_batch(bedrock_client, s3_client, batch_path)
-            except Exception as e:
-                print(f"Error processing batch {batch_path}: {e}")
-                continue
+            process_submitted_batch(bedrock_client, s3_client, batch_path)
+            
 
 if __name__ == "__main__":
     main() 
