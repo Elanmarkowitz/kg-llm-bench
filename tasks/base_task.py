@@ -140,19 +140,25 @@ class BaseTask:
             instance['usage_tokens'] = llm_usage
         self.save_results()
 
-    def save_results(self):
+    def save_results(self, overwrite=False):
         print(f"Saving results to {self.results_file}")
-        save_path = self._save_data(file_path=self.results_file, save_data=self.results)
+        save_path = self._save_data(file_path=self.results_file, 
+                                    save_data=self.results,
+                                    overwrite=overwrite)
         self.results_file = save_path
 
-    def save_formatted_dataset(self):
+    def save_formatted_dataset(self, overwrite=False):
         print(f"Saving formatted dataset to {self.dataset_file}")
-        save_path = self._save_data(file_path=self.dataset_file, save_data=self.formatted_data)
+        save_path = self._save_data(file_path=self.dataset_file, 
+                                    save_data=self.formatted_data,
+                                    overwrite=overwrite)
         self.dataset_file = save_path
 
-    def save_base_dataset(self):
+    def save_base_dataset(self, overwrite=False):
         print(f"Saving base dataset to {self.base_data_file}")
-        save_path = self._save_data(file_path=self.base_data_file, save_data=self.base_data)
+        save_path = self._save_data(file_path=self.base_data_file, 
+                                    save_data=self.base_data,
+                                    overwrite=overwrite)
         self.base_data_file = save_path
         self.load_base_dataset()  # load so that we have kg_path and pseudo_kg_path
 
@@ -168,7 +174,7 @@ class BaseTask:
         print("Loading results data")
         self.results = self._load_data(self.results_file)
 
-    def _save_data(self, file_path, save_data):
+    def _save_data(self, file_path, save_data, overwrite=False):
         save_id = str(uuid.uuid4())[:6]
         save_data = deepcopy(save_data)
 
@@ -192,7 +198,7 @@ class BaseTask:
                     pseudo_kg_path = self.task_dir/'pseudo_kg'/f"kg_{save_id}_{id:04d}.pkl"
                     instance['pseudo_kg_path'] = pseudo_kg.save_kg(pseudo_kg_path)
 
-        if os.path.exists(file_path):
+        if os.path.exists(file_path) and not overwrite:
             file_path = self.get_next_filepath(file_path)
         with open(file_path, 'w') as f:
             json.dump(save_data, f, cls=CustomJSONEncoder, indent=4)
@@ -268,7 +274,7 @@ class BaseTask:
             response = instance['response']
             answer = instance['answer']
             instance['score'] = self.evaluate_response(response, answer)
-        self.save_results()
+        self.save_results(overwrite=True)
 
     def structure_prompt(self, question, text_kg):
         intro = f"Your job is to answer questions using the following knowledge graph. {self.text_presenter.get_description()}. You must rely exclusively on the information presented in the Knowledge Graph to answer questions. If the answer includes entities, always respond using the entity label rather than entity ID (if applicable)."
