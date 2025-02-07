@@ -73,7 +73,10 @@ for task_config in config['task_configs']:
                         print(f"Reevaluating results for {task.results_file}")
                         task.reevaluate()
                         new_score = mean([r['score'] for r in task.results])
-                        print(f"Original score: {original_score}, New score: {new_score}")
+                        if new_score != original_score:
+                            print(f"SCORE CHANGE for {task.results_file}\n\tOriginal score: {original_score}, New score: {new_score}")
+                        else:
+                            print(f"NO SCORE CHANGE for {task.results_file} - Score: {new_score}")
                     else:
                         print(f"Skipping: Results already exist for {task.results_file}")
                     continue
@@ -84,7 +87,6 @@ for task_config in config['task_configs']:
                 else:
                     print(f"Running task: {task_type} with LLM: {llm_config['model']}")
                     task.run()
-                
-                print(f"Finished running task: {task_type} with LLM: {llm_config['model']}")
+                    print(f"Finished running task: {task_type} with LLM: {llm_config['model']}")
 
 print("All experiments completed.")
