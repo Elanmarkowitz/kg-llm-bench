@@ -9,6 +9,23 @@ from typing import Dict, List
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+COLOR_MAP = {
+    # Grouping by provider
+    'gpt-4o-mini': '#4a4e69',  # Dark Gray/Blue
+    
+    # Amazon models
+    'us.amazon.nova-lite-v1:0': '#ffbb78',  # Light Orange
+    'us.amazon.nova-pro-v1:0': '#ff7f0e',  # Darker Orange
+    
+    # Anthropic models
+    'us.anthropic.claude-3-5-sonnet-20241022-v2:0': '#d62728',  # Red
+    
+    # Meta models
+    'us.meta.llama3-2-1b-instruct-v1:0': '#b3a0d6',  # Light Purple
+    'us.meta.llama3-3-70b-instruct-v1:0': '#9467bd',  # Purple
+    
+    # Add more models and colors as needed
+}
 class ResultsAnalyzer:
     def __init__(self, results_dir: str = "benchmark_data"):
         self.results_dir = Path(results_dir)
@@ -255,9 +272,12 @@ class ResultsAnalyzer:
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
+            # Use color from COLOR_MAP
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], alpha=0.7)
-            ax.fill(angles, values, alpha=0.1)
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], alpha=0.7, color=color)
+            ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
         ax.set_theta_offset(np.pi / 2)
@@ -336,6 +356,153 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
+    def plot_model_radar_relative(self, output_file: str = "model_radar_relative_plot.pdf"):
+        """Generate a radar plot comparing model performance relative to the mean.
+        Shows how each model performs relative to the average across models for each task."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Get the best score for each task-model combination across formats
+        best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
+        
+        # Calculate mean score for each task across all models
+        task_means = best_scores.groupby('task')['avg_score'].mean()
+        
+        # Calculate the difference from mean for each model
+        best_scores['score_diff'] = best_scores.apply(
+            lambda row: row['avg_score'] - task_means[row['task']], 
+            axis=1
+        )
+        
+        # Pivot the data for plotting
+        pivot_data = best_scores.pivot(index='model', columns='task', values='score_diff')
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        for idx, model in enumerate(pivot_data.index):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Use color from COLOR_MAP
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        
+        plt.title("Model Performance Relative to Mean\nAcross Tasks (Using Best Format per Task)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_model_radar_relative_best_format(self, output_file: str = "model_radar_relative_best_format_plot.pdf"):
+        """Generate a radar plot comparing model performance relative to the mean.
+        Shows how each model performs relative to the average across models for each task,
+        using the best overall format for each model."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate average score for each model-format combination across all tasks
+        format_means = df.groupby(['model', 'format'])['avg_score'].mean()
+        
+        # Find the best format for each model
+        best_formats = format_means.groupby('model').idxmax().apply(lambda x: x[1])
+        
+        # Filter data to only include each model's best format
+        best_format_data = []
+        for model in best_formats.index:
+            model_data = df[
+                (df['model'] == model) & 
+                (df['format'] == best_formats[model])
+            ]
+            best_format_data.append(model_data)
+        
+        best_format_df = pd.concat(best_format_data)
+        
+        # Calculate mean score for each task across all models
+        task_means = best_format_df.groupby('task')['avg_score'].mean()
+        
+        # Calculate the difference from mean for each model
+        best_format_df['score_diff'] = best_format_df.apply(
+            lambda row: row['avg_score'] - task_means[row['task']], 
+            axis=1
+        )
+        
+        # Create pivot table for plotting
+        pivot_data = best_format_df.pivot_table(
+            values='score_diff',
+            index='model',
+            columns='task',
+            aggfunc='mean'
+        )
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Use color from COLOR_MAP
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        
+        plt.title("Model Performance Relative to Mean\nAcross Tasks (Using Best Overall Format per Model)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
     def plot_radar_best_overall_format(self, output_file: str = "model_radar_best_format_plot.pdf"):
         """Generate a radar plot comparing models across different tasks.
         Uses the single best performing format overall for each model."""
@@ -381,13 +548,12 @@ class ResultsAnalyzer:
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Get the best format for this model for the legend
-            best_format = best_formats[model]
-            label = f"{model.split('/')[-1]}\n(using {best_format})"
+            # Use color from COLOR_MAP
+            model_color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=label, color=color, alpha=0.7)
-            ax.fill(angles, values, color=color, alpha=0.1)
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=model_color, alpha=0.7)
+            ax.fill(angles, values, color=model_color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
         ax.set_theta_offset(np.pi / 2)
@@ -404,6 +570,218 @@ class ResultsAnalyzer:
         plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
         
         plt.title("Model Performance Across Tasks\n(Using Best Overall Format per Model)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_format_radar_relative_pct(self, output_file: str = "format_radar_relative_pct_plot.pdf"):
+        """Generate radar plots comparing format performance relative to the mean as percentages.
+        Shows how each format performs relative to the average across formats for each task."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate mean score for each task-model combination across formats
+        task_model_means = df.groupby(['task', 'model'])['avg_score'].mean()
+        
+        # Calculate the percentage difference from mean for each format
+        df['score_pct_diff'] = df.apply(
+            lambda row: (row['avg_score'] - task_model_means[row['task'], row['model']]) / task_model_means[row['task'], row['model']] * 100 
+            if task_model_means[row['task'], row['model']] > 0 else 0, 
+            axis=1
+        )
+        
+        # Get the average difference for each task-format combination
+        format_diffs = df.groupby(['task', 'format'])['score_pct_diff'].mean().reset_index()
+        
+        # Pivot the data for plotting
+        pivot_data = format_diffs.pivot(index='format', columns='task', values='score_pct_diff')
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (format_name, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[format_name].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Plot the format line
+            ax.plot(angles, values, 'o-', linewidth=2, label=format_name, color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend
+        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        
+        plt.title("Format Performance Relative to Mean (%)\nAcross Tasks and Models", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_model_radar_relative_pct(self, output_file: str = "model_radar_relative_pct_plot.pdf"):
+        """Generate a radar plot comparing model performance relative to the mean as percentages.
+        Shows how each model performs relative to the average across models for each task."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Get the best score for each task-model combination across formats
+        best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
+        
+        # Calculate mean score for each task across all models
+        task_means = best_scores.groupby('task')['avg_score'].mean()
+        
+        # Calculate the percentage difference from mean for each model
+        best_scores['score_pct_diff'] = best_scores.apply(
+            lambda row: (row['avg_score'] - task_means[row['task']]) / task_means[row['task']] * 100
+            if task_means[row['task']] > 0 else 0,
+            axis=1
+        )
+        
+        # Pivot the data for plotting
+        pivot_data = best_scores.pivot(index='model', columns='task', values='score_pct_diff')
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Use color from COLOR_MAP
+            model_color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=model_color, alpha=0.7)
+            ax.fill(angles, values, color=model_color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        
+        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Format per Task)", pad=20)
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_model_radar_relative_best_format_pct(self, output_file: str = "model_radar_relative_best_format_pct_plot.pdf"):
+        """Generate a radar plot comparing model performance relative to the mean as percentages.
+        Shows how each model performs relative to the average across models for each task,
+        using the best overall format for each model."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate average score for each model-format combination across all tasks
+        format_means = df.groupby(['model', 'format'])['avg_score'].mean()
+        
+        # Find the best format for each model
+        best_formats = format_means.groupby('model').idxmax().apply(lambda x: x[1])
+        
+        # Filter data to only include each model's best format
+        best_format_data = []
+        for model in best_formats.index:
+            model_data = df[
+                (df['model'] == model) & 
+                (df['format'] == best_formats[model])
+            ]
+            best_format_data.append(model_data)
+        
+        best_format_df = pd.concat(best_format_data)
+        
+        # Calculate mean score for each task across all models
+        task_means = best_format_df.groupby('task')['avg_score'].mean()
+        
+        # Calculate the percentage difference from mean for each model
+        best_format_df['score_pct_diff'] = best_format_df.apply(
+            lambda row: (row['avg_score'] - task_means[row['task']]) / task_means[row['task']] * 100
+            if task_means[row['task']] > 0 else 0,
+            axis=1
+        )
+        
+        # Create pivot table for plotting
+        pivot_data = best_format_df.pivot_table(
+            values='score_pct_diff',
+            index='model',
+            columns='task',
+            aggfunc='mean'
+        )
+        
+        # Set up the angles for the radar plot
+        tasks = pivot_data.columns
+        num_tasks = len(tasks)
+        angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
+        angles += angles[:1]  # Complete the circle
+        
+        # Create the plot
+        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        
+        # Plot data
+        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
+        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+            values = pivot_data.loc[model].values.flatten().tolist()
+            values += values[:1]  # Complete the circle
+            
+            # Use color from COLOR_MAP
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            
+            # Plot the model line
+            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.fill(angles, values, color=color, alpha=0.1)
+        
+        # Fix axis to go in the right order and start at 12 o'clock
+        ax.set_theta_offset(np.pi / 2)
+        ax.set_theta_direction(-1)
+        
+        # Draw axis lines for each angle and label
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(tasks)
+        
+        # Add a grid
+        ax.grid(True)
+        
+        # Add zero line for reference
+        ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+        
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        
+        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Overall Format per Model)", pad=20)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -432,7 +810,12 @@ def main():
     print("\nGenerating radar plots...")
     analyzer.plot_radar()  # Best format per task
     analyzer.plot_radar_best_overall_format()  # Best overall format
-    analyzer.plot_format_radar()  # Format comparison
+    analyzer.plot_format_radar()  # Format comparison (absolute)
+    analyzer.plot_format_radar_relative_pct()  # Format comparison (percentage)
+    analyzer.plot_model_radar_relative()  # Model performance relative to mean (absolute, best format per task)
+    analyzer.plot_model_radar_relative_pct()  # Model performance relative to mean (percentage, best format per task)
+    analyzer.plot_model_radar_relative_best_format()  # Model performance relative to mean (absolute, best overall format)
+    analyzer.plot_model_radar_relative_best_format_pct()  # Model performance relative to mean (percentage, best overall format)
     
     print("\nGenerating summary statistics...")
     analyzer.print_summary()
