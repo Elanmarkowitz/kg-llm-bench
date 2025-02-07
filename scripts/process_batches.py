@@ -48,6 +48,10 @@ def process_pending_batch(bedrock_client, s3_client, batch_path: Path,
     )
     
     # Create batch job
+    role_arn = os.getenv('BEDROCK_BATCH_ROLE_ARN')
+    if role_arn is None:
+        raise ValueError("The environment variable 'BEDROCK_BATCH_ROLE_ARN' is not set.")
+    
     try:
         response = bedrock_client.create_model_invocation_job(
             modelId=metadata['model'],
@@ -62,7 +66,7 @@ def process_pending_batch(bedrock_client, s3_client, batch_path: Path,
                     "s3Uri": f"s3://{output_bucket}/batch_outputs/{batch_path.name}/"
                 }
             },
-            roleArn=os.getenv('BEDROCK_BATCH_ROLE_ARN')
+            roleArn=role_arn
         )
         
         # Update metadata with job information

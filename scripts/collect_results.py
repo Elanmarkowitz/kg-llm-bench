@@ -24,6 +24,7 @@ def download_results(s3_client, uri: str, local_path: Path):
     bucket = uri.split('/')[2]
     key = '/'.join(uri.split('/')[3:])
     try:
+        breakpoint()
         s3_client.download_file(bucket, key, str(local_path))
         return True
     except ClientError as e:
@@ -94,15 +95,18 @@ def process_submitted_batch(bedrock_client, s3_client, batch_path: Path):
     """Process a submitted batch and collect results if complete."""
     with open(batch_path / 'metadata.json', 'r') as f:
         metadata = json.load(f)
+
+    breakpoint()
     
     if 'job_arn' not in metadata:
         print(f"No job ARN found for batch: {batch_path}")
         return
     
     try:
-        job_status = bedrock_client.get_model_invocation_job(
+        job = bedrock_client.get_model_invocation_job(
             jobIdentifier=metadata['job_arn']
-        )['status']
+        )
+        job_status = job['status']
         
         if job_status == 'Completed':
             print(f"Processing completed batch: {batch_path}")

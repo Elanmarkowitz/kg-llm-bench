@@ -9,6 +9,7 @@ from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
 from langchain_aws.chat_models.bedrock_converse import ChatBedrockConverse
+from langchain_aws.chat_models.bedrock import ChatPromptAdapter
 from langchain_core.messages import HumanMessage, SystemMessage
 
 class BatchBedrock:
@@ -65,6 +66,14 @@ class BatchBedrock:
             
         # Generate unique record ID
         record_id = f"REC{str(uuid.uuid4())[:8]}"
+
+        # Convert prompt according to provider
+        bedrock_provider = self.model.split('.')[0]
+        if bedrock_provider not in ['anthropic', 'meta', 'mistral', 'amazon']:
+            bedrock_provider = self.model.split('.')[1]
+        if bedrock_provider not in ['anthropic', 'meta', 'mistral', 'amazon']:
+            raise ValueError(f"Unable to identify Bedrock provider for model: {self.model}")
+        prompt = ChatPromptAdapter.convert_messages_to_prompt(bedrock_provider, [HumanMessage(content=prompt)], self.model)
         
         # Create model input
         model_input = {
@@ -127,7 +136,7 @@ class BatchBedrock:
     
     def _start_new_batch(self):
         """Start a new batch by creating necessary directories and files."""
-        batch_id = f"batch_{int(time.time())}_{str(uuid.uuid4())[:8]}"
+        batch_id = f"batch-{int(time.time())}-{str(uuid.uuid4())[:8]}"
         batch_path = self.pending_dir / batch_id
         batch_path.mkdir(parents=True, exist_ok=True)
         
