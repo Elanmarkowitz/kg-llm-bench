@@ -49,19 +49,6 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
     """Process batch results and map them back to record IDs."""
     processed_results = {}
     
-    # Process manifest file
-    manifest_file = results_file.with_name('manifest.json.out')
-    if manifest_file.exists():
-        with open(manifest_file, 'r') as f:
-            manifest_data = json.load(f)
-            for item in manifest_data:
-                record_id = item['recordId']
-                processed_results[record_id] = {
-                    'completion': item.get('completion', ''),
-                    'usage': item.get('usage', {}),
-                    'status': 'completed'
-                }
-    
     # Process records file
     records_file = results_file.with_name('records.jsonl.out')
     if records_file.exists():
@@ -70,18 +57,19 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
                 result = json.loads(line)
                 record_id = result['recordId']
                 
-                # Extract completion from modelOutput
+                # Extract generation from modelOutput
                 if 'modelOutput' in result:
-                    try:
-                        model_output = json.loads(result['modelOutput'])
-                        completion = model_output.get('completion', '')
-                        usage = model_output.get('usage', {})
-                    except json.JSONDecodeError:
-                        completion = ''
-                        usage = {}
+                    model_output = result['modelOutput']
+                    generation = model_output.get('generation', '')
+                    usage = {
+                        'prompt_tokens': model_output.get('prompt_token_count', 0),
+                        'completion_tokens': model_output.get('generation_token_count', 0),
+                        'stop_reason': model_output.get('stop_reason', '')
+                    }
+                    usage['total_tokens'] = usage['prompt_tokens'] + usage['completion_tokens']
                     
                     processed_results[record_id] = {
-                        'completion': completion,
+                        'completion': generation,
                         'usage': usage,
                         'status': 'completed'
                     }
