@@ -1,18 +1,18 @@
 llm_configs:
-#  - model: gpt-4o-mini
-#    provider: openai
-#  - model: us.amazon.nova-lite-v1:0
-#    provider: bedrock
-#  - model: us.amazon.nova-pro-v1:0
-#    provider: bedrock
-#  - model: us.meta.llama3-2-1b-instruct-v1:0
-#    provider: bedrock
-   - model: us.meta.llama3-3-70b-instruct-v1:0
-     provider: bedrock
+  - model: gpt-4o-mini
+    provider: openai
+  - model: us.amazon.nova-lite-v1:0
+    provider: bedrock
+  - model: us.amazon.nova-pro-v1:0
+    provider: bedrock
+  - model: us.meta.llama3-2-1b-instruct-v1:0
+    provider: bedrock
+  - model: us.meta.llama3-3-70b-instruct-v1:0
+    provider: bedrock
 #  - model: us.anthropic.claude-3-5-sonnet-20241022-v2:0
 #    provider: bedrock
-   - model: gemini-1.5-flash
-     provider: google
+  #  - model: gemini-1.5-flash
+  #    provider: google
 pseudonomizer_configs:
   - pseudonym_file: data/countries/pseudonym_data/country_pseudonyms.tsv
   - null
@@ -21,22 +21,22 @@ task_configs:
     base_dataset_file: TripleRetrieval_small.json
     dataset_file: TripleRetrieval_small.json
     results_file: small_results.json
-  - type: ShortestPathTask
-    base_dataset_file: ShortestPath_small.json
-    dataset_file: ShortestPath_small.json
-    results_file: small_results.json
-  - type: HighestDegreeNodeTask
-    base_dataset_file: HighestDegree_small.json
-    dataset_file: HighestDegree_small.json
-    results_file: small_results.json
-  - type: AggByRelationTask
-    base_dataset_file: AggByRelation_small.json
-    dataset_file: AggByRelation_small.json
-    results_file: small_results.json
-  - type: AggNeighborPropertiesTask
-    base_dataset_file: AggNeighborProperties_small.json
-    dataset_file: AggNeighborProperties_small.json
-    results_file: small_results.json
+  # - type: ShortestPathTask
+  #   base_dataset_file: ShortestPath_small.json
+  #   dataset_file: ShortestPath_small.json
+  #   results_file: small_results.json
+  # - type: HighestDegreeNodeTask
+  #   base_dataset_file: HighestDegree_small.json
+  #   dataset_file: HighestDegree_small.json
+  #   results_file: small_results.json
+  # - type: AggByRelationTask
+  #   base_dataset_file: AggByRelation_small.json
+  #   dataset_file: AggByRelation_small.json
+  #   results_file: small_results.json
+  # - type: AggNeighborPropertiesTask
+  #   base_dataset_file: AggNeighborProperties_small.json
+  #   dataset_file: AggNeighborProperties_small.json
+  #   results_file: small_results.json
 conversion_configs:
   - type: list_of_edges
   - type: structured_yaml
