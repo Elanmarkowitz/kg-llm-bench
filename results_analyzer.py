@@ -23,6 +23,8 @@ COLOR_MAP = {
     # Meta models
     'us.meta.llama3-2-1b-instruct-v1:0': '#b3a0d6',  # Light Purple
     'us.meta.llama3-3-70b-instruct-v1:0': '#9467bd',  # Purple
+
+    'gemini-1.5-flash': '#4285F4',  # Google Blue
     
     # Add more models and colors as needed
 }
@@ -92,12 +94,15 @@ class ResultsAnalyzer:
         """Generate heatmap of results and a normalized version, both overall and per-model"""
         df = pd.DataFrame(self.results_data)
         
+        # Average across pseudonymized and non-pseudonymized results
+        df_avg = df.groupby(['task', 'format', 'model'])['avg_score'].mean().reset_index()
+        
         # Generate overall heatmaps
-        self._generate_single_heatmap(df, output_file, normalized_output_file, title_prefix="Overall")
+        self._generate_single_heatmap(df_avg, output_file, normalized_output_file, title_prefix="Overall")
         
         # Generate per-model heatmaps
-        for model in df['model'].unique():
-            model_df = df[df['model'] == model]
+        for model in df_avg['model'].unique():
+            model_df = df_avg[df_avg['model'] == model]
             model_name = model.split('/')[-1]  # Get last part of model path
             model_output = output_file.replace('.pdf', f'_{model_name}.pdf')
             model_normalized_output = normalized_output_file.replace('.pdf', f'_{model_name}.pdf')
@@ -109,7 +114,7 @@ class ResultsAnalyzer:
             df,
             values='avg_score',
             index='task',
-            columns=['format', 'pseudonymized'],
+            columns='format',
             aggfunc='mean'
         )
         
@@ -126,7 +131,7 @@ class ResultsAnalyzer:
             cbar_kws={'label': 'Score'}
         )
         
-        plt.title(f"{title_prefix} Task Performance by Format and Pseudonymization", pad=20)
+        plt.title(f"{title_prefix} Task Performance by Format", pad=20)
         plt.xticks(rotation=45, ha='right')
         plt.yticks(rotation=0)
         plt.tight_layout()
@@ -154,7 +159,7 @@ class ResultsAnalyzer:
             cbar_kws={'label': 'Normalized Score'}
         )
         
-        plt.title(f"{title_prefix} Task Performance by Format and Pseudonymization (Row Normalized)", pad=20)
+        plt.title(f"{title_prefix} Task Performance by Format (Row Normalized)", pad=20)
         plt.xticks(rotation=45, ha='right')
         plt.yticks(rotation=0)
         plt.tight_layout()
@@ -786,6 +791,134 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
+    def plot_pseudo_comparison(self, output_file: str = "pseudo_comparison.pdf"):
+        """Generate bar graph comparing pseudonymized vs non-pseudonymized results for each task"""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate mean and std dev for each task and pseudonymization combination
+        stats = df.groupby(['task', 'pseudonymized']).agg({
+            'avg_score': ['mean', 'std']
+        }).reset_index()
+        
+        # Flatten column names
+        stats.columns = ['task', 'pseudonymized', 'mean', 'std']
+        
+        # Set up the plot
+        plt.figure(figsize=(15, 8))
+        
+        # Calculate bar positions
+        tasks = sorted(df['task'].unique())
+        x = np.arange(len(tasks))
+        width = 0.35
+        
+        # Plot bars
+        non_pseudo = stats[~stats['pseudonymized']]
+        pseudo = stats[stats['pseudonymized']]
+        
+        plt.bar(x - width/2, non_pseudo['mean'], width, label='Original',
+                color='skyblue', yerr=non_pseudo['std'], capsize=5)
+        plt.bar(x + width/2, pseudo['mean'], width, label='Pseudonymized',
+                color='lightcoral', yerr=pseudo['std'], capsize=5)
+        
+        # Customize plot
+        plt.xlabel('Task')
+        plt.ylabel('Score')
+        plt.title('Comparison of Original vs Pseudonymized Performance by Task')
+        plt.xticks(x, tasks, rotation=45, ha='right')
+        plt.legend()
+        
+        # Add grid for better readability
+        plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+        
+        # Adjust layout to prevent label cutoff
+        plt.tight_layout()
+        
+        # Save plot
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_model_pseudo_impact(self, output_file: str = "model_pseudo_impact.pdf"):
+        """Generate bar graph showing the impact of pseudonymization on each model's overall performance"""
+        df = pd.DataFrame(self.results_data)
+        
+        # Calculate mean and std dev for each model and pseudonymization combination
+        stats = df.groupby(['model', 'pseudonymized']).agg({
+            'avg_score': ['mean', 'std']
+        }).reset_index()
+        
+        # Flatten column names
+        stats.columns = ['model', 'pseudonymized', 'mean', 'std']
+        
+        # Calculate the difference (pseudo - non_pseudo) for each model
+        model_impacts = []
+        for model in stats['model'].unique():
+            model_stats = stats[stats['model'] == model]
+            non_pseudo = model_stats[~model_stats['pseudonymized']].iloc[0]
+            pseudo = model_stats[model_stats['pseudonymized']].iloc[0]
+            
+            # Calculate combined standard error
+            combined_std = np.sqrt(non_pseudo['std']**2 + pseudo['std']**2)
+            
+            model_impacts.append({
+                'model': model,
+                'impact': pseudo['mean'] - non_pseudo['mean'],
+                'std': combined_std
+            })
+        
+        impact_df = pd.DataFrame(model_impacts)
+        
+        # Sort by impact
+        impact_df = impact_df.sort_values('impact', ascending=True)
+        
+        # Set up the plot
+        plt.figure(figsize=(12, 6))
+        
+        # Create bars
+        bars = plt.bar(
+            range(len(impact_df)), 
+            impact_df['impact'],
+            yerr=impact_df['std'],
+            capsize=5
+        )
+        
+        # Color bars based on positive/negative impact
+        for i, bar in enumerate(bars):
+            if impact_df['impact'].iloc[i] >= 0:
+                bar.set_color('lightgreen')
+            else:
+                bar.set_color('lightcoral')
+        
+        # Customize plot
+        plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
+        plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+        
+        plt.xlabel('Model')
+        plt.ylabel('Performance Impact (Pseudo - Original)')
+        plt.title('Impact of Pseudonymization on Model Performance')
+        
+        # Format x-axis labels
+        plt.xticks(
+            range(len(impact_df)),
+            [model.split('/')[-1] for model in impact_df['model']],
+            rotation=45,
+            ha='right'
+        )
+        
+        # Add value labels on the bars
+        for i, v in enumerate(impact_df['impact']):
+            plt.text(
+                i, 
+                v + (0.01 if v >= 0 else -0.01), 
+                f'{v:.3f}',
+                ha='center',
+                va='bottom' if v >= 0 else 'top',
+                fontsize=8
+            )
+        
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
 def main():
     print("Starting results analysis...")
     analyzer = ResultsAnalyzer()
@@ -816,6 +949,10 @@ def main():
     analyzer.plot_model_radar_relative_pct()  # Model performance relative to mean (percentage, best format per task)
     analyzer.plot_model_radar_relative_best_format()  # Model performance relative to mean (absolute, best overall format)
     analyzer.plot_model_radar_relative_best_format_pct()  # Model performance relative to mean (percentage, best overall format)
+    
+    print("\nGenerating pseudo comparison plots...")
+    analyzer.plot_pseudo_comparison()
+    analyzer.plot_model_pseudo_impact()
     
     print("\nGenerating summary statistics...")
     analyzer.print_summary()
