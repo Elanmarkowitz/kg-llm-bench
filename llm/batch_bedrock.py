@@ -81,11 +81,6 @@ class BatchBedrock:
             messages.insert(0, SystemMessage(content=system_prompt))
             
         # Create model input using LLMInputOutputAdapter
-        model_kwargs = {
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
-        
         model_input = LLMInputOutputAdapter.prepare_input(
             provider=bedrock_provider,
             prompt=ChatPromptAdapter.convert_messages_to_prompt(
@@ -94,10 +89,10 @@ class BatchBedrock:
                 self.model
             ),
             system=system_prompt,
-            model_kwargs=model_kwargs,
+            model_kwargs={},
             max_tokens=max_tokens,
             temperature=temperature
-        )   
+        )
         # Create record
         record = {
             "recordId": record_id,
