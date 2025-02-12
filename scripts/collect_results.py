@@ -48,6 +48,7 @@ def download_results(s3_client, uri: str, local_path: Path, metadata: Dict):
 def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]:
     """Process batch results and map them back to record IDs."""
     processed_results = {}
+    has_errors = False
     
     # Process records file
     records_file = results_file.with_name('records.jsonl.out')
@@ -56,6 +57,11 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
             for line in f:
                 result = json.loads(line)
                 record_id = result['recordId']
+                
+                # Check if there's an error in the result
+                if 'error' in result:
+                    has_errors = True
+                    break
                 
                 # Extract generation from modelOutput
                 if 'modelOutput' in result:
@@ -81,7 +87,7 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
                         'error': result.get('error', 'Unknown error')
                     }
     
-    return processed_results
+    return processed_results, has_errors
 
 def update_task_results(results_dir: Path, record_results: Dict[str, Dict]):
     """Update task result files with batch results."""
@@ -131,7 +137,15 @@ def process_submitted_batch(bedrock_client, s3_client, batch_path: Path):
             results_file = batch_path / 'results.jsonl'
             if download_results(s3_client, metadata['s3_output_uri'], results_file, metadata):
                 # Process results using the actual manifest and records files
-                results = process_batch_results(results_file, metadata)
+                results, has_errors = process_batch_results(results_file, metadata)
+                
+                if has_errors:
+                    print(f"Errors found in batch results: {batch_path}")
+                    metadata['status'] = 'failed'
+                    metadata['error'] = "Errors found in batch results"
+                    with open(batch_path / 'metadata.json', 'w') as f:
+                        json.dump(metadata, f, indent=2)
+                    return
                 
                 # Update task results
                 update_task_results(Path('benchmark_data'), results)
