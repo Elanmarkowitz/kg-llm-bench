@@ -168,11 +168,11 @@ def delete_pending_batch(batch_id: Optional[str] = None, delete_all: bool = Fals
                     except Exception as e:
                         print(f"Error updating {result_file}: {e}")
         
-        if not update_results:
-            continue_delete = input("Results were not deleted. Do you want to continue with batch deletion? [y/N] ").lower() == 'y'
-            if not continue_delete:
-                print("Batch deletion aborted.")
-                return
+            if not update_results:
+                continue_delete = input("Results were not deleted. Do you want to continue with batch deletion? [y/N] ").lower() == 'y'
+                if not continue_delete:
+                    print("Batch deletion aborted.")
+                    return
         try:
             shutil.rmtree(batch_path)
             print(f"Deleted batch directory: {batch_path}")
