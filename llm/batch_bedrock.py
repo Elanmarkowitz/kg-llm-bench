@@ -10,6 +10,7 @@ import boto3
 from botocore.exceptions import ClientError
 from langchain_aws.chat_models.bedrock_converse import ChatBedrockConverse
 from langchain_aws.chat_models.bedrock import ChatPromptAdapter
+from langchain_aws.llms.bedrock import LLMInputOutputAdapter
 from langchain_core.messages import HumanMessage, SystemMessage
 
 class BatchBedrock:
@@ -73,22 +74,30 @@ class BatchBedrock:
             bedrock_provider = self.model.split('.')[1]
         if bedrock_provider not in ['anthropic', 'meta', 'mistral', 'amazon']:
             raise ValueError(f"Unable to identify Bedrock provider for model: {self.model}")
-        prompt = ChatPromptAdapter.convert_messages_to_prompt(bedrock_provider, [HumanMessage(content=prompt)], self.model)
-        
-        # Create model input
-        model_input = {
-            "prompt": prompt,
+
+        # Convert messages to provider-specific prompt format
+        messages = [HumanMessage(content=prompt)]
+        if system_prompt:
+            messages.insert(0, SystemMessage(content=system_prompt))
+            
+        # Create model input using LLMInputOutputAdapter
+        model_kwargs = {
             "temperature": temperature,
-            "top_p": 1.0,  # Default value for top_p, can be adjusted as needed
-            "max_gen_len": max_tokens
+            "max_tokens": max_tokens,
         }
         
-        if system_prompt:
-            model_input["messages"].insert(0, {
-                "role": "system",
-                "content": [{"type": "text", "text": system_prompt}]
-            })
-            
+        model_input = LLMInputOutputAdapter.prepare_input(
+            provider=bedrock_provider,
+            prompt=ChatPromptAdapter.convert_messages_to_prompt(
+                bedrock_provider, 
+                messages,
+                self.model
+            ),
+            system=system_prompt,
+            model_kwargs=model_kwargs,
+            max_tokens=max_tokens,
+            temperature=temperature
+        )   
         # Create record
         record = {
             "recordId": record_id,
