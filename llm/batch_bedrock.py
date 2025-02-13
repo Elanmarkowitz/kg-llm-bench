@@ -79,16 +79,20 @@ class BatchBedrock:
         messages = [HumanMessage(content=prompt)]
         if system_prompt:
             messages.insert(0, SystemMessage(content=system_prompt))
+
+        try:
+            messages = ChatPromptAdapter.format_messages(bedrock_provider, messages)
+            prompt = None
+        except NotImplementedError:
+            messages = None
+            prompt = ChatPromptAdapter.convert_messages_to_prompt(bedrock_provider, messages, self.model) 
             
         # Create model input using LLMInputOutputAdapter
         model_input = LLMInputOutputAdapter.prepare_input(
             provider=bedrock_provider,
-            prompt=ChatPromptAdapter.convert_messages_to_prompt(
-                bedrock_provider, 
-                messages,
-                self.model
-            ),
-            system=system_prompt,
+            prompt=prompt,
+            system_prompt=None,
+            messages=messages,
             model_kwargs={},
             max_tokens=max_tokens,
             temperature=temperature
