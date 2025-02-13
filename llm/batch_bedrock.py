@@ -79,7 +79,7 @@ class BatchBedrock:
         messages = [HumanMessage(content=prompt)]
 
         try:
-            messages = ChatPromptAdapter.format_messages(bedrock_provider, messages)
+            _, messages = ChatPromptAdapter.format_messages(bedrock_provider, messages)
             prompt = None
         except NotImplementedError:
             messages = None
