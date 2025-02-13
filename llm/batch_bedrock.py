@@ -77,8 +77,6 @@ class BatchBedrock:
 
         # Convert messages to provider-specific prompt format
         messages = [HumanMessage(content=prompt)]
-        if system_prompt:
-            messages.insert(0, SystemMessage(content=system_prompt))
 
         try:
             messages = ChatPromptAdapter.format_messages(bedrock_provider, messages)
@@ -91,7 +89,7 @@ class BatchBedrock:
         model_input = LLMInputOutputAdapter.prepare_input(
             provider=bedrock_provider,
             prompt=prompt,
-            system_prompt=None,
+            system=system_prompt,
             messages=messages,
             model_kwargs={},
             max_tokens=max_tokens,
