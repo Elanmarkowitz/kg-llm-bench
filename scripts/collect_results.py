@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
+import io
 import os
 import json
 import time
 import argparse
 from pathlib import Path
 from typing import Optional, Dict, List
+from io import BytesIO
 
 import boto3
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
+from langchain_aws.llms.bedrock import LLMInputOutputAdapter
 
 load_dotenv()
 
@@ -50,6 +53,14 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
     processed_results = {}
     has_errors = False
     
+    # Get provider from model ID
+    model_id = metadata['model']
+    provider = model_id.split('.')[0]
+    if provider not in ['anthropic', 'meta', 'mistral', 'amazon']:
+        provider = model_id.split('.')[1]
+    if provider not in ['anthropic', 'meta', 'mistral', 'amazon']:
+        raise ValueError(f"Unable to identify Bedrock provider for model: {model_id}")
+    
     # Process records file
     records_file = results_file.with_name('records.jsonl.out')
     if records_file.exists():
@@ -61,31 +72,44 @@ def process_batch_results(results_file: Path, metadata: Dict) -> Dict[str, Dict]
                 # Check if there's an error in the result
                 if 'error' in result:
                     has_errors = True
-                    break
-                
-                # Extract generation from modelOutput
-                if 'modelOutput' in result:
-                    model_output = result['modelOutput']
-                    generation = model_output.get('generation', '')
-                    usage = {
-                        'prompt_tokens': model_output.get('prompt_token_count', 0),
-                        'completion_tokens': model_output.get('generation_token_count', 0),
-                        'stop_reason': model_output.get('stop_reason', '')
-                    }
-                    usage['total_tokens'] = usage['prompt_tokens'] + usage['completion_tokens']
-                    
-                    processed_results[record_id] = {
-                        'completion': generation,
-                        'usage': usage,
-                        'status': 'completed'
-                    }
-                else:
                     processed_results[record_id] = {
                         'completion': '',
                         'usage': {},
                         'status': 'failed',
                         'error': result.get('error', 'Unknown error')
                     }
+                    continue
+
+                # Use LLMInputOutputAdapter to process the output
+                try:
+                    # Create a readable bytes object
+                    body_bytes = io.BytesIO(json.dumps(result['modelOutput']).encode())
+                    
+                    output = LLMInputOutputAdapter.prepare_output(provider, {
+                        'body': body_bytes,
+                        'ResponseMetadata': {
+                            'HTTPHeaders': {
+                                'x-amzn-bedrock-input-token-count': result['modelOutput']['usage']['input_tokens'],
+                                'x-amzn-bedrock-output-token-count': result['modelOutput']['usage']['output_tokens']
+                            }
+                        }
+                    })
+                    
+                    processed_results[record_id] = {
+                        'completion': output['text'],
+                        'usage': output['usage'],
+                        'status': 'completed',
+                        'tool_calls': output['tool_calls']
+                    }
+                except Exception as e:
+                    print(f"Error processing result for record {record_id}: {e}")
+                    processed_results[record_id] = {
+                        'completion': '',
+                        'usage': {},
+                        'status': 'failed',
+                        'error': str(e)
+                    }
+                    has_errors = True
     
     return processed_results, has_errors
 
@@ -108,6 +132,7 @@ def update_task_results(results_dir: Path, record_results: Dict[str, Dict]):
                     result = record_results[record_id]
                     instance['response'] = result['completion']
                     instance['usage_tokens'] = result['usage']
+                    instance['tool_calls'] = result.get('tool_calls', [])
                     updated = True
         
         if updated:
@@ -138,7 +163,6 @@ def process_submitted_batch(bedrock_client, s3_client, batch_path: Path):
             if download_results(s3_client, metadata['s3_output_uri'], results_file, metadata):
                 # Process results using the actual manifest and records files
                 results, has_errors = process_batch_results(results_file, metadata)
-                
                 if has_errors:
                     print(f"Errors found in batch results: {batch_path}")
                     metadata['status'] = 'failed'
