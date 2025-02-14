@@ -14,20 +14,40 @@ COLOR_MAP = {
     'gpt-4o-mini': '#4a4e69',  # Dark Gray/Blue
     
     # Amazon models
-    'us.amazon.nova-lite-v1:0': '#ffbb78',  # Light Orange
-    'us.amazon.nova-pro-v1:0': '#ff7f0e',  # Darker Orange
+    'nova-lite': '#ffbb78',  # Light Orange
+    'nova-pro': '#ff7f0e',  # Darker Orange
     
     # Anthropic models
-    'us.anthropic.claude-3-5-sonnet-20241022-v2:0': '#d62728',  # Red
+    'claude-3.5-sonnet-v2': '#d62728',  # Red
     
     # Meta models
-    'us.meta.llama3-2-1b-instruct-v1:0': '#b3a0d6',  # Light Purple
-    'us.meta.llama3-3-70b-instruct-v1:0': '#9467bd',  # Purple
+    'llama3.2-1b-instruct': '#b3a0d6',  # Light Purple
+    'llama3.3-70b-instruct': '#9467bd',  # Purple
 
     'gemini-1.5-flash': '#4285F4',  # Google Blue
     
     # Add more models and colors as needed
 }
+
+MODEL_NAME_MAP = {
+    'gemini-1.5-flash': 'gemini-1.5-flash',
+    'gpt-4o-mini': 'gpt-4o-mini',
+    'us.amazon.nova-lite-v1:0': 'nova-lite',
+    'us.amazon.nova-pro-v1:0': 'nova-pro',
+    'us.anthropic.claude-3-5-sonnet-20241022-v2:0': 'claude-3.5-sonnet-v2',
+    'us.meta.llama3-2-1b-instruct-v1:0': 'llama3.2-1b-instruct',
+    'us.meta.llama3-3-70b-instruct-v1:0': 'llama3.3-70b-instruct'
+}
+
+# Format name mapping
+FORMAT_NAME_MAP = {
+    'list_of_edges': 'List of Edges',
+    'structured_json': 'Structured JSON',
+    'structured_yaml': 'Structured YAML',
+    'rdf_turtle3': 'RDF Turtle',
+    'json_ld3': 'JSON-LD'
+}
+
 class ResultsAnalyzer:
     def __init__(self, results_dir: str = "benchmark_data"):
         self.results_dir = Path(results_dir)
@@ -78,6 +98,11 @@ class ResultsAnalyzer:
                             avg_score = np.mean(scores) if scores else 0
                             std_score = np.std(scores) if scores else 0
                             
+                            # Calculate token usage metrics
+                            input_tokens = [r['usage_tokens']['prompt_tokens'] for r in results if r is not None]
+                            avg_input_tokens = np.mean(input_tokens) if input_tokens else 0
+                            std_input_tokens = np.std(input_tokens) if input_tokens else 0
+                            
                             print(f"      Found {len(scores)} examples, avg score: {avg_score:.3f}")
                             
                             self.results_data.append({
@@ -87,28 +112,55 @@ class ResultsAnalyzer:
                                 'pseudonymized': is_pseudo,
                                 'avg_score': avg_score,
                                 'std_score': std_score,
-                                'num_examples': len(scores)
+                                'num_examples': len(scores),
+                                'avg_input_tokens': avg_input_tokens,
+                                'std_input_tokens': std_input_tokens
                             })
+
+    def _get_ordered_tasks_and_formats(self, df: pd.DataFrame):
+        """Helper method to get tasks and formats ordered by overall performance"""
+        # Calculate average performance for each task
+        task_performance = df.groupby('task')['avg_score'].mean().sort_values(ascending=False)
+        ordered_tasks = task_performance.index.tolist()
+        
+        # Calculate average performance for each format
+        format_performance = df.groupby('format')['avg_score'].mean().sort_values(ascending=False)
+        ordered_formats = format_performance.index.tolist()
+        
+        return ordered_tasks, ordered_formats
 
     def plot_heatmap(self, output_file: str = "results_heatmap.pdf", normalized_output_file: str = "results_heatmap_normalized.pdf"):
         """Generate heatmap of results and a normalized version, both overall and per-model"""
         df = pd.DataFrame(self.results_data)
         
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        
+        # Get ordered tasks and formats from raw data first
+        ordered_tasks, ordered_formats = self._get_ordered_tasks_and_formats(df)
+        
         # Average across pseudonymized and non-pseudonymized results
         df_avg = df.groupby(['task', 'format', 'model'])['avg_score'].mean().reset_index()
         
         # Generate overall heatmaps
-        self._generate_single_heatmap(df_avg, output_file, normalized_output_file, title_prefix="Overall")
+        self._generate_single_heatmap(df_avg, output_file, normalized_output_file, 
+                                    title_prefix="Overall",
+                                    ordered_tasks=ordered_tasks,
+                                    ordered_formats=ordered_formats)
         
         # Generate per-model heatmaps
         for model in df_avg['model'].unique():
             model_df = df_avg[df_avg['model'] == model]
-            model_name = model.split('/')[-1]  # Get last part of model path
+            model_name = model  # Already mapped
             model_output = output_file.replace('.pdf', f'_{model_name}.pdf')
             model_normalized_output = normalized_output_file.replace('.pdf', f'_{model_name}.pdf')
-            self._generate_single_heatmap(model_df, model_output, model_normalized_output, title_prefix=f"Model: {model_name}")
+            self._generate_single_heatmap(model_df, model_output, model_normalized_output, 
+                                        title_prefix=f"Model: {model_name}",
+                                        ordered_tasks=ordered_tasks,
+                                        ordered_formats=ordered_formats)
     
-    def _generate_single_heatmap(self, df: pd.DataFrame, output_file: str, normalized_output_file: str, title_prefix: str = ""):
+    def _generate_single_heatmap(self, df: pd.DataFrame, output_file: str, normalized_output_file: str, 
+                                title_prefix: str = "", ordered_tasks=None, ordered_formats=None):
         """Helper method to generate a pair of heatmaps (regular and normalized) for the given dataframe"""
         pivot = pd.pivot_table(
             df,
@@ -117,6 +169,12 @@ class ResultsAnalyzer:
             columns='format',
             aggfunc='mean'
         )
+        
+        # Reorder rows and columns if provided
+        if ordered_tasks is not None:
+            pivot = pivot.reindex(ordered_tasks)
+        if ordered_formats is not None:
+            pivot = pivot.reindex(columns=ordered_formats)
         
         # Regular heatmap
         plt.figure(figsize=(12, 8))
@@ -127,13 +185,15 @@ class ResultsAnalyzer:
             cmap='Greens',
             vmin=0,
             vmax=1,
-            annot_kws={'size': 8},
-            cbar_kws={'label': 'Score'}
+            annot_kws={'size': 10},  # Increased font size
+            cbar_kws={'label': 'Score'},
+            linewidths=0.5,  # Adjusted to reduce horizontal margin
+            linecolor='white'  # Optional: to make grid lines visible
         )
         
-        plt.title(f"{title_prefix} Task Performance by Format", pad=20)
-        plt.xticks(rotation=45, ha='right')
-        plt.yticks(rotation=0)
+        plt.title(f"{title_prefix} Raw Heatmap", pad=20)  # Updated title
+        plt.xticks(rotation=45, ha='right', fontsize=10)  # Diagonalize and increase font size
+        plt.yticks(rotation=0, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -155,13 +215,15 @@ class ResultsAnalyzer:
             cmap='Greens',
             vmin=0,
             vmax=1,
-            annot_kws={'size': 8},
-            cbar_kws={'label': 'Normalized Score'}
+            annot_kws={'size': 10},  # Increased font size
+            cbar_kws={'label': 'Normalized Score'},
+            linewidths=0.5,  # Adjusted to reduce horizontal margin
+            linecolor='white'  # Optional: to make grid lines visible
         )
         
-        plt.title(f"{title_prefix} Task Performance by Format (Row Normalized)", pad=20)
-        plt.xticks(rotation=45, ha='right')
-        plt.yticks(rotation=0)
+        plt.title(f"{title_prefix} Row Normalized Heatmap", pad=20)  # Updated title
+        plt.xticks(rotation=45, ha='right', fontsize=10)  # Diagonalize and increase font size
+        plt.yticks(rotation=0, fontsize=10)
         plt.tight_layout()
         plt.savefig(normalized_output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -257,11 +319,20 @@ class ResultsAnalyzer:
         Uses the best performing format for each task."""
         df = pd.DataFrame(self.results_data)
         
+        # Map model names using MODEL_NAME_MAP
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        
         # Get the best score for each task-model combination across formats
         best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
         
+        # Get ordered tasks
+        ordered_tasks, _ = self._get_ordered_tasks_and_formats(df)
+        
         # Pivot the data for plotting
         pivot_data = best_scores.pivot(index='model', columns='task', values='avg_score')
+        
+        # Reorder columns (tasks)
+        pivot_data = pivot_data.reindex(columns=ordered_tasks)
         
         # Set up the angles for the radar plot
         tasks = pivot_data.columns
@@ -269,19 +340,18 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
         for idx, model in enumerate(pivot_data.index):
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
             color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], alpha=0.7, color=color)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -290,12 +360,15 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
-        # Add legend
-        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        # Adjust y-axis labels
+        ax.tick_params(axis='y', labelsize=8)  # Smaller font size for score labels
         
-        plt.title("Model Performance Across Tasks\n(Best Format per Task)", pad=20)
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)  # Moved downward
+        
+        plt.title("Model Performance Across Tasks\n(Best Format per Task)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -326,8 +399,8 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
         colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
@@ -336,7 +409,7 @@ class ResultsAnalyzer:
             values += values[:1]  # Complete the circle
             
             # Plot the format line
-            ax.plot(angles, values, 'o-', linewidth=2, label=format_name, color=color, alpha=0.7)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=format_name, color=color, alpha=0.7, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -345,7 +418,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -353,10 +426,13 @@ class ResultsAnalyzer:
         # Add zero line for reference
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
-        # Add legend
-        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        # Adjust y-axis labels
+        ax.tick_params(axis='y', labelsize=8)  # Smaller font size for score labels
         
-        plt.title("Format Performance Relative to Mean\nAcross Tasks and Models", pad=20)
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
+        
+        plt.title("Format Performance Relative to Mean\nAcross Tasks and Models", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -366,8 +442,14 @@ class ResultsAnalyzer:
         Shows how each model performs relative to the average across models for each task."""
         df = pd.DataFrame(self.results_data)
         
+        # Map model names using MODEL_NAME_MAP
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        
         # Get the best score for each task-model combination across formats
         best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
+        
+        # Get ordered tasks
+        ordered_tasks, _ = self._get_ordered_tasks_and_formats(df)
         
         # Calculate mean score for each task across all models
         task_means = best_scores.groupby('task')['avg_score'].mean()
@@ -381,25 +463,27 @@ class ResultsAnalyzer:
         # Pivot the data for plotting
         pivot_data = best_scores.pivot(index='model', columns='task', values='score_diff')
         
+        # Reorder columns (tasks)
+        pivot_data = pivot_data.reindex(columns=ordered_tasks)
+        
         # Set up the angles for the radar plot
         tasks = pivot_data.columns
         num_tasks = len(tasks)
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
         for idx, model in enumerate(pivot_data.index):
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
             color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -408,7 +492,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -416,10 +500,13 @@ class ResultsAnalyzer:
         # Add zero line for reference
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
-        # Add legend with adjusted position and font size
-        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        # Adjust y-axis labels
+        ax.tick_params(axis='y', labelsize=8)  # Smaller font size for score labels
         
-        plt.title("Model Performance Relative to Mean\nAcross Tasks (Using Best Format per Task)", pad=20)
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
+        
+        plt.title("Model Performance Relative to Mean\nAcross Tasks (Best Format per Task)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -429,6 +516,9 @@ class ResultsAnalyzer:
         Shows how each model performs relative to the average across models for each task,
         using the best overall format for each model."""
         df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
         
         # Calculate average score for each model-format combination across all tasks
         format_means = df.groupby(['model', 'format'])['avg_score'].mean()
@@ -470,20 +560,18 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
-        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
-        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+        for idx, model in enumerate(pivot_data.index):
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
             color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -492,7 +580,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -501,9 +589,9 @@ class ResultsAnalyzer:
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
         # Add legend with adjusted position and font size
-        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
         
-        plt.title("Model Performance Relative to Mean\nAcross Tasks (Using Best Overall Format per Model)", pad=20)
+        plt.title("Model Performance Relative to Mean\nAcross Tasks (Using Best Overall Format per Model)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -512,6 +600,9 @@ class ResultsAnalyzer:
         """Generate a radar plot comparing models across different tasks.
         Uses the single best performing format overall for each model."""
         df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
         
         # Calculate average score for each model-format combination across all tasks
         format_means = df.groupby(['model', 'format'])['avg_score'].mean()
@@ -544,21 +635,19 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
-        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
-        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+        for idx, model in enumerate(pivot_data.index):
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
-            model_color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=model_color, alpha=0.7)
-            ax.fill(angles, values, color=model_color, alpha=0.1)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
+            ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
         ax.set_theta_offset(np.pi / 2)
@@ -566,15 +655,15 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
         
         # Add legend with adjusted position and font size
-        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
         
-        plt.title("Model Performance Across Tasks\n(Using Best Overall Format per Model)", pad=20)
+        plt.title("Model Performance Across Tasks\n(Using Best Overall Format per Model)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -584,6 +673,9 @@ class ResultsAnalyzer:
         Shows how each format performs relative to the average across formats for each task."""
         df = pd.DataFrame(self.results_data)
         
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+
         # Calculate mean score for each task-model combination across formats
         task_model_means = df.groupby(['task', 'model'])['avg_score'].mean()
         
@@ -606,8 +698,8 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
         colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
@@ -616,7 +708,7 @@ class ResultsAnalyzer:
             values += values[:1]  # Complete the circle
             
             # Plot the format line
-            ax.plot(angles, values, 'o-', linewidth=2, label=format_name, color=color, alpha=0.7)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=format_name, color=color, alpha=0.7, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -625,7 +717,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -633,10 +725,10 @@ class ResultsAnalyzer:
         # Add zero line for reference
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
-        # Add legend
-        plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        # Add legend with adjusted position and font size
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
         
-        plt.title("Format Performance Relative to Mean (%)\nAcross Tasks and Models", pad=20)
+        plt.title("Format Performance Relative to Mean (%)\nAcross Tasks and Models", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -646,6 +738,10 @@ class ResultsAnalyzer:
         Shows how each model performs relative to the average across models for each task."""
         df = pd.DataFrame(self.results_data)
         
+
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+
         # Get the best score for each task-model combination across formats
         best_scores = df.groupby(['task', 'model'])['avg_score'].max().reset_index()
         
@@ -668,8 +764,8 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
         colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
@@ -677,12 +773,11 @@ class ResultsAnalyzer:
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
-            model_color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
+            color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=model_color, alpha=0.7)
-            ax.fill(angles, values, color=model_color, alpha=0.1)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
+            ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
         ax.set_theta_offset(np.pi / 2)
@@ -690,7 +785,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -699,9 +794,9 @@ class ResultsAnalyzer:
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
         # Add legend with adjusted position and font size
-        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
         
-        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Format per Task)", pad=20)
+        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Format per Task)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -712,6 +807,9 @@ class ResultsAnalyzer:
         using the best overall format for each model."""
         df = pd.DataFrame(self.results_data)
         
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+
         # Calculate average score for each model-format combination across all tasks
         format_means = df.groupby(['model', 'format'])['avg_score'].mean()
         
@@ -753,20 +851,18 @@ class ResultsAnalyzer:
         angles = [n / float(num_tasks) * 2 * np.pi for n in range(num_tasks)]
         angles += angles[:1]  # Complete the circle
         
-        # Create the plot
-        fig, ax = plt.subplots(figsize=(12, 12), subplot_kw=dict(projection='polar'))
+        # Create the plot with adjusted size for single column
+        fig, ax = plt.subplots(figsize=(4.5, 4.5), subplot_kw=dict(projection='polar'))
         
         # Plot data
-        colors = plt.cm.Set2(np.linspace(0, 1, len(pivot_data.index)))
-        for idx, (model, color) in enumerate(zip(pivot_data.index, colors)):
+        for idx, model in enumerate(pivot_data.index):
             values = pivot_data.loc[model].values.flatten().tolist()
             values += values[:1]  # Complete the circle
             
-            # Use color from COLOR_MAP
             color = COLOR_MAP.get(model, '#000000')  # Default to black if model not found
             
             # Plot the model line
-            ax.plot(angles, values, 'o-', linewidth=2, label=model.split('/')[-1], color=color, alpha=0.7)
+            ax.plot(angles, values, 'o-', linewidth=1.5, label=model, alpha=0.7, color=color, markersize=3)
             ax.fill(angles, values, color=color, alpha=0.1)
         
         # Fix axis to go in the right order and start at 12 o'clock
@@ -775,7 +871,7 @@ class ResultsAnalyzer:
         
         # Draw axis lines for each angle and label
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(tasks)
+        ax.set_xticklabels(tasks, fontsize=8)  # Smaller font size for task labels
         
         # Add a grid
         ax.grid(True)
@@ -784,9 +880,9 @@ class ResultsAnalyzer:
         ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
         
         # Add legend with adjusted position and font size
-        plt.legend(loc='center left', bbox_to_anchor=(1.2, 0.5), fontsize=8)
+        plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.4), fontsize=7)
         
-        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Overall Format per Model)", pad=20)
+        plt.title("Model Performance Relative to Mean (%)\nAcross Tasks (Using Best Overall Format per Model)", pad=20, fontsize=10)
         plt.tight_layout()
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
@@ -794,6 +890,12 @@ class ResultsAnalyzer:
     def plot_pseudo_comparison(self, output_file: str = "pseudo_comparison.pdf"):
         """Generate bar graph comparing pseudonymized vs non-pseudonymized results for each task"""
         df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        
+        # Get ordered tasks
+        ordered_tasks, _ = self._get_ordered_tasks_and_formats(df)
         
         # Calculate mean and std dev for each task and pseudonymization combination
         stats = df.groupby(['task', 'pseudonymized']).agg({
@@ -807,13 +909,12 @@ class ResultsAnalyzer:
         plt.figure(figsize=(15, 8))
         
         # Calculate bar positions
-        tasks = sorted(df['task'].unique())
-        x = np.arange(len(tasks))
+        x = np.arange(len(ordered_tasks))
         width = 0.35
         
         # Plot bars
-        non_pseudo = stats[~stats['pseudonymized']]
-        pseudo = stats[stats['pseudonymized']]
+        non_pseudo = stats[~stats['pseudonymized']].set_index('task').reindex(ordered_tasks)
+        pseudo = stats[stats['pseudonymized']].set_index('task').reindex(ordered_tasks)
         
         plt.bar(x - width/2, non_pseudo['mean'], width, label='Original',
                 color='skyblue', yerr=non_pseudo['std'], capsize=5)
@@ -824,7 +925,7 @@ class ResultsAnalyzer:
         plt.xlabel('Task')
         plt.ylabel('Score')
         plt.title('Comparison of Original vs Pseudonymized Performance by Task')
-        plt.xticks(x, tasks, rotation=45, ha='right')
+        plt.xticks(x, ordered_tasks, rotation=45, ha='right')
         plt.legend()
         
         # Add grid for better readability
@@ -840,6 +941,9 @@ class ResultsAnalyzer:
     def plot_model_pseudo_impact(self, output_file: str = "model_pseudo_impact.pdf"):
         """Generate bar graph showing the impact of pseudonymization on each model's overall performance"""
         df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
         
         # Calculate mean and std dev for each model and pseudonymization combination
         stats = df.groupby(['model', 'pseudonymized']).agg({
@@ -899,7 +1003,7 @@ class ResultsAnalyzer:
         # Format x-axis labels
         plt.xticks(
             range(len(impact_df)),
-            [model.split('/')[-1] for model in impact_df['model']],
+            impact_df['model'],
             rotation=45,
             ha='right'
         )
@@ -919,6 +1023,634 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
+    def plot_combined_heatmaps(self, output_file: str = "combined_heatmaps.pdf"):
+        """Generate a combined heatmap plot for all models in a grid layout."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        
+        # Get ordered tasks and formats from raw data
+        ordered_tasks, ordered_formats = self._get_ordered_tasks_and_formats(df)
+        
+        # Average across pseudonymized and non-pseudonymized results
+        df_avg = df.groupby(['task', 'format', 'model'])['avg_score'].mean().reset_index()
+        
+        # Filter the DataFrame to include only the specified models using their exact names
+        models_to_include = ['gemini-1.5-flash', 'claude-3.5-sonnet-v2', 'gpt-4o-mini', 'nova-pro']
+        df_avg = df_avg[df_avg['model'].isin(models_to_include)]
+        
+        # Create a figure with subplots in a 2x7 grid
+        fig = plt.figure(figsize=(7, 4)) 
+        gs = plt.GridSpec(2, len(df_avg['model'].unique()), figure=fig, wspace=0.1)  # Reduced horizontal margin
+        
+        # Create axes for each subplot
+        axes = [[plt.subplot(gs[i, j]) for j in range(len(df_avg['model'].unique()))] 
+                for i in range(2)]
+        
+        # Create a single colorbar axis
+        cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
+        
+        # First, create all pivot tables and find global min/max per task
+        all_pivots = {}
+        task_min_max = {}
+        
+        for model in sorted(df_avg['model'].unique()):
+            model_df = df_avg[df_avg['model'] == model]
+            pivot = model_df.pivot(index='task', columns='format', values='avg_score')
+            pivot = pivot.reindex(ordered_tasks).reindex(columns=ordered_formats)
+            all_pivots[model] = pivot
+            
+            # Update min/max for each task
+            for task in pivot.index:
+                if task not in task_min_max:
+                    task_min_max[task] = {'min': float('inf'), 'max': float('-inf')}
+                task_min_max[task]['min'] = min(task_min_max[task]['min'], pivot.loc[task].min())
+                task_min_max[task]['max'] = max(task_min_max[task]['max'], pivot.loc[task].max())
+        
+        for col_idx, model in enumerate(sorted(df_avg['model'].unique())):
+            pivot = all_pivots[model]
+            
+            # Unnormalized heatmap (top row)
+            sns.heatmap(
+                pivot,
+                annot=True,
+                fmt='.2f',
+                cmap='Greens',
+                vmin=0,
+                vmax=1,
+                ax=axes[0][col_idx],
+                cbar=True if col_idx == len(df_avg['model'].unique())-1 else False,
+                cbar_ax=cbar_ax if col_idx == len(df_avg['model'].unique())-1 else None,
+                cbar_kws={'label': 'Score'},
+                xticklabels=False,
+                yticklabels=True if col_idx == 0 else False,
+                annot_kws={"size": 6}
+            )
+            
+            # Create normalized pivot using global task min/max
+            normalized_pivot = pivot.copy()
+            for task in pivot.index:
+                min_val = task_min_max[task]['min']
+                max_val = task_min_max[task]['max']
+                if max_val > min_val:  # Avoid division by zero
+                    normalized_pivot.loc[task] = (pivot.loc[task] - min_val) / (max_val - min_val)
+            
+            # Normalized heatmap (bottom row)
+            sns.heatmap(
+                normalized_pivot,
+                annot=pivot.values,
+                fmt='.2f',
+                cmap='Greens',
+                vmin=0,
+                vmax=1,
+                ax=axes[1][col_idx],
+                cbar=False,
+                xticklabels=True,
+                yticklabels=True if col_idx == 0 else False,
+                annot_kws={"size": 6}
+            )
+            
+            # Only show y-labels on leftmost plots
+            if col_idx == 0:
+                axes[0][col_idx].set_ylabel('Raw Heatmap', fontsize=10)  # Increased font size
+                axes[1][col_idx].set_ylabel('Row Normalized Heatmap', fontsize=10)  # Increased font size
+            else:
+                axes[0][col_idx].set_ylabel('')
+                axes[1][col_idx].set_ylabel('')
+            
+            # Rotate x-labels on all bottom plots
+            axes[1][col_idx].set_xticklabels(
+                axes[1][col_idx].get_xticklabels(),
+                rotation=45,
+                ha='right',
+                fontsize=8  # Increased font size
+            )
+            
+            # Rotate y-labels on all left plots
+            if col_idx == 0:
+                axes[0][col_idx].set_yticklabels(
+                    axes[0][col_idx].get_yticklabels(),
+                    rotation=30,
+                    va='top',  
+                    ha='right',   # Horizontal alignment to the right
+                    fontsize=8  # Increased font size
+                )
+                axes[1][col_idx].set_yticklabels(
+                    axes[1][col_idx].get_yticklabels(),
+                    rotation=30,
+                    va='top',  
+                    ha='right',   # Horizontal alignment to the right
+                    fontsize=8  # Increased font size
+                )
+
+            # Add model name only at the top
+            axes[0][col_idx].set_title(model, fontsize=10)  # Increased font size
+            
+            # Set x-label only on bottom row
+            axes[0][col_idx].set_xlabel('')
+            axes[1][col_idx].set_xlabel('')
+            # axes[1][col_idx].set_xlabel('Format' if col_idx == len(df_avg['model'].unique())//2 else '')
+            
+        # Add row labels on the left
+        # fig.text(0.02, 0.75, 'Raw Heatmap', rotation=90, va='center', fontsize=16)  # Increased font size
+        # fig.text(0.02, 0.25, 'Row Normalized Heatmap', rotation=90, va='center', fontsize=16)  # Increased font size
+        
+        plt.tight_layout()
+        # Adjust layout to make room for the colorbar
+        plt.subplots_adjust(right=0.9)
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def generate_full_results_latex_table(self, output_file: str = "full_results_summary.tex"):
+        """Generate a LaTeX table with format -> model structure, with pseudonymized as sub-rows."""
+        df = pd.DataFrame(self.results_data)
+
+        # Map model names using MODEL_NAME_MAP
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+
+        # Task name mapping
+        TASK_NAME_MAP = {
+            'AggByRelation': '\makecell{Agg by\\\\ Relation}',
+            'AggNeighborProperties': '\makecell{Agg Neighbor\\\\ Properties}',
+            'HighestDegreeNode': '\makecell{Highest\\\\ Degree}',
+            'ShortestPath': '\makecell{Shortest\\\\ Path}',
+            'TripleRetrieval': '\makecell{Triple\\\\ Retrieval}'
+        }
+
+        # Create pivot table for scores
+        pivot = df.pivot_table(
+            values='avg_score',
+            index=['format', 'model', 'pseudonymized'],
+            columns='task',
+            aggfunc='mean'
+        ).round(3)
+
+        # Rename columns using task mapping
+        pivot = pivot.rename(columns=TASK_NAME_MAP)
+
+        # Calculate overall scores
+        pivot['Overall'] = pivot.mean(axis=1)
+
+        # Sort formats in desired order
+        format_order = ['List of Edges', 'Structured JSON', 'Structured YAML', 'RDF Turtle', 'JSON-LD']
+        pivot = pivot.reindex(format_order, level=0)
+
+        # Calculate format-level averages
+        format_avgs = {}
+        for format_name in format_order:
+            format_data = pivot.xs(format_name, level=0)
+            # Calculate averages for non-pseudo and pseudo separately
+            non_pseudo = format_data[~format_data.index.get_level_values('pseudonymized')].mean()
+            pseudo = format_data[format_data.index.get_level_values('pseudonymized')].mean()
+            format_avgs[format_name] = {'non_pseudo': non_pseudo, 'pseudo': pseudo}
+
+        # Start building LaTeX string
+        latex_lines = []
+        
+        # Add required packages
+        latex_lines.extend([
+            "% Required packages for rotated text and multirow",
+            "%\\usepackage{rotating}",
+            "%\\usepackage{multirow}",
+            "%\\usepackage{makecell}",
+            ""
+        ])
+        
+        latex_lines.append("\\begin{longtable}{p{1.5cm}lcccccc}")  # Adjusted first column width for rotated text
+        
+        # Add caption and label
+        latex_lines.append("\\caption{Full Results Summary by Format and Model} \\\\")
+        latex_lines.append("\\label{tab:full_results_summary} \\\\")
+        
+        # Add headers
+        latex_lines.append("\\toprule")
+        headers = ['Format', 'Model', '\makecell{Agg by\\\\ Relation}', '\makecell{Agg Neighbor\\\\ Properties}', 
+                  '\makecell{Highest\\\\ Degree}', '\makecell{Shortest\\\\ Path}', '\makecell{Triple\\\\ Retrieval}', 'Overall']
+        latex_lines.append(" & ".join(headers) + " \\\\")
+        latex_lines.append("\\midrule")
+        latex_lines.append("\\endfirsthead")
+        
+        # Add continued headers for subsequent pages
+        latex_lines.append("\\multicolumn{8}{c}{\\tablename\\ \\thetable\\ -- Continued from previous page} \\\\")
+        latex_lines.append("\\toprule")
+        latex_lines.append(" & ".join(headers) + " \\\\")
+        latex_lines.append("\\midrule")
+        latex_lines.append("\\endhead")
+        
+        # Add footer for all but last page
+        latex_lines.append("\\midrule")
+        latex_lines.append("\\multicolumn{8}{r}{Continued on next page} \\\\")
+        latex_lines.append("\\endfoot")
+        
+        # Add footer for last page
+        latex_lines.append("\\bottomrule")
+        latex_lines.append("\\endlastfoot")
+
+        # Process each format
+        current_format = None
+        first_model = True
+        for idx in pivot.index:
+            format_name, model, is_pseudo = idx
+            
+            # Add format separator if needed
+            if current_format != format_name:
+                if current_format is not None:
+                    # Add format overall before moving to next format
+                    avgs = format_avgs[current_format]
+                    latex_lines.append("\\midrule")
+                    row = [
+                        "",
+                        "\\textbf{Format Overall}",
+                    ] + [f"{v:.3f}" for v in avgs['non_pseudo']]
+                    latex_lines.append(" & ".join(row) + " \\\\")
+                    row = [
+                        "",
+                        "\\quad +pseudo",
+                    ] + [f"{v:.3f}" for v in avgs['pseudo']]
+                    latex_lines.append(" & ".join(row) + " \\\\")
+                    latex_lines.append("\\midrule")
+                current_format = format_name
+                first_model = True
+            
+            # Format the row
+            values = pivot.loc[idx]
+            if not is_pseudo:
+                # Main model row with rotated format name
+                row = [
+                    f"\\multirow{{2}}{{=}}{{\\rotatebox[origin=c]{{90}}{{{format_name}}}}}" if first_model else "",  # Rotated format name
+                    f"\\textbf{{{model}}}",
+                ] + [f"{v:.3f}" for v in values]
+                latex_lines.append(" & ".join(row) + " \\\\")
+                first_model = False
+            else:
+                # Pseudonymized sub-row
+                row = [
+                    "",  # Empty for format
+                    "\\quad +pseudo",  # Shortened pseudonymized indicator
+                ] + [f"{v:.3f}" for v in values]
+                latex_lines.append(" & ".join(row) + " \\\\")
+
+        # Add the last format's overall after all models
+        avgs = format_avgs[current_format]
+        latex_lines.append("\\midrule")
+        row = [
+            "",
+            "\\textbf{Format Overall}",
+        ] + [f"{v:.3f}" for v in avgs['non_pseudo']]
+        latex_lines.append(" & ".join(row) + " \\\\")
+        row = [
+            "",
+            "\\quad +pseudo",
+        ] + [f"{v:.3f}" for v in avgs['pseudo']]
+        latex_lines.append(" & ".join(row) + " \\\\")
+
+        # Add Format Overall section showing model averages across all formats
+        latex_lines.append("\\midrule")
+        
+        # Process each model for Format Overall section
+        first_model = True
+        for model in pivot.index.get_level_values('model').unique():
+            # Get scores for non-pseudonymized version
+            model_scores = pivot.xs((model, False), level=('model', 'pseudonymized'), drop_level=False)
+            avg_scores = model_scores.mean()  # Average across all formats
+            
+            # Main model row with rotated Format Overall text
+            row = [
+                f"\\multirow{{2}}{{=}}{{\\rotatebox[origin=c]{{90}}{{All Formats}}}}" if first_model else "",
+                f"\\textbf{{{model}}}",
+            ] + [f"{avg_scores[col]:.3f}" for col in pivot.columns]
+            latex_lines.append(" & ".join(row) + " \\\\")
+            
+            # Get scores for pseudonymized version
+            model_scores_pseudo = pivot.xs((model, True), level=('model', 'pseudonymized'), drop_level=False)
+            avg_scores_pseudo = model_scores_pseudo.mean()  # Average across all formats
+            
+            # Pseudonymized sub-row
+            row = [
+                "",  # Empty for format
+                "\\quad +pseudo",  # Shortened pseudonymized indicator
+            ] + [f"{avg_scores_pseudo[col]:.3f}" for col in pivot.columns]
+            latex_lines.append(" & ".join(row) + " \\\\")
+            first_model = False
+
+        latex_lines.append("\\midrule")
+        # Calculate overall means for each task (column)
+        # For non-pseudonymized
+        overall_row = [
+            "",
+            "\\textbf{Overall Score}",
+        ] + [f"{pivot[col][~pivot.index.get_level_values('pseudonymized')].mean():.3f}" for col in pivot.columns]
+        latex_lines.append(" & ".join(overall_row) + " \\\\")
+
+        # For pseudonymized
+        overall_row_pseudo = [
+            "",
+            "\\quad +pseudo",
+        ] + [f"{pivot[col][pivot.index.get_level_values('pseudonymized')].mean():.3f}" for col in pivot.columns]
+        latex_lines.append(" & ".join(overall_row_pseudo) + " \\\\")
+
+        # Finish table
+        latex_lines.append("\\bottomrule")
+        latex_lines.append("\\end{longtable}")
+
+        # Write to file
+        with open(output_file, 'w') as f:
+            f.write("\n".join(latex_lines))
+
+    def generate_best_format_table(self, output_file: str = "best_format_summary.tex"):
+        """Generate a LaTeX table with the best overall format for each model."""
+        df = pd.DataFrame(self.results_data)
+
+        # Map model names using MODEL_NAME_MAP
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+
+        # Calculate average score for each model-format combination
+        format_means = df.groupby(['model', 'format'])['avg_score'].mean().reset_index()
+
+        # Find the best format for each model
+        best_formats = format_means.loc[format_means.groupby('model')['avg_score'].idxmax()]
+
+        # Map format names to their display names
+        best_formats['format'] = best_formats['format'].map(FORMAT_NAME_MAP)
+
+        # Start building LaTeX string
+        latex_lines = []
+        
+        # Add required packages
+        latex_lines.append("\\begin{table}[ht]")
+        latex_lines.append("\\centering")
+        latex_lines.append("\\caption{Best Textualization Strategy for Each Model}")
+        latex_lines.append("\\begin{tabular}{ll}")
+        latex_lines.append("\\toprule")
+        latex_lines.append("Model & Best $f$ \\\\")
+        latex_lines.append("\\midrule")
+
+        # Add rows for each model and its best format
+        for _, row in best_formats.iterrows():
+            latex_lines.append(f"{row['model']} & {row['format']} \\\\")
+        
+        latex_lines.append("\\bottomrule")
+        latex_lines.append("\\end{tabular}")
+        latex_lines.append("\\end{table}")
+
+        # Write to file
+        with open(output_file, 'w') as f:
+            f.write("\n".join(latex_lines))
+
+    def plot_pseudo_scatter_by_format(self, output_file: str = "pseudo_scatter_by_format.pdf"):
+        """Generate a scatter plot showing pseudonymization impact for each format-model combination."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+
+        # Calculate means for each model-task-format combination
+        means = df.groupby(['model', 'task', 'format', 'pseudonymized'])['avg_score'].agg(['mean', 'std', 'count']).reset_index()
+
+        # Pivot to get pseudo and non-pseudo scores side by side
+        pivot = means.pivot(index=['model', 'task', 'format'], columns='pseudonymized', values=['mean', 'std', 'count']).reset_index()
+        pivot.columns = ['model', 'task', 'format', 'mean_non_pseudo', 'mean_pseudo', 'std_non_pseudo', 'std_pseudo', 'n_non_pseudo', 'n_pseudo']
+        
+        # Calculate difference and standard error
+        pivot['diff'] = pivot['mean_pseudo'] - pivot['mean_non_pseudo']
+        # Standard error of the difference using pooled standard error formula
+        pivot['se'] = np.sqrt(
+            (pivot['std_pseudo']**2 / pivot['n_pseudo']) + 
+            (pivot['std_non_pseudo']**2 / pivot['n_non_pseudo'])
+        )
+        
+        # Create figure
+        plt.figure(figsize=(12, 6))
+        
+        # Calculate x positions with jitter
+        formats = pivot['format'].unique()
+        x_positions = {format_name: i for i, format_name in enumerate(formats)}
+        jitter = np.random.normal(0, 0.1, size=len(pivot))
+        x_coords = [x_positions[format_name] + j for format_name, j in zip(pivot['format'], jitter)]
+        
+        # Create color map for models
+        models = pivot['model'].unique()
+        colors = plt.cm.Set2(np.linspace(0, 1, len(models)))
+        model_color_map = dict(zip(models, colors))
+        
+        # Plot error bars and points
+        for model in models:
+            mask = pivot['model'] == model
+            plt.scatter(
+                [x_coords[i] for i in range(len(pivot)) if mask.iloc[i]],
+                pivot[mask]['diff'],
+                label=model,
+                color=model_color_map[model],
+                alpha=0.6
+            )
+        
+        # Add zero line
+        plt.axhline(y=0, color='black', linestyle='--', alpha=0.3)
+        
+        # Customize plot
+        plt.xlabel('Format')
+        plt.ylabel('Pseudonymization Impact (Pseudo - Original)')
+        plt.title('Impact of Pseudonymization by Format and Model')
+        plt.xticks(range(len(formats)), formats, rotation=45, ha='right')
+        plt.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True, axis='y', linestyle='--', alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_pseudo_scatter_by_model(self, output_file: str = "pseudo_scatter_by_model.pdf"):
+        """Generate a scatter plot showing pseudonymization impact for each model-task-format combination."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+
+        # Calculate means for each model-task-format combination
+        means = df.groupby(['model', 'task', 'format', 'pseudonymized'])['avg_score'].agg(['mean', 'std', 'count']).reset_index()
+        
+        # Pivot to get pseudo and non-pseudo scores side by side
+        pivot = means.pivot(index=['model', 'task', 'format'], columns='pseudonymized', values=['mean', 'std', 'count']).reset_index()
+        pivot.columns = ['model', 'task', 'format', 'mean_non_pseudo', 'mean_pseudo', 'std_non_pseudo', 'std_pseudo', 'n_non_pseudo', 'n_pseudo']
+        
+        # Calculate difference and standard error
+        pivot['diff'] = pivot['mean_pseudo'] - pivot['mean_non_pseudo']
+        # Standard error of the difference using pooled standard error formula
+        pivot['se'] = np.sqrt(
+            (pivot['std_pseudo']**2 / pivot['n_pseudo']) + 
+            (pivot['std_non_pseudo']**2 / pivot['n_non_pseudo'])
+        )
+        
+        # Create figure
+        plt.figure(figsize=(12, 6))
+        
+        # Calculate x positions with jitter
+        models = pivot['model'].unique()
+        x_positions = {model: i for i, model in enumerate(models)}
+        jitter = np.random.normal(0, 0.1, size=len(pivot))
+        x_coords = [x_positions[model] + j for model, j in zip(pivot['model'], jitter)]
+        
+        # Create color map for tasks
+        tasks = pivot['task'].unique()
+        colors = plt.cm.Set2(np.linspace(0, 1, len(tasks)))
+        task_color_map = dict(zip(tasks, colors))
+        
+        # Plot error bars and points
+        for task in tasks:
+            mask = pivot['task'] == task
+            plt.scatter(
+                [x_coords[i] for i in range(len(pivot)) if mask.iloc[i]],
+                pivot[mask]['diff'],
+                label=task,
+                color=task_color_map[task],
+                alpha=0.6
+            )
+        
+        # Add zero line
+        plt.axhline(y=0, color='black', linestyle='--', alpha=0.3)
+        
+        # Customize plot
+        plt.xlabel('Model')
+        plt.ylabel('Pseudonymization Impact (Pseudo - Original)')
+        plt.title('Impact of Pseudonymization by Model and Task')
+        plt.xticks(range(len(models)), models, rotation=45, ha='right')
+        plt.legend(title='Task', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True, axis='y', linestyle='--', alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def plot_pseudo_scatter_by_task(self, output_file: str = "pseudo_scatter_by_task.pdf"):
+        """Generate a scatter plot showing pseudonymization impact for each task-model-format combination."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map model names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+
+        # Calculate means for each model-task-format combination
+        means = df.groupby(['model', 'task', 'format', 'pseudonymized'])['avg_score'].agg(['mean', 'std', 'count']).reset_index()
+        
+        # Pivot to get pseudo and non-pseudo scores side by side
+        pivot_full = means.pivot(index=['model', 'task', 'format'], columns='pseudonymized', values=['mean', 'std', 'count']).reset_index()
+        pivot_full.columns = ['model', 'task', 'format', 'mean_non_pseudo', 'mean_pseudo', 'std_non_pseudo', 'std_pseudo', 'n_non_pseudo', 'n_pseudo']
+
+        means_stats = df.groupby(['task', 'model', 'pseudonymized'])['avg_score'].agg(['mean', 'std', 'count']).reset_index()
+        pivot_stats = means_stats.pivot(index=['task', 'model'], columns='pseudonymized', values=['mean', 'std', 'count']).reset_index()
+        pivot_stats.columns = ['task', 'model', 'mean_non_pseudo', 'mean_pseudo', 'std_non_pseudo', 'std_pseudo', 'n_non_pseudo', 'n_pseudo']
+
+        # Calculate difference and standard error
+        pivot_full['diff'] = pivot_full['mean_pseudo'] - pivot_full['mean_non_pseudo']
+        pivot_stats['diff'] = pivot_stats['mean_pseudo'] - pivot_stats['mean_non_pseudo']
+
+        # Standard error of the difference using pooled standard error formula
+        pivot_stats['se'] = np.sqrt(
+            (pivot_stats['std_pseudo']**2 / pivot_stats['n_pseudo']) + 
+            (pivot_stats['std_non_pseudo']**2 / pivot_stats['n_non_pseudo'])
+        )
+        pivot = pivot_full
+        # Create figure
+        plt.figure(figsize=(6, 5))  # Adjusted for a single column figure
+        
+        # Create color map for models
+        models = pivot['model'].unique()
+        colors = plt.cm.Set2(np.linspace(0, 1, len(models)))
+        model_color_map = dict(zip(models, colors))
+        model_color_map = COLOR_MAP
+
+        # Calculate x positions with jitter
+        tasks = pivot['task'].unique()
+        x_positions = {task: i for i, task in enumerate(tasks)}
+        jitter = np.random.normal(0, 0.1, size=len(pivot))
+        x_coords = [x_positions[task] + j for task, j in zip(pivot['task'], jitter)]
+        jitter_stats = np.tile(np.arange(-0.3, 0.3, 0.6/len(models)), len(pivot_stats) // len(models))  
+        x_coords_stats = [x_positions[task] + j for task, j in zip(pivot_stats['task'], jitter_stats)]
+        
+        # Plot error bars and points
+        for model in models:
+            mask = pivot['model'] == model
+            plt.scatter(
+                [x_coords[i] for i in range(len(pivot)) if mask.iloc[i]],
+                pivot[mask]['diff'],
+                label=model,
+                color=model_color_map[model],
+                alpha=0.6
+            )
+            mask = pivot_stats['model'] == model
+            plt.errorbar(
+                [x_coords_stats[i] for i in range(len(pivot_stats)) if mask.iloc[i]],
+                pivot_stats[mask]['diff'],
+                yerr=pivot_stats[mask]['se'],  # Using standard error as the error bars
+                color=model_color_map[model],
+                alpha=0.6,
+                fmt='o',  # Changed to a valid format string
+                capsize=5  # Size of the error bar caps 
+            )
+        
+        # Add zero line
+        plt.axhline(y=0, color='black', linestyle='--', alpha=0.3)
+        
+        # Customize plot
+        plt.xlabel('Task')
+        plt.ylabel('Difference (Pseudo - Original)')
+        plt.title('Impact of Pseudonymization by Task')
+        plt.xticks(range(len(tasks)), tasks, rotation=45, ha='right')
+        # plt.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True, axis='y', linestyle='--', alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
+    def generate_token_usage_table(self, output_file: str = "token_usage_summary.tex"):
+        """Generate a LaTeX table showing average token usage by format."""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map format names using FORMAT_NAME_MAP
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+        
+        # Calculate average token usage for each format
+        token_stats = df.groupby(['format'])['avg_input_tokens'].agg(['mean', 'std']).round(1)
+        
+        # Start building LaTeX string
+        latex_lines = []
+        
+        latex_lines.append("\\begin{table}[ht]")
+        latex_lines.append("\\centering")
+        latex_lines.append("\\caption{Average Input Token Usage by Format}")
+        latex_lines.append("\\begin{tabular}{lr}")
+        latex_lines.append("\\toprule")
+        latex_lines.append("Textualizer & Mean Input Tokens \\\\")
+        latex_lines.append("\\midrule")
+        
+        # Process each format
+        for format_name in FORMAT_NAME_MAP.values():
+            if format_name in token_stats.index.get_level_values('format'):
+                orig_tokens = token_stats.loc[(format_name), 'mean']
+                orig_std = token_stats.loc[(format_name), 'std']
+                
+                latex_lines.append(f"{format_name} & {orig_tokens:.1f} $\\pm$ {orig_std:.1f} \\\\")
+        
+        # Add overall averages
+        latex_lines.append("\\midrule")
+        overall_orig = token_stats['mean'].mean()
+        overall_orig_std = token_stats['std'].mean()
+        latex_lines.append(f"Overall & {overall_orig:.1f} $\\pm$ {overall_orig_std:.1f} \\\\")
+        
+        latex_lines.append("\\bottomrule")
+        latex_lines.append("\\end{tabular}")
+        latex_lines.append("\\end{table}")
+        
+        # Write to file
+        with open(output_file, 'w') as f:
+            f.write("\n".join(latex_lines))
+
 def main():
     print("Starting results analysis...")
     analyzer = ResultsAnalyzer()
@@ -934,11 +1666,20 @@ def main():
         print("4. The format directories contain model directories with 'small_results.json' files")
         return
     
+    print("\nGenerating token usage table...")
+    analyzer.generate_token_usage_table()
+    
     print("\nGenerating LaTeX table...")
     analyzer.generate_latex_table()
     
-    print("\nGenerating heatmap plot...")
-    analyzer.plot_heatmap()
+    print("\nGenerating best format summary table...")
+    analyzer.generate_best_format_table()
+    
+    print("\nGenerating full results LaTeX table...")
+    analyzer.generate_full_results_latex_table()
+    
+    print("\nGenerating combined heatmap plot...")
+    analyzer.plot_combined_heatmaps()
     
     print("\nGenerating radar plots...")
     analyzer.plot_radar()  # Best format per task
@@ -953,6 +1694,9 @@ def main():
     print("\nGenerating pseudo comparison plots...")
     analyzer.plot_pseudo_comparison()
     analyzer.plot_model_pseudo_impact()
+    analyzer.plot_pseudo_scatter_by_format()  # New scatter plot by format
+    analyzer.plot_pseudo_scatter_by_model()  # New scatter plot by model
+    analyzer.plot_pseudo_scatter_by_task()
     
     print("\nGenerating summary statistics...")
     analyzer.print_summary()
