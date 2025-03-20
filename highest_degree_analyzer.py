@@ -121,7 +121,7 @@ class HighestDegreeAnalyzer:
                                 'num_examples': len(data['scores'])
                             })
 
-    def plot_edge_direction_comparison(self, output_file: str = "highest_degree_edge_direction.pdf"):
+    def plot_edge_direction_comparison(self, output_file: str = "figs/highest_degree/highest_degree_edge_direction.pdf"):
         """Generate a bar plot comparing format performance by edge direction, averaged over models"""
         df = pd.DataFrame(self.results_data)
         
@@ -172,7 +172,7 @@ class HighestDegreeAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_edge_direction_comparison(self, output_file: str = "highest_degree_edge_direction.pdf"):
+    def plot_model_edge_direction_comparison(self, output_file: str = "figs/highest_degree/highest_degree_edge_direction.pdf"):
         """Generate a bar plot comparing format performance by edge direction, averaged over models"""
         df = pd.DataFrame(self.results_data)
         
@@ -223,7 +223,7 @@ class HighestDegreeAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def generate_edge_direction_latex_table(self, output_file: str = "highest_degree_edge_direction.tex"):
+    def generate_edge_direction_latex_table(self, output_file: str = "figs/highest_degree/highest_degree_edge_direction.tex"):
         """Generate a LaTeX table showing performance by edge direction"""
         df = pd.DataFrame(self.results_data)
         
@@ -276,7 +276,7 @@ class HighestDegreeAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
 
-    def plot_binned_degree_performance(self, output_file: str = "degree_binned_performance.pdf", n_bins: int = 10):
+    def plot_binned_degree_performance(self, output_file: str = "figs/highest_degree/degree_binned_performance.pdf", n_bins: int = 10):
         """Generate a scatter plot showing binned max degree vs average accuracy"""
         df = pd.DataFrame(self.full_results_data)  # Changed to use full_results_data
         
@@ -321,6 +321,9 @@ def main():
         print("\nNo HighestDegree results data was found!")
         return
     
+    # Make figs/highest_degree directory
+    os.makedirs("figs/highest_degree", exist_ok=True)
+
     print("\nGenerating edge direction comparison plot...")
     analyzer.plot_edge_direction_comparison()
     

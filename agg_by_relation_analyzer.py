@@ -113,7 +113,7 @@ class AggByRelationAnalyzer:
                         })
                         
 
-    def plot_relation_comparison(self, output_file: str = "agg_by_relation_comparison.pdf"):
+    def plot_relation_comparison(self, output_file: str = "figs/agg_by_relation/agg_by_relation_comparison.pdf"):
         """Generate a bar plot comparing format performance by relation, averaged over models"""
         df = pd.DataFrame(self.results_data)
         
@@ -217,7 +217,7 @@ class AggByRelationAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
 
-    def plot_binned_answer_performance(self, output_file: str = "answer_binned_performance.pdf", n_bins: int = 10):
+    def plot_binned_answer_performance(self, output_file: str = "figs/agg_by_relation/answer_binned_performance.pdf", n_bins: int = 10):
         """Generate a scatter plot showing binned answer vs average accuracy"""
         df = pd.DataFrame(self.full_results_data)  # Changed to use full_results_data
         
@@ -270,6 +270,9 @@ def main():
         print("\nNo AggByRelation results data was found!")
         return
     
+    # Make figs/agg_by_relation directory
+    os.makedirs("figs/agg_by_relation", exist_ok=True)
+
     # print("\nGenerating relation comparison plot...")
     # analyzer.plot_relation_comparison()
     

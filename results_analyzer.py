@@ -129,7 +129,7 @@ class ResultsAnalyzer:
         
         return ordered_tasks, ordered_formats
 
-    def plot_heatmap(self, output_file: str = "results_heatmap.pdf", normalized_output_file: str = "results_heatmap_normalized.pdf"):
+    def plot_heatmap(self, output_file: str = "figs/results_heatmap.pdf", normalized_output_file: str = "figs/results_heatmap_normalized.pdf"):
         """Generate heatmap of results and a normalized version, both overall and per-model"""
         df = pd.DataFrame(self.results_data)
         
@@ -228,7 +228,7 @@ class ResultsAnalyzer:
         plt.savefig(normalized_output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def generate_latex_table(self, output_file: str = "results_summary.tex"):
+    def generate_latex_table(self, output_file: str = "figs/results_summary.tex"):
         """Generate LaTeX table with format x task matrix, subdividing each task into normal/pseudo"""
         df = pd.DataFrame(self.results_data)
         
@@ -314,7 +314,7 @@ class ResultsAnalyzer:
         print("\nMax scores:")
         print(df.groupby(['task', 'pseudonymized'])['avg_score'].max().unstack())
 
-    def plot_radar(self, output_file: str = "model_radar_plot.pdf"):
+    def plot_radar(self, output_file: str = "figs/model_radar_plot.pdf"):
         """Generate a radar plot comparing models across different tasks.
         Uses the best performing format for each task."""
         df = pd.DataFrame(self.results_data)
@@ -373,7 +373,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_format_radar(self, output_file: str = "format_radar_plot.pdf"):
+    def plot_format_radar(self, output_file: str = "figs/format_radar_plot.pdf"):
         """Generate radar plots comparing format performance relative to the mean.
         Shows how each format performs relative to the average across formats for each task."""
         df = pd.DataFrame(self.results_data)
@@ -437,7 +437,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_radar_relative(self, output_file: str = "model_radar_relative_plot.pdf"):
+    def plot_model_radar_relative(self, output_file: str = "figs/model_radar_relative_plot.pdf"):
         """Generate a radar plot comparing model performance relative to the mean.
         Shows how each model performs relative to the average across models for each task."""
         df = pd.DataFrame(self.results_data)
@@ -511,7 +511,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_radar_relative_best_format(self, output_file: str = "model_radar_relative_best_format_plot.pdf"):
+    def plot_model_radar_relative_best_format(self, output_file: str = "figs/model_radar_relative_best_format_plot.pdf"):
         """Generate a radar plot comparing model performance relative to the mean.
         Shows how each model performs relative to the average across models for each task,
         using the best overall format for each model."""
@@ -596,7 +596,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_radar_best_overall_format(self, output_file: str = "model_radar_best_format_plot.pdf"):
+    def plot_radar_best_overall_format(self, output_file: str = "figs/model_radar_best_format_plot.pdf"):
         """Generate a radar plot comparing models across different tasks.
         Uses the single best performing format overall for each model."""
         df = pd.DataFrame(self.results_data)
@@ -668,7 +668,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_format_radar_relative_pct(self, output_file: str = "format_radar_relative_pct_plot.pdf"):
+    def plot_format_radar_relative_pct(self, output_file: str = "figs/format_radar_relative_pct_plot.pdf"):
         """Generate radar plots comparing format performance relative to the mean as percentages.
         Shows how each format performs relative to the average across formats for each task."""
         df = pd.DataFrame(self.results_data)
@@ -733,7 +733,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_radar_relative_pct(self, output_file: str = "model_radar_relative_pct_plot.pdf"):
+    def plot_model_radar_relative_pct(self, output_file: str = "figs/model_radar_relative_pct_plot.pdf"):
         """Generate a radar plot comparing model performance relative to the mean as percentages.
         Shows how each model performs relative to the average across models for each task."""
         df = pd.DataFrame(self.results_data)
@@ -801,7 +801,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_radar_relative_best_format_pct(self, output_file: str = "model_radar_relative_best_format_pct_plot.pdf"):
+    def plot_model_radar_relative_best_format_pct(self, output_file: str = "figs/model_radar_relative_best_format_pct_plot.pdf"):
         """Generate a radar plot comparing model performance relative to the mean as percentages.
         Shows how each model performs relative to the average across models for each task,
         using the best overall format for each model."""
@@ -887,7 +887,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_pseudo_comparison(self, output_file: str = "pseudo_comparison.pdf"):
+    def plot_pseudo_comparison(self, output_file: str = "figs/pseudo_comparison.pdf"):
         """Generate bar graph comparing pseudonymized vs non-pseudonymized results for each task"""
         df = pd.DataFrame(self.results_data)
         
@@ -938,7 +938,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_model_pseudo_impact(self, output_file: str = "model_pseudo_impact.pdf"):
+    def plot_model_pseudo_impact(self, output_file: str = "figs/model_pseudo_impact.pdf"):
         """Generate bar graph showing the impact of pseudonymization on each model's overall performance"""
         df = pd.DataFrame(self.results_data)
         
@@ -1023,7 +1023,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_combined_heatmaps(self, output_file: str = "combined_heatmaps.pdf"):
+    def plot_combined_heatmaps(self, output_file: str = "figs/combined_heatmaps.pdf"):
         """Generate a combined heatmap plot for all models in a grid layout."""
         df = pd.DataFrame(self.results_data)
         
@@ -1162,7 +1162,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def generate_full_results_latex_table(self, output_file: str = "full_results_summary.tex"):
+    def generate_full_results_latex_table(self, output_file: str = "figs/full_results_summary.tex"):
         """Generate a LaTeX table with format -> model structure, with pseudonymized as sub-rows."""
         df = pd.DataFrame(self.results_data)
 
@@ -1360,7 +1360,7 @@ class ResultsAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
 
-    def generate_best_format_table(self, output_file: str = "best_format_summary.tex"):
+    def generate_best_format_table(self, output_file: str = "figs/best_format_summary.tex"):
         """Generate a LaTeX table with the best overall format for each model."""
         df = pd.DataFrame(self.results_data)
 
@@ -1400,7 +1400,7 @@ class ResultsAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
 
-    def plot_pseudo_scatter_by_format(self, output_file: str = "pseudo_scatter_by_format.pdf"):
+    def plot_pseudo_scatter_by_format(self, output_file: str = "figs/pseudo_scatter_by_format.pdf"):
         """Generate a scatter plot showing pseudonymization impact for each format-model combination."""
         df = pd.DataFrame(self.results_data)
         
@@ -1463,7 +1463,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_pseudo_scatter_by_model(self, output_file: str = "pseudo_scatter_by_model.pdf"):
+    def plot_pseudo_scatter_by_model(self, output_file: str = "figs/pseudo_scatter_by_model.pdf"):
         """Generate a scatter plot showing pseudonymization impact for each model-task-format combination."""
         df = pd.DataFrame(self.results_data)
         
@@ -1526,7 +1526,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def plot_pseudo_scatter_by_task(self, output_file: str = "pseudo_scatter_by_task.pdf"):
+    def plot_pseudo_scatter_by_task(self, output_file: str = "figs/pseudo_scatter_by_task.pdf"):
         """Generate a scatter plot showing pseudonymization impact for each task-model-format combination."""
         df = pd.DataFrame(self.results_data)
         
@@ -1597,7 +1597,7 @@ class ResultsAnalyzer:
         plt.axhline(y=0, color='black', linestyle='--', alpha=0.3)
         
         # Customize plot
-        plt.xlabel('Task')
+        plt.xlabel('')
         plt.ylabel('Difference (Pseudo - Original)')
         plt.title('Impact of Pseudonymization by Task')
         plt.xticks(range(len(tasks)), tasks, rotation=45, ha='right')
@@ -1608,7 +1608,7 @@ class ResultsAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
-    def generate_token_usage_table(self, output_file: str = "token_usage_summary.tex"):
+    def generate_token_usage_table(self, output_file: str = "figs/token_usage_summary.tex"):
         """Generate a LaTeX table showing average token usage by format."""
         df = pd.DataFrame(self.results_data)
         
@@ -1666,6 +1666,9 @@ def main():
         print("4. The format directories contain model directories with 'small_results.json' files")
         return
     
+    # Make figs directory
+    os.makedirs("figs", exist_ok=True)
+
     print("\nGenerating token usage table...")
     analyzer.generate_token_usage_table()
     
