@@ -172,6 +172,57 @@ class HighestDegreeAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
 
+    def plot_model_edge_direction_comparison(self, output_file: str = "highest_degree_edge_direction.pdf"):
+        """Generate a bar plot comparing format performance by edge direction, averaged over models"""
+        df = pd.DataFrame(self.results_data)
+        
+        # Map names
+        df['model'] = df['model'].map(MODEL_NAME_MAP)
+        df['format'] = df['format'].map(FORMAT_NAME_MAP)
+        
+        # Calculate average scores by edge direction and format, averaging over models
+        avg_scores = df.groupby(['edge_direction', 'format', 'model'])['avg_score'].agg(['mean']).reset_index()
+        avg_scores = avg_scores.groupby(['edge_direction', 'model'])['mean'].agg(['mean', 'min', 'max']).reset_index()
+
+        # Create figure
+        plt.figure(figsize=(6, 3))
+        
+        # Set up the plot
+        bar_width = 0.15
+        formats = sorted(avg_scores['format'].unique())
+        edge_directions = sorted(avg_scores['edge_direction'].unique())
+        
+        x = np.arange(len(edge_directions))
+        
+        # Plot bars for each format
+        colors = plt.cm.Set2(np.linspace(0, 1, len(formats)))
+        for i, format_name in enumerate(formats):
+            format_data = avg_scores[avg_scores['format'] == format_name]
+            
+            # Calculate error bars using min and max
+            yerr = [format_data['mean'] - format_data['min'], format_data['max'] - format_data['mean']]
+
+            plt.bar(x + i * bar_width, 
+                   format_data['mean'],
+                   bar_width,
+                   label=format_name,
+                   color=colors[i],
+                   yerr=None, # No error bars
+                   capsize=5)
+        
+        # Customize plot
+        plt.xlabel('Edge Direction')
+        plt.ylabel('Average Score')
+        plt.title('Format Performance by Edge Direction\n(Averaged over Models)')
+        plt.xticks(x + bar_width * (len(formats) - 1) / 2, edge_directions)
+        plt.legend(title='Format', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.grid(True, axis='y', alpha=0.3)
+        
+        # Ensure the plot fits with the legend
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+
     def generate_edge_direction_latex_table(self, output_file: str = "highest_degree_edge_direction.tex"):
         """Generate a LaTeX table showing performance by edge direction"""
         df = pd.DataFrame(self.results_data)
