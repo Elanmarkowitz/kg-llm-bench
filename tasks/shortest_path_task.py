@@ -21,7 +21,10 @@ class ShortestPathTask(BaseTask):
                          results_file)
 
     def evaluate_response(self, response, answer):
-        response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
+        # response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
+        import re
+        match = re.search(r"SHORTEST PATH: \[(.*)\]", response)
+        response = match.group(1).strip() if match else ""
         try:
             response_list = ast.literal_eval(response)
         except (SyntaxError, ValueError):
@@ -32,7 +35,7 @@ class ShortestPathTask(BaseTask):
         for answer_option in answer:
             try:
                 answer_list = ast.literal_eval(answer_option.replace("SHORTEST PATH:", "").strip())
-                if response_list == answer_list:
+                if tuple(response_list) == tuple(answer_list):
                     return 1.0
             except (SyntaxError, ValueError):
                 continue
