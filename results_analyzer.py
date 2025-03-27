@@ -48,6 +48,14 @@ FORMAT_NAME_MAP = {
     'json_ld3': 'JSON-LD'
 }
 
+TASKS = [
+    "ShortestPath",
+    "TripleRetrieval",
+    "HighestDegreeNode",
+    "AggByRelation",
+    "AggNeighborProperties"
+]
+
 class ResultsAnalyzer:
     def __init__(self, results_dir: str = "benchmark_data"):
         self.results_dir = Path(results_dir)
@@ -61,6 +69,8 @@ class ResultsAnalyzer:
         print(f"Found {len(task_dirs)} task directories")
         
         for task_dir in task_dirs:
+            if task_dir.name not in TASKS:
+                continue
             print(f"\nProcessing task: {task_dir.name}")
             format_dirs = list(task_dir.glob("*"))
             format_dirs = [d for d in format_dirs if d.is_dir()]
@@ -1037,11 +1047,11 @@ class ResultsAnalyzer:
         df_avg = df.groupby(['task', 'format', 'model'])['avg_score'].mean().reset_index()
         
         # Filter the DataFrame to include only the specified models using their exact names
-        models_to_include = ['gemini-1.5-flash', 'claude-3.5-sonnet-v2', 'gpt-4o-mini', 'nova-pro']
+        models_to_include = ['gemini-1.5-flash', 'claude-3.5-sonnet-v2', 'gpt-4o-mini', 'nova-pro', 'llama3.3-70b-instruct']
         df_avg = df_avg[df_avg['model'].isin(models_to_include)]
         
         # Create a figure with subplots in a 2x7 grid
-        fig = plt.figure(figsize=(7, 4)) 
+        fig = plt.figure(figsize=(8, 4)) 
         gs = plt.GridSpec(2, len(df_avg['model'].unique()), figure=fig, wspace=0.1)  # Reduced horizontal margin
         
         # Create axes for each subplot
@@ -1556,7 +1566,7 @@ class ResultsAnalyzer:
         )
         pivot = pivot_full
         # Create figure
-        plt.figure(figsize=(6, 5))  # Adjusted for a single column figure
+        plt.figure(figsize=(6, 3.5))  # Adjusted for a single column figure
         
         # Create color map for models
         models = pivot['model'].unique()
@@ -1600,7 +1610,7 @@ class ResultsAnalyzer:
         plt.xlabel('')
         plt.ylabel('Difference (Pseudo - Original)')
         plt.title('Impact of Pseudonymization by Task')
-        plt.xticks(range(len(tasks)), tasks, rotation=45, ha='right')
+        plt.xticks(range(len(tasks)), tasks, rotation=25, ha='center')
         # plt.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
         plt.grid(True, axis='y', linestyle='--', alpha=0.3)
         

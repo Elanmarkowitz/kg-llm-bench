@@ -1,3 +1,4 @@
+import ast
 import json
 import os
 import pandas as pd
@@ -88,6 +89,27 @@ class ShortestPathAnalyzer:
         # All paths should be the same length for shortest path
         return len(paths[0]) - 1 if paths[0] else 0
     
+    def evaluate_response(self, response, answer):
+        # response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
+        import re
+        match = re.search(r"SHORTEST PATH: \[(.*)\]", response)
+        response = match.group(1).strip() if match else ""
+        try:
+            response_list = ast.literal_eval(response)
+        except (SyntaxError, ValueError):
+            response_list = response.strip('[]').split(',')
+            response_list = [item.strip().strip("'") for item in response_list]
+            return 0.0
+
+        for answer_option in answer:
+            try:
+                answer_list = ast.literal_eval(answer_option.replace("SHORTEST PATH:", "").strip())
+                if tuple(response_list) == tuple(answer_list):
+                    return 1.0
+            except (SyntaxError, ValueError):
+                continue
+        return 0.0
+
     def load_results(self):
         """Load all ShortestPath task results files"""
         print(f"\nSearching for ShortestPath results in: {self.results_dir}")
@@ -110,6 +132,8 @@ class ShortestPathAnalyzer:
             print(f"  Found {len(llm_dirs)} model directories")
             
             for llm_dir in llm_dirs:
+                # if llm_dir.name == "us.anthropic.claude-3-5-sonnet-20241022-v2:0":
+                #     breakpoint()
                 if not llm_dir.is_dir():
                     continue
                     
@@ -148,6 +172,12 @@ class ShortestPathAnalyzer:
                             # Add to results
                             path_lengths[gt_length].append(score)
                             
+                            # if llm_dir.name == "us.anthropic.claude-3-5-sonnet-20241022-v2:0" and predicted_length >= 1:
+                            #     new_score = self.evaluate_response(predicted_answer, example["answer"])
+                            #     print(score, new_score, predicted_answer, example["answer"])
+                            #     breakpoint()
+                            new_score = self.evaluate_response(predicted_answer, example["answer"])
+
                             self.full_results_data.append({
                                 'format': format_name,
                                 'model': llm_dir.name,
@@ -155,7 +185,8 @@ class ShortestPathAnalyzer:
                                 'example_id': i,
                                 'gt_path_length': gt_length,
                                 'predicted_path_length': predicted_length,
-                                'score': score
+                                'score': score,
+                                'new_score': new_score
                             })
                         
                         # Compute overall accuracy
@@ -185,7 +216,6 @@ class ShortestPathAnalyzer:
     def plot_model_comparison(self, output_file: str = "figs/shortest_path/shortest_path_model_comparison.pdf"):
         """Generate a bar plot comparing model performance, averaged over formats"""
         df = pd.DataFrame(self.results_data)
-        breakpoint()
         
         if df.empty:
             print("No data available for model comparison plot")
@@ -331,6 +361,8 @@ class ShortestPathAnalyzer:
             'avg_score': 'mean',
             'num_examples': 'sum'
         }).reset_index()
+
+        model_length_scores = model_length_scores[model_length_scores['num_examples'] > 10]
         
         # Create the plot
         plt.figure(figsize=(12, 8))
@@ -354,7 +386,7 @@ class ShortestPathAnalyzer:
         
         # Get the best format for each model
         best_formats = format_model_scores.loc[format_model_scores.groupby('model')['avg_score'].idxmax()]
-        
+
         # Add dashed line for best format for each model
         for _, row in best_formats.iterrows():
             model = row['model']
@@ -362,6 +394,7 @@ class ShortestPathAnalyzer:
             
             # Get data for this model and format
             best_format_data = df[(df['model'] == model) & (df['format'] == best_format)]
+            best_format_data = best_format_data[best_format_data['num_examples'] > 1]
             
             # Group by path length and calculate average (in case there are duplicates with different pseudonymized values)
             best_format_data = best_format_data.groupby('path_length')['avg_score'].mean().reset_index()
@@ -388,14 +421,73 @@ class ShortestPathAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
         
-    def plot_predicted_vs_actual_length(self, output_file: str = "predicted_vs_actual_length.pdf"):
+    def plot_predicted_path_length_distribution(self, output_file: str = "figs/shortest_path/predicted_path_length_distribution.pdf"):
+        """Generate a stacked bar chart showing the distribution of predicted path lengths by model"""
+        df = pd.DataFrame(self.full_results_data)
+        
+        if df.empty:
+            print("No data available for predicted path length distribution plot")
+            return
+            
+        # Map model names
+        df['model'] = df['model'].map(lambda x: MODEL_NAME_MAP.get(x, x))
+        
+        # Bin predicted path lengths, grouping all values above 5 into a single bin
+        df['predicted_path_length_bin'] = pd.cut(df['predicted_path_length'], 
+                                              bins=[-1, 0, 1, 2, 3, 4, float('inf')], 
+                                              labels=['None', '1', '2', '3', '4', '5+'], 
+                                              right=True)
+        
+        # Count proportions for each model
+        model_path_props = pd.crosstab(
+            df['model'], 
+            df['predicted_path_length_bin'],
+            normalize='index',  # Normalize by row (model)
+            rownames=['Model'],
+            colnames=['Predicted Path Length']
+        )
+        
+        # Create the plot
+        plt.figure(figsize=(12, 8))
+        
+        # Define a colormap for the different bins
+        colors = ['#FF9999', '#66B2FF', '#99FF99', '#FFCC99', '#c2c2f0', '#ffb3e6']
+        
+        # Plot stacked bars
+        model_path_props.plot(kind='bar', stacked=True, color=colors, figsize=(12, 8))
+        
+        # Add percentages on each segment
+        ax = plt.gca()
+        for i, model in enumerate(model_path_props.index):
+            cumulative_sum = 0
+            for j, bin_label in enumerate(model_path_props.columns):
+                value = model_path_props.loc[model, bin_label]
+                if value > 0.05:  # Only add text if segment is large enough
+                    ax.text(i, cumulative_sum + value/2, f'{value:.0%}', 
+                            ha='center', va='center', fontsize=9, fontweight='bold')
+                cumulative_sum += value
+        
+        # Customize plot
+        plt.xlabel('Model')
+        plt.ylabel('Proportion')
+        plt.title('Distribution of Predicted Path Lengths by Model')
+        plt.legend(title='Predicted Path Length', bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.xticks(rotation=45, ha='right')
+        plt.ylim(0, 1.05)  # Set y-axis limit
+        plt.grid(True, axis='y', alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        plt.close()
+        
+    def plot_predicted_vs_actual_length(self, output_file: str = "figs/shortest_path/predicted_vs_actual_length.pdf"):
         """Generate a heatmap comparing predicted path length vs actual path length"""
         df = pd.DataFrame(self.full_results_data)
         
         if df.empty:
             print("No data available for predicted vs actual length plot")
             return
-        breakpoint()
+        
         # Create a contingency table of actual vs predicted path lengths
         # Bin predicted path lengths, grouping all values above 5 into a single bin
         df['predicted_path_length_bin'] = pd.cut(df['predicted_path_length'], 
@@ -420,7 +512,7 @@ class ShortestPathAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
         
-    def plot_error_analysis(self, output_file: str = "error_analysis.pdf"):
+    def plot_error_analysis(self, output_file: str = "figs/shortest_path/error_analysis.pdf"):
         """Generate a bar plot showing error types (off by 1, off by 2, etc.)"""
         df = pd.DataFrame(self.full_results_data)
         
@@ -429,6 +521,7 @@ class ShortestPathAnalyzer:
             return
             
         # Calculate difference between predicted and actual path length
+        df = df[df['predicted_path_length'] > 0]
         df['length_diff'] = df['predicted_path_length'] - df['gt_path_length']
         
         # Count occurrences of each difference
@@ -457,7 +550,7 @@ class ShortestPathAnalyzer:
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
         
-    def generate_latex_table(self, output_file: str = "shortest_path_results.tex"):
+    def generate_latex_table(self, output_file: str = "figs/shortest_path/shortest_path_results.tex"):
         """Generate a LaTeX table showing performance by model and format"""
         df = pd.DataFrame(self.results_data)
         
@@ -525,7 +618,7 @@ class ShortestPathAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
             
-    def generate_path_length_latex_table(self, output_file: str = "path_length_results.tex"):
+    def generate_path_length_latex_table(self, output_file: str = "figs/shortest_path/path_length_results.tex"):
         """Generate a LaTeX table showing performance by path length for each model"""
         df = pd.DataFrame(self.path_length_data)
         
@@ -613,6 +706,8 @@ def main():
     print("Starting ShortestPath analysis...")
     analyzer = ShortestPathAnalyzer()
     analyzer.load_results()
+
+    df = pd.DataFrame(analyzer.full_results_data)
     
     if not analyzer.results_data:
         print("\nNo ShortestPath results data was found!")
@@ -632,6 +727,9 @@ def main():
     
     print("\nGenerating path length by model plot...")
     analyzer.plot_path_length_by_model()
+    
+    print("\nGenerating predicted path length distribution plot...")
+    analyzer.plot_predicted_path_length_distribution()
     
     print("\nGenerating predicted vs actual length plot...")
     analyzer.plot_predicted_vs_actual_length()
