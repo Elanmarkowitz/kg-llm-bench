@@ -1,0 +1,131 @@
+% Required packages for rotated text and multirow
+%\usepackage{rotating}
+%\usepackage{multirow}
+%\usepackage{makecell}
+
+\begin{longtable}{p{1.5cm}lcccccc}
+\caption{Full Results Summary by Format and Model} \\
+\label{tab:full_results_summary} \\
+\toprule
+Format & Model & \makecell{Agg by\\ Relation} & \makecell{Agg Neighbor\\ Properties} & \makecell{Highest\\ Degree} & \makecell{Shortest\\ Path} & \makecell{Triple\\ Retrieval} & Overall \\
+\midrule
+\endfirsthead
+\multicolumn{8}{c}{\tablename\ \thetable\ -- Continued from previous page} \\
+\toprule
+Format & Model & \makecell{Agg by\\ Relation} & \makecell{Agg Neighbor\\ Properties} & \makecell{Highest\\ Degree} & \makecell{Shortest\\ Path} & \makecell{Triple\\ Retrieval} & Overall \\
+\midrule
+\endhead
+\midrule
+\multicolumn{8}{r}{Continued on next page} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\multirow{2}{=}{\rotatebox[origin=c]{90}{List of Edges}} & \textbf{claude-3.5-sonnet-v2} & 0.490 & 0.440 & 0.370 & 0.000 & 1.000 & 0.460 \\
+ & \quad +pseudo & 0.530 & 0.530 & 0.460 & 0.000 & 1.000 & 0.504 \\
+ & \textbf{gemini-1.5-flash} & 0.520 & 0.430 & 0.000 & 0.080 & 1.000 & 0.406 \\
+ & \quad +pseudo & 0.420 & 0.340 & 0.000 & 0.040 & 0.990 & 0.358 \\
+ & \textbf{gpt-4o-mini} & 0.400 & 0.520 & 0.140 & 0.150 & 0.980 & 0.438 \\
+ & \quad +pseudo & 0.400 & 0.580 & 0.270 & 0.140 & 0.910 & 0.460 \\
+ & \textbf{llama3.2-1b-instruct} & 0.250 & 0.430 & 0.050 & 0.000 & 0.560 & 0.258 \\
+ & \quad +pseudo & 0.260 & 0.450 & 0.030 & 0.000 & 0.560 & 0.260 \\
+ & \textbf{llama3.3-70b-instruct} & 0.540 & 0.590 & 0.200 & 0.000 & 0.970 & 0.460 \\
+ & \quad +pseudo & 0.470 & 0.620 & 0.180 & 0.010 & 0.980 & 0.452 \\
+ & \textbf{nova-lite} & 0.390 & 0.560 & 0.120 & 0.000 & 0.990 & 0.412 \\
+ & \quad +pseudo & 0.410 & 0.540 & 0.160 & 0.010 & 0.980 & 0.420 \\
+ & \textbf{nova-pro} & 0.460 & 0.520 & 0.130 & 0.150 & 0.990 & 0.450 \\
+ & \quad +pseudo & 0.450 & 0.530 & 0.230 & 0.110 & 0.990 & 0.462 \\
+\midrule
+ & \textbf{Format Overall} & 0.436 & 0.499 & 0.144 & 0.054 & 0.927 & 0.412 \\
+ & \quad +pseudo & 0.420 & 0.513 & 0.190 & 0.044 & 0.916 & 0.417 \\
+\midrule
+\multirow{2}{=}{\rotatebox[origin=c]{90}{Structured JSON}} & \textbf{claude-3.5-sonnet-v2} & 0.550 & 0.520 & 0.330 & 0.000 & 0.990 & 0.478 \\
+ & \quad +pseudo & 0.560 & 0.540 & 0.390 & 0.000 & 0.990 & 0.496 \\
+ & \textbf{gemini-1.5-flash} & 0.500 & 0.410 & 0.000 & 0.060 & 0.960 & 0.386 \\
+ & \quad +pseudo & 0.470 & 0.380 & 0.000 & 0.010 & 0.970 & 0.366 \\
+ & \textbf{gpt-4o-mini} & 0.490 & 0.560 & 0.100 & 0.140 & 0.950 & 0.448 \\
+ & \quad +pseudo & 0.420 & 0.580 & 0.100 & 0.160 & 0.940 & 0.440 \\
+ & \textbf{llama3.2-1b-instruct} & 0.260 & 0.440 & 0.040 & 0.000 & 0.540 & 0.256 \\
+ & \quad +pseudo & 0.240 & 0.410 & 0.040 & 0.000 & 0.620 & 0.262 \\
+ & \textbf{llama3.3-70b-instruct} & 0.530 & 0.600 & 0.190 & 0.000 & 0.980 & 0.460 \\
+ & \quad +pseudo & 0.500 & 0.710 & 0.200 & 0.000 & 0.970 & 0.476 \\
+ & \textbf{nova-lite} & 0.490 & 0.590 & 0.100 & 0.000 & 0.960 & 0.428 \\
+ & \quad +pseudo & 0.440 & 0.580 & 0.120 & 0.000 & 0.950 & 0.418 \\
+ & \textbf{nova-pro} & 0.550 & 0.580 & 0.100 & 0.170 & 0.970 & 0.474 \\
+ & \quad +pseudo & 0.500 & 0.450 & 0.140 & 0.110 & 0.970 & 0.434 \\
+\midrule
+ & \textbf{Format Overall} & 0.481 & 0.529 & 0.123 & 0.053 & 0.907 & 0.419 \\
+ & \quad +pseudo & 0.447 & 0.521 & 0.141 & 0.040 & 0.916 & 0.413 \\
+\midrule
+\multirow{2}{=}{\rotatebox[origin=c]{90}{Structured YAML}} & \textbf{claude-3.5-sonnet-v2} & 0.500 & 0.600 & 0.320 & 0.000 & 0.990 & 0.482 \\
+ & \quad +pseudo & 0.540 & 0.460 & 0.410 & 0.000 & 0.980 & 0.478 \\
+ & \textbf{gemini-1.5-flash} & 0.490 & 0.400 & 0.010 & 0.090 & 0.950 & 0.388 \\
+ & \quad +pseudo & 0.500 & 0.370 & 0.000 & 0.000 & 0.950 & 0.364 \\
+ & \textbf{gpt-4o-mini} & 0.490 & 0.540 & 0.070 & 0.200 & 0.940 & 0.448 \\
+ & \quad +pseudo & 0.460 & 0.570 & 0.120 & 0.140 & 0.940 & 0.446 \\
+ & \textbf{llama3.2-1b-instruct} & 0.290 & 0.430 & 0.030 & 0.000 & 0.560 & 0.262 \\
+ & \quad +pseudo & 0.220 & 0.430 & 0.010 & 0.000 & 0.510 & 0.234 \\
+ & \textbf{llama3.3-70b-instruct} & 0.510 & 0.550 & 0.150 & 0.000 & 0.960 & 0.434 \\
+ & \quad +pseudo & 0.500 & 0.620 & 0.120 & 0.000 & 1.000 & 0.448 \\
+ & \textbf{nova-lite} & 0.410 & 0.540 & 0.100 & 0.000 & 0.950 & 0.400 \\
+ & \quad +pseudo & 0.410 & 0.580 & 0.100 & 0.000 & 0.950 & 0.408 \\
+ & \textbf{nova-pro} & 0.510 & 0.520 & 0.070 & 0.110 & 0.930 & 0.428 \\
+ & \quad +pseudo & 0.480 & 0.540 & 0.230 & 0.140 & 0.940 & 0.466 \\
+\midrule
+ & \textbf{Format Overall} & 0.457 & 0.511 & 0.107 & 0.057 & 0.897 & 0.406 \\
+ & \quad +pseudo & 0.444 & 0.510 & 0.141 & 0.040 & 0.896 & 0.406 \\
+\midrule
+\multirow{2}{=}{\rotatebox[origin=c]{90}{RDF Turtle}} & \textbf{claude-3.5-sonnet-v2} & 0.450 & 0.510 & 0.590 & 0.000 & 0.940 & 0.498 \\
+ & \quad +pseudo & 0.510 & 0.540 & 0.640 & 0.000 & 0.970 & 0.532 \\
+ & \textbf{gemini-1.5-flash} & 0.460 & 0.330 & 0.000 & 0.060 & 0.890 & 0.348 \\
+ & \quad +pseudo & 0.490 & 0.340 & 0.000 & 0.030 & 0.930 & 0.358 \\
+ & \textbf{gpt-4o-mini} & 0.310 & 0.270 & 0.070 & 0.140 & 0.690 & 0.296 \\
+ & \quad +pseudo & 0.330 & 0.260 & 0.050 & 0.030 & 0.630 & 0.260 \\
+ & \textbf{llama3.2-1b-instruct} & 0.190 & 0.160 & 0.010 & 0.000 & 0.530 & 0.178 \\
+ & \quad +pseudo & 0.180 & 0.020 & 0.010 & 0.000 & 0.530 & 0.148 \\
+ & \textbf{llama3.3-70b-instruct} & 0.400 & 0.380 & 0.050 & 0.010 & 0.790 & 0.326 \\
+ & \quad +pseudo & 0.410 & 0.310 & 0.050 & 0.000 & 0.840 & 0.322 \\
+ & \textbf{nova-lite} & 0.410 & 0.400 & 0.060 & 0.030 & 0.820 & 0.344 \\
+ & \quad +pseudo & 0.400 & 0.370 & 0.110 & 0.010 & 0.780 & 0.334 \\
+ & \textbf{nova-pro} & 0.330 & 0.440 & 0.100 & 0.500 & 0.880 & 0.450 \\
+ & \quad +pseudo & 0.470 & 0.360 & 0.210 & 0.440 & 0.830 & 0.462 \\
+\midrule
+ & \textbf{Format Overall} & 0.364 & 0.356 & 0.126 & 0.106 & 0.791 & 0.349 \\
+ & \quad +pseudo & 0.399 & 0.314 & 0.153 & 0.073 & 0.787 & 0.345 \\
+\midrule
+\multirow{2}{=}{\rotatebox[origin=c]{90}{JSON-LD}} & \textbf{claude-3.5-sonnet-v2} & 0.500 & 0.370 & 0.370 & 0.000 & 0.980 & 0.444 \\
+ & \quad +pseudo & 0.520 & 0.450 & 0.550 & 0.000 & 0.970 & 0.498 \\
+ & \textbf{gemini-1.5-flash} & 0.460 & 0.330 & 0.000 & 0.230 & 0.910 & 0.386 \\
+ & \quad +pseudo & 0.440 & 0.330 & 0.000 & 0.050 & 0.870 & 0.338 \\
+ & \textbf{gpt-4o-mini} & 0.380 & 0.210 & 0.130 & 0.090 & 0.670 & 0.296 \\
+ & \quad +pseudo & 0.390 & 0.180 & 0.110 & 0.040 & 0.600 & 0.264 \\
+ & \textbf{llama3.2-1b-instruct} & 0.170 & 0.290 & 0.000 & 0.000 & 0.460 & 0.184 \\
+ & \quad +pseudo & 0.150 & 0.150 & 0.000 & 0.000 & 0.450 & 0.150 \\
+ & \textbf{llama3.3-70b-instruct} & 0.350 & 0.320 & 0.020 & 0.000 & 0.760 & 0.290 \\
+ & \quad +pseudo & 0.410 & 0.330 & 0.020 & 0.000 & 0.730 & 0.298 \\
+ & \textbf{nova-lite} & 0.330 & 0.360 & 0.110 & 0.000 & 0.820 & 0.324 \\
+ & \quad +pseudo & 0.380 & 0.340 & 0.170 & 0.000 & 0.730 & 0.324 \\
+ & \textbf{nova-pro} & 0.440 & 0.380 & 0.210 & 0.420 & 0.900 & 0.470 \\
+ & \quad +pseudo & 0.440 & 0.320 & 0.200 & 0.470 & 0.850 & 0.456 \\
+\midrule
+ & \textbf{Format Overall} & 0.376 & 0.323 & 0.120 & 0.106 & 0.786 & 0.342 \\
+ & \quad +pseudo & 0.390 & 0.300 & 0.150 & 0.080 & 0.743 & 0.333 \\
+\midrule
+\multirow{2}{=}{\rotatebox[origin=c]{90}{All Formats}} & \textbf{claude-3.5-sonnet-v2} & 0.498 & 0.488 & 0.396 & 0.000 & 0.980 & 0.472 \\
+ & \quad +pseudo & 0.532 & 0.504 & 0.490 & 0.000 & 0.982 & 0.502 \\
+ & \textbf{gemini-1.5-flash} & 0.486 & 0.380 & 0.002 & 0.104 & 0.942 & 0.383 \\
+ & \quad +pseudo & 0.464 & 0.352 & 0.000 & 0.026 & 0.942 & 0.357 \\
+ & \textbf{gpt-4o-mini} & 0.414 & 0.420 & 0.102 & 0.144 & 0.846 & 0.385 \\
+ & \quad +pseudo & 0.400 & 0.434 & 0.130 & 0.102 & 0.804 & 0.374 \\
+ & \textbf{llama3.2-1b-instruct} & 0.232 & 0.350 & 0.026 & 0.000 & 0.530 & 0.228 \\
+ & \quad +pseudo & 0.210 & 0.292 & 0.018 & 0.000 & 0.534 & 0.211 \\
+ & \textbf{llama3.3-70b-instruct} & 0.466 & 0.488 & 0.122 & 0.002 & 0.892 & 0.394 \\
+ & \quad +pseudo & 0.458 & 0.518 & 0.114 & 0.002 & 0.904 & 0.399 \\
+ & \textbf{nova-lite} & 0.406 & 0.490 & 0.098 & 0.006 & 0.908 & 0.382 \\
+ & \quad +pseudo & 0.408 & 0.482 & 0.132 & 0.004 & 0.878 & 0.381 \\
+ & \textbf{nova-pro} & 0.458 & 0.488 & 0.122 & 0.270 & 0.934 & 0.454 \\
+ & \quad +pseudo & 0.468 & 0.440 & 0.202 & 0.254 & 0.916 & 0.456 \\
+\midrule
+ & \textbf{Overall Score} & 0.423 & 0.443 & 0.124 & 0.075 & 0.862 & 0.385 \\
+ & \quad +pseudo & 0.420 & 0.432 & 0.155 & 0.055 & 0.851 & 0.383 \\
+\bottomrule
+\end{longtable}

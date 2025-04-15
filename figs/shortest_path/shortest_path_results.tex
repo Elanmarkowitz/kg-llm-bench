@@ -1,0 +1,18 @@
+\begin{table}[ht]
+\centering
+\caption{ShortestPath Task Performance by Model and Format}
+\begin{tabular}{lcccccccccc}
+\toprule
+\multirow{2}{*}{Model} & \multicolumn{2}{c}{JSON-LD} & \multicolumn{2}{c}{List of Edges} & \multicolumn{2}{c}{RDF Turtle} & \multicolumn{2}{c}{Structured JSON} & \multicolumn{2}{c}{Structured YAML} \\
+ & Orig. & Pseudo & Orig. & Pseudo & Orig. & Pseudo & Orig. & Pseudo & Orig. & Pseudo \\
+\midrule
+claude-3.5-sonnet-v2 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+gemini-1.5-flash & 0.230 & 0.050 & 0.080 & 0.040 & 0.060 & 0.030 & 0.060 & 0.010 & 0.090 & 0.000 \\
+gpt-4o-mini & 0.090 & 0.040 & 0.150 & 0.140 & 0.140 & 0.030 & 0.140 & 0.160 & 0.200 & 0.140 \\
+llama3.2-1b-instruct & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+llama3.3-70b-instruct & 0.000 & 0.000 & 0.000 & 0.010 & 0.010 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\
+nova-lite & 0.000 & 0.000 & 0.000 & 0.010 & 0.030 & 0.010 & 0.000 & 0.000 & 0.000 & 0.000 \\
+nova-pro & 0.420 & 0.470 & 0.150 & 0.110 & 0.500 & 0.440 & 0.170 & 0.110 & 0.110 & 0.140 \\
+\bottomrule
+\end{tabular}
+\end{table}

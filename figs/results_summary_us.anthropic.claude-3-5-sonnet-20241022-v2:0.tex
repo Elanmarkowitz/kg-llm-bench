@@ -1,0 +1,17 @@
+\begin{table}
+\caption{Knowledge Graph Format Performance by Task for Model us.anthropic.claude-3-5-sonnet-20241022-v2:0}
+\label{tab:results_us.anthropic.claude-3-5-sonnet-20241022-v2:0}
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+task & \multicolumn{2}{c}{c}{AggByRelation} & \multicolumn{2}{c}{c}{AggNeighborProperties} & \multicolumn{2}{c}{c}{HighestDegreeNode} & \multicolumn{2}{c}{c}{Overall} & \multicolumn{2}{c}{c}{ShortestPath} & \multicolumn{2}{c}{c}{TripleRetrieval} \\
+pseudonymized & False & True & False & True & False & True & False & True & False & True & False & True \\
+format &  &  &  &  &  &  &  &  &  &  &  &  \\
+\midrule
+\textbf{json_ld3} & 0.500 & 0.520 & 0.370 & 0.450 & 0.370 & 0.550 & 0.444 & 0.498 & 0.000 & 0.000 & 0.980 & 0.970 \\
+\textbf{list_of_edges} & 0.490 & 0.530 & 0.440 & 0.530 & 0.370 & 0.460 & 0.460 & 0.504 & 0.000 & 0.000 & 1.000 & 1.000 \\
+\textbf{rdf_turtle3} & 0.450 & 0.510 & 0.510 & 0.540 & 0.590 & 0.640 & 0.498 & 0.532 & 0.000 & 0.000 & 0.940 & 0.970 \\
+\textbf{structured_json} & 0.550 & 0.560 & 0.520 & 0.540 & 0.330 & 0.390 & 0.478 & 0.496 & 0.000 & 0.000 & 0.990 & 0.990 \\
+\textbf{structured_yaml} & 0.500 & 0.540 & 0.600 & 0.460 & 0.320 & 0.410 & 0.482 & 0.478 & 0.000 & 0.000 & 0.990 & 0.980 \\
+\bottomrule
+\end{tabular}
+\end{table}

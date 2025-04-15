@@ -1,0 +1,119 @@
+\begin{table}[ht]
+\centering
+\caption{HighestDegree Task Performance by Edge Direction}
+\begin{tabular}{llllrr}
+\toprule
+Format & Model & Direction & Score & Avg Max Degree \\
+\midrule
+JSON-LD & claude-3.5-sonnet-v2 & incoming & 0.257 $\pm$ 0.134 & 3.2 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & outgoing & 0.600 $\pm$ 0.162 & 3.1 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & total & 0.554 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & gemini-1.5-flash & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gemini-1.5-flash & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & gemini-1.5-flash & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & gpt-4o-mini & incoming & 0.027 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gpt-4o-mini & outgoing & 0.214 $\pm$ 0.061 & 3.1 $\pm$ 0.0 \\
+ & gpt-4o-mini & total & 0.125 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & incoming & 0.041 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & outgoing & 0.014 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & nova-lite & incoming & 0.081 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & nova-lite & outgoing & 0.143 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & nova-lite & total & 0.214 $\pm$ 0.101 & 3.8 $\pm$ 0.0 \\
+ & nova-pro & incoming & 0.122 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & nova-pro & outgoing & 0.186 $\pm$ 0.061 & 3.1 $\pm$ 0.0 \\
+ & nova-pro & total & 0.339 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+\midrule
+List of Edges & claude-3.5-sonnet-v2 & incoming & 0.149 $\pm$ 0.057 & 3.2 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & outgoing & 0.657 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & total & 0.464 $\pm$ 0.152 & 3.8 $\pm$ 0.0 \\
+ & gemini-1.5-flash & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gemini-1.5-flash & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & gemini-1.5-flash & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & gpt-4o-mini & incoming & 0.041 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & gpt-4o-mini & outgoing & 0.271 $\pm$ 0.101 & 3.1 $\pm$ 0.0 \\
+ & gpt-4o-mini & total & 0.339 $\pm$ 0.177 & 3.8 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & outgoing & 0.071 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & total & 0.054 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & incoming & 0.095 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & outgoing & 0.271 $\pm$ 0.061 & 3.1 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & total & 0.214 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & nova-lite & incoming & 0.054 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & nova-lite & outgoing & 0.200 $\pm$ 0.081 & 3.1 $\pm$ 0.0 \\
+ & nova-lite & total & 0.179 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+ & nova-pro & incoming & 0.108 $\pm$ 0.115 & 3.2 $\pm$ 0.0 \\
+ & nova-pro & outgoing & 0.214 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & nova-pro & total & 0.232 $\pm$ 0.126 & 3.8 $\pm$ 0.0 \\
+\midrule
+RDF Turtle & claude-3.5-sonnet-v2 & incoming & 0.635 $\pm$ 0.057 & 3.2 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & outgoing & 0.714 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & total & 0.464 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+ & gemini-1.5-flash & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gemini-1.5-flash & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & gemini-1.5-flash & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & gpt-4o-mini & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gpt-4o-mini & outgoing & 0.129 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & gpt-4o-mini & total & 0.054 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & outgoing & 0.014 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & total & 0.018 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & incoming & 0.108 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & total & 0.036 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+ & nova-lite & incoming & 0.108 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & nova-lite & outgoing & 0.100 $\pm$ 0.061 & 3.1 $\pm$ 0.0 \\
+ & nova-lite & total & 0.036 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & nova-pro & incoming & 0.054 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & nova-pro & outgoing & 0.257 $\pm$ 0.162 & 3.1 $\pm$ 0.0 \\
+ & nova-pro & total & 0.161 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+\midrule
+Structured JSON & claude-3.5-sonnet-v2 & incoming & 0.149 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & outgoing & 0.543 $\pm$ 0.040 & 3.1 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & total & 0.411 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & gemini-1.5-flash & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gemini-1.5-flash & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & gemini-1.5-flash & total & 0.000 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & gpt-4o-mini & incoming & 0.041 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & gpt-4o-mini & outgoing & 0.100 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & gpt-4o-mini & total & 0.179 $\pm$ 0.000 & 3.8 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & incoming & 0.014 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & outgoing & 0.071 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & total & 0.036 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & incoming & 0.122 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & outgoing & 0.200 $\pm$ 0.081 & 3.1 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & total & 0.286 $\pm$ 0.101 & 3.8 $\pm$ 0.0 \\
+ & nova-lite & incoming & 0.054 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & nova-lite & outgoing & 0.114 $\pm$ 0.040 & 3.1 $\pm$ 0.0 \\
+ & nova-lite & total & 0.179 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+ & nova-pro & incoming & 0.054 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & nova-pro & outgoing & 0.100 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & nova-pro & total & 0.232 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+\midrule
+Structured YAML & claude-3.5-sonnet-v2 & incoming & 0.189 $\pm$ 0.076 & 3.2 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & outgoing & 0.557 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & claude-3.5-sonnet-v2 & total & 0.357 $\pm$ 0.101 & 3.8 $\pm$ 0.0 \\
+ & gemini-1.5-flash & incoming & 0.000 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gemini-1.5-flash & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & gemini-1.5-flash & total & 0.018 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+ & gpt-4o-mini & incoming & 0.054 $\pm$ 0.000 & 3.2 $\pm$ 0.0 \\
+ & gpt-4o-mini & outgoing & 0.086 $\pm$ 0.040 & 3.1 $\pm$ 0.0 \\
+ & gpt-4o-mini & total & 0.161 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & incoming & 0.014 $\pm$ 0.019 & 3.2 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & outgoing & 0.000 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & llama3.2-1b-instruct & total & 0.054 $\pm$ 0.025 & 3.8 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & incoming & 0.108 $\pm$ 0.038 & 3.2 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & outgoing & 0.100 $\pm$ 0.020 & 3.1 $\pm$ 0.0 \\
+ & llama3.3-70b-instruct & total & 0.214 $\pm$ 0.101 & 3.8 $\pm$ 0.0 \\
+ & nova-lite & incoming & 0.095 $\pm$ 0.057 & 3.2 $\pm$ 0.0 \\
+ & nova-lite & outgoing & 0.057 $\pm$ 0.000 & 3.1 $\pm$ 0.0 \\
+ & nova-lite & total & 0.161 $\pm$ 0.076 & 3.8 $\pm$ 0.0 \\
+ & nova-pro & incoming & 0.081 $\pm$ 0.115 & 3.2 $\pm$ 0.0 \\
+ & nova-pro & outgoing & 0.171 $\pm$ 0.162 & 3.1 $\pm$ 0.0 \\
+ & nova-pro & total & 0.214 $\pm$ 0.051 & 3.8 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

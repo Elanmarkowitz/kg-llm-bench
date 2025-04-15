@@ -1,0 +1,17 @@
+\begin{table}
+\caption{Knowledge Graph Format Performance by Task}
+\label{tab:results}
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+task & \multicolumn{2}{c}{c}{AggByRelation} & \multicolumn{2}{c}{c}{AggNeighborProperties} & \multicolumn{2}{c}{c}{HighestDegreeNode} & \multicolumn{2}{c}{c}{Overall} & \multicolumn{2}{c}{c}{ShortestPath} & \multicolumn{2}{c}{c}{TripleRetrieval} \\
+pseudonymized & False & True & False & True & False & True & False & True & False & True & False & True \\
+format &  &  &  &  &  &  &  &  &  &  &  &  \\
+\midrule
+\textbf{json_ld3} & 0.376 & 0.390 & 0.323 & 0.300 & 0.120 & 0.150 & 0.342 & 0.333 & 0.106 & 0.080 & 0.786 & 0.743 \\
+\textbf{list_of_edges} & 0.436 & 0.420 & 0.499 & 0.513 & 0.144 & 0.190 & 0.412 & 0.417 & 0.054 & 0.044 & 0.927 & 0.916 \\
+\textbf{rdf_turtle3} & 0.364 & 0.399 & 0.356 & 0.314 & 0.126 & 0.153 & 0.349 & 0.345 & 0.106 & 0.073 & 0.791 & 0.787 \\
+\textbf{structured_json} & 0.481 & 0.447 & 0.529 & 0.521 & 0.123 & 0.141 & 0.419 & 0.413 & 0.053 & 0.040 & 0.907 & 0.916 \\
+\textbf{structured_yaml} & 0.457 & 0.444 & 0.511 & 0.510 & 0.107 & 0.141 & 0.406 & 0.406 & 0.057 & 0.040 & 0.897 & 0.896 \\
+\bottomrule
+\end{tabular}
+\end{table}

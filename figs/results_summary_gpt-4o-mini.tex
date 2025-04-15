@@ -1,0 +1,17 @@
+\begin{table}
+\caption{Knowledge Graph Format Performance by Task for Model gpt-4o-mini}
+\label{tab:results_gpt-4o-mini}
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+task & \multicolumn{2}{c}{c}{AggByRelation} & \multicolumn{2}{c}{c}{AggNeighborProperties} & \multicolumn{2}{c}{c}{HighestDegreeNode} & \multicolumn{2}{c}{c}{Overall} & \multicolumn{2}{c}{c}{ShortestPath} & \multicolumn{2}{c}{c}{TripleRetrieval} \\
+pseudonymized & False & True & False & True & False & True & False & True & False & True & False & True \\
+format &  &  &  &  &  &  &  &  &  &  &  &  \\
+\midrule
+\textbf{json_ld3} & 0.380 & 0.390 & 0.210 & 0.180 & 0.130 & 0.110 & 0.296 & 0.264 & 0.090 & 0.040 & 0.670 & 0.600 \\
+\textbf{list_of_edges} & 0.400 & 0.400 & 0.520 & 0.580 & 0.140 & 0.270 & 0.438 & 0.460 & 0.150 & 0.140 & 0.980 & 0.910 \\
+\textbf{rdf_turtle3} & 0.310 & 0.330 & 0.270 & 0.260 & 0.070 & 0.050 & 0.296 & 0.260 & 0.140 & 0.030 & 0.690 & 0.630 \\
+\textbf{structured_json} & 0.490 & 0.420 & 0.560 & 0.580 & 0.100 & 0.100 & 0.448 & 0.440 & 0.140 & 0.160 & 0.950 & 0.940 \\
+\textbf{structured_yaml} & 0.490 & 0.460 & 0.540 & 0.570 & 0.070 & 0.120 & 0.448 & 0.446 & 0.200 & 0.140 & 0.940 & 0.940 \\
+\bottomrule
+\end{tabular}
+\end{table}

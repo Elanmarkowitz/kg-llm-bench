@@ -1,0 +1,17 @@
+\begin{table}
+\caption{Knowledge Graph Format Performance by Task for Model gemini-1.5-flash}
+\label{tab:results_gemini-1.5-flash}
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+task & \multicolumn{2}{c}{c}{AggByRelation} & \multicolumn{2}{c}{c}{AggNeighborProperties} & \multicolumn{2}{c}{c}{HighestDegreeNode} & \multicolumn{2}{c}{c}{Overall} & \multicolumn{2}{c}{c}{ShortestPath} & \multicolumn{2}{c}{c}{TripleRetrieval} \\
+pseudonymized & False & True & False & True & False & True & False & True & False & True & False & True \\
+format &  &  &  &  &  &  &  &  &  &  &  &  \\
+\midrule
+\textbf{json_ld3} & 0.460 & 0.440 & 0.330 & 0.330 & 0.000 & 0.000 & 0.386 & 0.338 & 0.230 & 0.050 & 0.910 & 0.870 \\
+\textbf{list_of_edges} & 0.520 & 0.420 & 0.430 & 0.340 & 0.000 & 0.000 & 0.406 & 0.358 & 0.080 & 0.040 & 1.000 & 0.990 \\
+\textbf{rdf_turtle3} & 0.460 & 0.490 & 0.330 & 0.340 & 0.000 & 0.000 & 0.348 & 0.358 & 0.060 & 0.030 & 0.890 & 0.930 \\
+\textbf{structured_json} & 0.500 & 0.470 & 0.410 & 0.380 & 0.000 & 0.000 & 0.386 & 0.366 & 0.060 & 0.010 & 0.960 & 0.970 \\
+\textbf{structured_yaml} & 0.490 & 0.500 & 0.400 & 0.370 & 0.010 & 0.000 & 0.388 & 0.364 & 0.090 & 0.000 & 0.950 & 0.950 \\
+\bottomrule
+\end{tabular}
+\end{table}
