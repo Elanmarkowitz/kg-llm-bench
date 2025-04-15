@@ -47,12 +47,15 @@ FORMAT_NAME_MAP = {
 }
 
 class ShortestPathAnalyzer:
-    def __init__(self, results_dir: str = "benchmark_data"):
+    def __init__(self, results_dir: str = "benchmark_data", use_flexible=False):
         self.results_dir = Path(results_dir) / "ShortestPath"
+        self.use_flexible = use_flexible
+        if use_flexible:
+            self.results_dir = Path(results_dir) / "ShortestPathFlexible"
         self.results_data = []
         self.full_results_data = []
         self.path_length_data = []
-            
+    
     def extract_path_from_answer(self, answer_text):
         """Extract the path from an answer string"""
         # Match the list format in the answer: SHORTEST PATH: ['Entity1', 'Entity2', ...]
@@ -316,9 +319,9 @@ class ShortestPathAnalyzer:
         
         # Average over models and formats
         length_scores = df.groupby(['path_length'])['avg_score'].agg(['mean', 'count']).reset_index()
-        
+
         # Create the plot
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(5, 3))
         
         # Primary axis for scores
         plt.subplot(111)
@@ -356,6 +359,9 @@ class ShortestPathAnalyzer:
         df['model'] = df['model'].map(lambda x: MODEL_NAME_MAP.get(x, x))
         df['format'] = df['format'].map(lambda x: FORMAT_NAME_MAP.get(x, x))
         
+        path_length_count = df.groupby(['path_length'])['num_examples'].median().reset_index()
+        path_length_count["num_examples"] = path_length_count["num_examples"].astype(int)
+        path_length_count = path_length_count.set_index('path_length')['num_examples'].to_dict()
         # Average over formats for each model
         model_length_scores = df.groupby(['model', 'path_length']).agg({
             'avg_score': 'mean',
@@ -365,7 +371,7 @@ class ShortestPathAnalyzer:
         model_length_scores = model_length_scores[model_length_scores['num_examples'] > 10]
         
         # Create the plot
-        plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(8, 4))
         
         # Get unique models and lengths for the plot
         models = sorted(model_length_scores['model'].unique())
@@ -412,9 +418,13 @@ class ShortestPathAnalyzer:
         plt.xlabel('Path Length')
         plt.ylabel('Average Accuracy')
         plt.title('ShortestPath Task Performance by Path Length and Model\n(Solid: Avg over Formats, Dashed: Best Format)')
-        plt.ylim(0, 1.05)  # Set y-axis limit
+        plt.ylim(0, 0.805)  # Set y-axis limit
         plt.grid(True, alpha=0.3)
-        plt.xticks(lengths)
+        
+        # Create custom ticks with example counts
+        xticks_labels = [f"{length}\n(n={path_length_count.get(length, 0)})" for length in lengths]
+        plt.xticks(lengths, xticks_labels)
+        
         plt.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
         
         plt.tight_layout()
@@ -448,13 +458,13 @@ class ShortestPathAnalyzer:
         )
         
         # Create the plot
-        plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(8, 4))
         
         # Define a colormap for the different bins
         colors = ['#FF9999', '#66B2FF', '#99FF99', '#FFCC99', '#c2c2f0', '#ffb3e6']
         
         # Plot stacked bars
-        model_path_props.plot(kind='bar', stacked=True, color=colors, figsize=(12, 8))
+        model_path_props.plot(kind='bar', stacked=True, color=colors, figsize=(8, 4))
         
         # Add percentages on each segment
         ax = plt.gca()
@@ -464,15 +474,15 @@ class ShortestPathAnalyzer:
                 value = model_path_props.loc[model, bin_label]
                 if value > 0.05:  # Only add text if segment is large enough
                     ax.text(i, cumulative_sum + value/2, f'{value:.0%}', 
-                            ha='center', va='center', fontsize=9, fontweight='bold')
+                            ha='center', va='center', fontsize=7, fontweight='bold')
                 cumulative_sum += value
         
         # Customize plot
-        plt.xlabel('Model')
         plt.ylabel('Proportion')
         plt.title('Distribution of Predicted Path Lengths by Model')
         plt.legend(title='Predicted Path Length', bbox_to_anchor=(1.05, 1), loc='upper left')
-        plt.xticks(rotation=45, ha='right')
+        plt.xticks(rotation=30, ha='right')
+        plt.xlabel('')
         plt.ylim(0, 1.05)  # Set y-axis limit
         plt.grid(True, axis='y', alpha=0.3)
         
@@ -492,25 +502,92 @@ class ShortestPathAnalyzer:
         # Bin predicted path lengths, grouping all values above 5 into a single bin
         df['predicted_path_length_bin'] = pd.cut(df['predicted_path_length'], 
                                               bins=[-1, 0, 1, 2, 3, 4, float('inf')], 
-                                              labels=['None', '1', '2', '3', '4', '5+'], 
+                                              labels=['0', '1', '2', '3', '4', '5+'], 
                                               right=True)
         
-        contingency = pd.crosstab(
-            df['gt_path_length'], 
-            df['predicted_path_length_bin'],
-            normalize='index',  # Normalize by row (actual path length)
-            rownames=['Actual Length'],
-            colnames=['Predicted Length']
-        )
+        # Split dataframe into pseudonymized and non-pseudonymized
+        df_original = df[df['pseudonymized'] == False]
+        df_pseudo = df[df['pseudonymized'] == True]
         
-        # Create the plot
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(contingency, annot=True, cmap='YlGnBu', fmt='.2f', cbar_kws={'label': 'Proportion'})
+        # Create the main figure with two subplots
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
         
-        plt.title('Actual vs Predicted Path Length\n(Normalized by Actual Length)')
+        # Process original data
+        if not df_original.empty:
+            contingency_original = pd.crosstab(
+                df_original['gt_path_length'], 
+                df_original['predicted_path_length_bin'],
+                normalize='index',  # Normalize by row (actual path length)
+                rownames=['Actual Length'],
+                colnames=['Predicted Length']
+            )
+            
+            # Create heatmap for original data
+            sns.heatmap(contingency_original, annot=True, cmap='YlGnBu', fmt='.2f', 
+                        cbar_kws={'label': 'Proportion'}, ax=ax1)
+            ax1.set_title('Original Data\nActual vs Predicted Path Length')
+        else:
+            ax1.text(0.5, 0.5, "No original data available", 
+                    horizontalalignment='center', verticalalignment='center')
+            ax1.set_xlabel('Predicted Length')
+            ax1.set_ylabel('Actual Length')
+        
+        # Process pseudonymized data
+        if not df_pseudo.empty:
+            contingency_pseudo = pd.crosstab(
+                df_pseudo['gt_path_length'], 
+                df_pseudo['predicted_path_length_bin'],
+                normalize='index',  # Normalize by row (actual path length)
+                rownames=['Actual Length'],
+                colnames=['Predicted Length']
+            )
+            
+            # Create heatmap for pseudonymized data
+            sns.heatmap(contingency_pseudo, annot=True, cmap='YlGnBu', fmt='.2f', 
+                        cbar_kws={'label': 'Proportion'}, ax=ax2)
+            ax2.set_title('Pseudonymized Data\nActual vs Predicted Path Length')
+        else:
+            ax2.text(0.5, 0.5, "No pseudonymized data available", 
+                    horizontalalignment='center', verticalalignment='center')
+            ax2.set_xlabel('Predicted Length')
+            ax2.set_ylabel('Actual Length')
+        
+        # Add overall title
+        plt.suptitle('Comparison of Actual vs Predicted Path Length\n(Normalized by Actual Length)', fontsize=14)
+        
         plt.tight_layout()
+        fig.subplots_adjust(top=0.85)  # Make room for the suptitle
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
+        
+        # Create an additional version showing the difference between original and pseudonymized data
+        if not df_original.empty and not df_pseudo.empty:
+            # Align both contingency tables to have the same indices and columns
+            all_indices = sorted(set(contingency_original.index) | set(contingency_pseudo.index))
+            all_columns = sorted(set(contingency_original.columns) | set(contingency_pseudo.columns))
+            
+            # Reindex both dataframes
+            contingency_original_aligned = contingency_original.reindex(index=all_indices, columns=all_columns, fill_value=0)
+            contingency_pseudo_aligned = contingency_pseudo.reindex(index=all_indices, columns=all_columns, fill_value=0)
+            
+            # Calculate difference (pseudo - original)
+            diff = contingency_pseudo_aligned - contingency_original_aligned
+            
+            # Create the difference plot
+            plt.figure(figsize=(7, 5))
+            
+            # Use diverging colormap centered at 0
+            cmap = plt.cm.RdBu_r
+            sns.heatmap(diff, annot=True, cmap=cmap, fmt='.2f', center=0,
+                        cbar_kws={'label': 'Difference (Pseudo - Original)'})
+            
+            plt.title('Difference in Prediction Patterns:\nPseudonymized - Original', fontsize=14)
+            plt.tight_layout()
+            
+            # Save the difference plot
+            diff_output_file = output_file.replace('.pdf', '_difference.pdf')
+            plt.savefig(diff_output_file, bbox_inches='tight', dpi=300)
+            plt.close()
         
     def plot_error_analysis(self, output_file: str = "figs/shortest_path/error_analysis.pdf"):
         """Generate a bar plot showing error types (off by 1, off by 2, etc.)"""
@@ -520,33 +597,72 @@ class ShortestPathAnalyzer:
             print("No data available for error analysis plot")
             return
             
+        # Map model names
+        df['model'] = df['model'].map(lambda x: MODEL_NAME_MAP.get(x, x))
+            
         # Calculate difference between predicted and actual path length
         df = df[df['predicted_path_length'] > 0]
         df['length_diff'] = df['predicted_path_length'] - df['gt_path_length']
         
-        # Count occurrences of each difference
-        diff_counts = df['length_diff'].value_counts().reset_index()
-        diff_counts.columns = ['Length Difference', 'Count']
-        diff_counts = diff_counts.sort_values('Length Difference')
+        # Group by model and length difference
+        model_diff_counts = df.groupby(['model', 'length_diff']).size().reset_index(name='count')
+        
+        # Create a pivot table for easier plotting
+        pivot_counts = pd.pivot_table(
+            model_diff_counts,
+            values='count',
+            index='length_diff',
+            columns='model',
+            fill_value=0
+        )
+        
+        # Sort the index to ensure length differences are in order
+        pivot_counts = pivot_counts.sort_index()
         
         # Create the plot
-        plt.figure(figsize=(12, 6))
-        bars = plt.bar(diff_counts['Length Difference'], diff_counts['Count'], color='skyblue')
+        plt.figure(figsize=(14, 8))
         
-        # Add counts above bars
-        for bar in bars:
-            height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width()/2., height + 0.01 * max(diff_counts['Count']),
-                    f'{int(height)}', ha='center', va='bottom')
+        # Get unique models for coloring
+        models = pivot_counts.columns
+        
+        # Create the stacked bar chart
+        bottom = np.zeros(len(pivot_counts))
+        bar_width = 0.8
+        
+        for model in models:
+            counts = pivot_counts[model].values
+            plt.bar(pivot_counts.index, counts, bottom=bottom, 
+                   label=model, color=COLOR_MAP.get(model, None), 
+                   width=bar_width, alpha=0.9)
+            bottom += counts
+        
+        # Add total counts above bars
+        for i, (diff, row) in enumerate(pivot_counts.iterrows()):
+            total_count = row.sum()
+            if total_count > 0:
+                plt.text(diff, total_count + 0.5, f'{int(total_count)}', 
+                        ha='center', va='bottom', fontweight='bold')
         
         # Customize plot
-        plt.xlabel('Predicted Path Length - Actual Path Length')
-        plt.ylabel('Number of Examples')
-        plt.title('Error Analysis: Difference Between Predicted and Actual Path Length')
+        plt.xlabel('Predicted Path Length - Actual Path Length', fontsize=12)
+        plt.ylabel('Number of Examples', fontsize=12)
+        plt.title('Error Analysis: Difference Between Predicted and Actual Path Length by Model', fontsize=14)
         plt.grid(True, axis='y', alpha=0.3)
-        plt.xticks(diff_counts['Length Difference'])
+        plt.xticks(pivot_counts.index)
+        plt.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        # Add overall statistics
+        total_examples = len(df)
+        perfect_predictions = len(df[df['length_diff'] == 0])
+        off_by_one = len(df[(df['length_diff'] == 1) | (df['length_diff'] == -1)])
+        accuracy = perfect_predictions / total_examples if total_examples > 0 else 0
+        
+        plt.figtext(0.5, 0.01, 
+                   f"Total examples: {total_examples} | Exact predictions: {perfect_predictions} ({accuracy:.1%}) | Off by ±1: {off_by_one} ({off_by_one/total_examples:.1%})",
+                   ha='center', fontsize=11, bbox=dict(facecolor='lightyellow', alpha=0.5, pad=5))
         
         plt.tight_layout()
+        plt.subplots_adjust(bottom=0.15)  # Make room for the statistics text
         plt.savefig(output_file, bbox_inches='tight', dpi=300)
         plt.close()
         
@@ -702,10 +818,198 @@ class ShortestPathAnalyzer:
         with open(output_file, 'w') as f:
             f.write("\n".join(latex_lines))
 
+def plot_flexible_vs_non_flexible(analyzer: ShortestPathAnalyzer, analyzer_flexible: ShortestPathAnalyzer, output_file: str = "figs/shortest_path/flexible_vs_non_flexible.pdf"):
+    """Generate a heatmap comparing performance between flexible and non-flexible ShortestPath tasks."""
+    df = pd.DataFrame(analyzer.results_data)
+    df_flexible = pd.DataFrame(analyzer_flexible.results_data)
+    
+    # Rename tasks for clarity
+    df['task'] = 'ShortestPath'
+    df_flexible['task'] = 'ShortestPathFlexible'
+    
+    # Combine the dataframes
+    combined_df = pd.concat([df, df_flexible])
+    
+    # Map names for better readability
+    combined_df['model'] = combined_df['model'].map(lambda x: MODEL_NAME_MAP.get(x, x))
+    combined_df['format'] = combined_df['format'].map(lambda x: FORMAT_NAME_MAP.get(x, x))
+    
+    # Focus only on non-pseudonymized data for simplicity
+    combined_df = combined_df[combined_df['pseudonymized'] == False]
+    
+    # Get unique models and formats in a consistent order
+    models = sorted(combined_df['model'].unique())
+    models = ['gemini-1.5-flash', 'claude-3.5-sonnet-v2', 'gpt-4o-mini', 'nova-pro', 'llama3.3-70b-instruct']
+    combined_df = combined_df[combined_df['model'].isin(models)]
+
+    formats = ['Structured JSON', 'List of Edges', 'Structured JSON', 'Structured YAML', 'JSON-LD', 'RDF Turtle']
+    
+    # Create figure with GridSpec - one row, one column per model
+    fig = plt.figure(figsize=(16, 2.5))
+    gs = plt.GridSpec(1, len(models), figure=fig, wspace=0.05)
+    
+    # Create axes for each subplot
+    axes = [plt.subplot(gs[0, j]) for j in range(len(models))]
+    
+    # Create a single colorbar axis
+    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
+    
+    # Prepare all the pivot tables
+    all_pivots = {}
+    for i, model in enumerate(models):
+        model_df = combined_df[combined_df['model'] == model]
+        pivot = pd.pivot_table(
+            model_df,
+            values='avg_score',
+            index='task',
+            columns='format',
+            aggfunc='mean'
+        )
+        # Make sure the columns (formats) are in consistent order
+        pivot = pivot.reindex(columns=formats)
+        all_pivots[model] = pivot
+    
+    # Create a heatmap for each model
+    for i, model in enumerate(models):
+        pivot = all_pivots[model]
+        
+        # Create the heatmap for this model
+        sns.heatmap(
+            pivot,
+            annot=True,
+            fmt='.3f',
+            cmap='Greens',
+            vmin=0,
+            vmax=1,
+            ax=axes[i],
+            cbar=True if i == len(models)-1 else False,
+            cbar_ax=cbar_ax if i == len(models)-1 else None,
+            cbar_kws={'label': 'Score'},
+            linewidths=0.5,
+            linecolor='white',
+            annot_kws={'size': 9}
+        )
+        
+        # Set title as model name
+        axes[i].set_title(model, fontsize=11)
+        
+        # Only show y-axis labels for the first plot
+        if i > 0:
+            axes[i].set_ylabel('')
+            axes[i].set_yticklabels([])
+        
+        # Customize x-axis labels without the axis label
+        axes[i].set_xticklabels(
+            axes[i].get_xticklabels(),
+            rotation=45,
+            ha='right',
+            fontsize=9
+        )
+        axes[i].set_xlabel('')  # Remove x-axis label
+    
+    # Add a main title
+    plt.suptitle("Performance Comparison: ShortestPath vs. ShortestPathFlexible", 
+                 fontsize=14, y=1.05)
+    
+    plt.tight_layout()
+    # Adjust layout to make room for the colorbar
+    plt.subplots_adjust(right=0.9)
+    plt.savefig(output_file, bbox_inches='tight', dpi=300)
+    plt.close()
+    
+    # Also create a difference heatmap using GridSpec
+    diff_output_file = output_file.replace('.pdf', '_difference.pdf')
+    
+    # Calculate differences (Flexible - Non-Flexible)
+    sp_df = combined_df[combined_df['task'] == 'ShortestPath']
+    sp_flex_df = combined_df[combined_df['task'] == 'ShortestPathFlexible']
+    
+    # Create difference dataframe with model and format columns
+    diff_data = []
+    for model in models:
+        for fmt in formats:
+            sp_score = sp_df[(sp_df['model'] == model) & (sp_df['format'] == fmt)]['avg_score'].mean()
+            flex_score = sp_flex_df[(sp_flex_df['model'] == model) & (sp_flex_df['format'] == fmt)]['avg_score'].mean()
+            diff = flex_score - sp_score
+            diff_data.append({
+                'model': model,
+                'format': fmt,
+                'difference': diff
+            })
+    
+    diff_df = pd.DataFrame(diff_data)
+    
+    # Create figure with GridSpec for difference heatmap
+    fig = plt.figure(figsize=(16, 4))
+    gs = plt.GridSpec(1, len(models), figure=fig, wspace=0.05)
+    
+    # Create axes for each subplot
+    axes = [plt.subplot(gs[0, j]) for j in range(len(models))]
+    
+    # Create a single colorbar axis for difference
+    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
+    
+    # Prepare pivot tables for differences
+    for i, model in enumerate(models):
+        model_diff = diff_df[diff_df['model'] == model]
+        # Create a dummy DataFrame with a single row to use as index
+        pivot_diff = pd.DataFrame(
+            index=['Difference'],
+            columns=formats,
+            data=[model_diff.set_index('format')['difference'].reindex(formats).values]
+        )
+        
+        # Create the heatmap for difference
+        sns.heatmap(
+            pivot_diff,
+            annot=True,
+            fmt='.3f',
+            cmap='RdBu_r',
+            center=0,
+            vmin=-0.3,
+            vmax=0.3,
+            ax=axes[i],
+            cbar=True if i == len(models)-1 else False,
+            cbar_ax=cbar_ax if i == len(models)-1 else None,
+            cbar_kws={'label': 'Score Difference\n(Flexible - Regular)'},
+            linewidths=0.5,
+            linecolor='white',
+            annot_kws={'size': 10}
+        )
+        
+        # Set title as model name
+        axes[i].set_title(model, fontsize=11)
+        
+        # Only show y-axis labels for the first plot
+        if i > 0:
+            axes[i].set_ylabel('')
+            axes[i].set_yticklabels([])
+        
+        # Customize x-axis labels
+        axes[i].set_xticklabels(
+            axes[i].get_xticklabels(),
+            rotation=45,
+            ha='right',
+            fontsize=9
+        )
+    
+    # Add a main title for difference plot
+    plt.suptitle("Performance Difference: ShortestPathFlexible - ShortestPath", 
+                 fontsize=14, y=1.05)
+    
+    plt.tight_layout()
+    # Adjust layout to make room for the colorbar
+    plt.subplots_adjust(right=0.9)
+    plt.savefig(diff_output_file, bbox_inches='tight', dpi=300)
+    plt.close()
+
 def main():
     print("Starting ShortestPath analysis...")
     analyzer = ShortestPathAnalyzer()
     analyzer.load_results()
+
+    analyzer_flexible = ShortestPathAnalyzer(use_flexible=True)
+    analyzer_flexible.load_results()
 
     df = pd.DataFrame(analyzer.full_results_data)
     
@@ -740,6 +1044,9 @@ def main():
     print("\nGenerating LaTeX tables...")
     analyzer.generate_latex_table()
     analyzer.generate_path_length_latex_table()
+    
+    print("\nGenerating flexible vs non-flexible comparison...")
+    plot_flexible_vs_non_flexible(analyzer, analyzer_flexible)
     
     print("\nAnalysis complete!")
 
