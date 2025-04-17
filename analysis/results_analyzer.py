@@ -1049,7 +1049,10 @@ class ResultsAnalyzer:
         # Filter the DataFrame to include only the specified models using their exact names
         models_to_include = ['gemini-1.5-flash', 'claude-3.5-sonnet-v2', 'gpt-4o-mini', 'nova-pro', 'llama3.3-70b-instruct']
         df_avg = df_avg[df_avg['model'].isin(models_to_include)]
-        
+
+        # tasks_to_include = ['ShortestPath', 'ShortestPathFlexible']
+        # df_avg = df_avg[df_avg['task'].isin(tasks_to_include)]
+        # output_file = "figs/shortest_path/combined_heatmaps_shortest_path_flexible.pdf"
         # Create a figure with subplots in a 2x7 grid
         fig = plt.figure(figsize=(8, 4)) 
         gs = plt.GridSpec(2, len(df_avg['model'].unique()), figure=fig, wspace=0.1)  # Reduced horizontal margin

@@ -19,12 +19,14 @@ class ShortestPathTask(BaseTask):
                          base_dataset_file,
                          dataset_file,
                          results_file)
+        self.use_flexible_eval = False
 
     def evaluate_response(self, response, answer):
-        # response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
-        import re
-        match = re.search(r"SHORTEST PATH: \[(.*)\]", response)
-        response = match.group(1).strip() if match else ""
+        response = response.replace("SHORTEST PATH:", "").split('\n')[0].strip()
+        if self.use_flexible_eval:
+            import re
+            match = re.search(r"SHORTEST PATH: \[(.*)\]", response)
+            response = match.group(1).strip() if match else ""
         try:
             response_list = ast.literal_eval(response)
         except (SyntaxError, ValueError):
