@@ -43,9 +43,39 @@ Follow these steps to set up the project:
    GEMINI_API_KEY=<your-gemini-api-key>
    ```
 
+## Instructions to download data from DVC(Data Version Control)
+Make sure to install dvc before `dvc pull`. You can do this by running the following command:
+```bash
+pip install dvc
+pip install 'dvc[gdrive]'
+
+dvc pull # pull all data from dvc remote drive.
+```
+
+## Instructions to run experiments with models
+
+To run experiments with the models, use the `run_experiments.py` script. This script executes tasks defined in the configuration file and evaluates the performance of various models on knowledge graph tasks.
+
+```bash
+python run_experiments.py --config configs/run_small_datasets.yaml
+```
+
+### Optional Arguments
+- `--reevaluate`: Reevaluate existing results.
+- `--reevaluate_only`: Only reevaluate existing results without running new experiments.
+- `--batch`: Enable batch mode for AWS Bedrock models.
+
+For example, to reevaluate results in batch mode:
+```bash
+python run_experiments.py --config configs/run_small_datasets.yaml --reevaluate --batch
+```
+
+Ensure that the configuration file (`configs/run_small_datasets.yaml`) is properly set up with the desired task, pseudonymizer, and conversion configurations.
+
+
 ## Running Experiments with Batch Processing
 
-1. Run experiments in batch mode:
+#### 1. Run experiments in batch mode:
 ```bash
 python run_experiments.py --config configs/run_small_datasets.yaml --batch
 ```
@@ -55,14 +85,14 @@ This will:
 - Store placeholder results with `PENDING:` status
 - Continue processing all tasks
 
-2. Submit batch jobs to Bedrock:
+#### 2. Submit batch jobs to Bedrock:
 ```bash
 python scripts/process_batches.py \
   --input-bucket $BEDROCK_INPUT_BUCKET \
   --output-bucket $BEDROCK_OUTPUT_BUCKET
 ```
 
-3. Collect and process results:
+#### 3. Collect and process results:
 ```bash
 python scripts/collect_results.py
 ```
@@ -72,6 +102,32 @@ Run this periodically to:
 - Download completed results
 - Update task result files
 - Move completed batches to archive
+
+
+## Instructions to generate new data from KG
+
+To generate new data from the knowledge graph, follow these steps:
+
+#### 1: Construct Base Datasets
+Use the `construct_base_datasets.py` script to create base datasets for knowledge graph tasks. This script loads the knowledge graph and generates datasets based on the task configurations.
+
+Run the script with the following command:
+```bash
+python construct_base_datasets.py --config configs/construct_base_datasets_small.yaml
+```
+Ensure that the configuration file (configs/construct_base_datasets_small.yaml) is properly set up with the desired task configurations.
+
+
+#### 2: Construct Formatted Datasets
+After constructing the base datasets, use the `construct_formatted_datasets.py` script to format the datasets for specific tasks. This script processes the base datasets and applies formatting based on the conversion and pseudonymizer configurations.
+
+Run the script with the following command:
+```bash
+python construct_formatted_datasets.py --config configs/construct_formatted_datasets_small.yaml
+```
+
+Ensure that the configuration file (`configs/construct_formatted_datasets_small.yaml`) is properly set up with the desired conversion and pseudonymizer configurations.
+
 
 ## Directory Structure
 
