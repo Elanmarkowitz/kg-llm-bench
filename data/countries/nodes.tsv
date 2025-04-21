@@ -1,0 +1,3558 @@
+entityID	wikidataID	label
+0	Q31	Belgium
+1	Q45	Portugal
+2	Q148	People's Republic of China
+3	Q155	Brazil
+4	Q183	Germany
+5	Q233	Malta
+6	Q298	Chile
+7	Q398	Bahrain
+8	Q686	Vanuatu
+9	Q801	Israel
+10	Q819	Laos
+11	Q863	Tajikistan
+12	Q869	Thailand
+13	Q878	United Arab Emirates
+14	Q891	Nizhny Novgorod
+15	Q912	Mali
+16	Q916	Angola
+17	Q1044	Sierra Leone
+18	Q1049	Sudan
+19	Q1363	Tripura
+20	Q1499	Uttarakhand
+21	Q5257	Satavahana dynasty
+22	Q7183	Qin dynasty
+23	Q7318	Nazi Germany
+24	Q12544	Byzantine Empire
+25	Q12560	Ottoman Empire
+26	Q18097	Korea
+27	Q22424	Punjab
+28	Q25227	Netherlands Antilles
+29	Q28025	Ryukyu Kingdom
+30	Q28428	Baekje
+31	Q28511	Buyeo
+32	Q28573	Inca Empire
+33	Q38610	Dominion of Newfoundland
+34	Q45670	Kingdom of Portugal
+35	Q49322	Demak
+36	Q55502	Kingdom of Jerusalem
+37	Q83891	Sasanian Empire
+38	Q83958	Macedonia
+39	Q105092	Kingdom of Mercia
+40	Q107380	Lippe
+41	Q123559	Al-Andalus
+42	Q124298	Marquisate of Bodonitsa
+43	Q127861	Khedivate of Egypt
+44	Q146713	Arab Federation
+45	Q149805	Kingdom of Iraq
+46	Q150069	United Suvadive Republic
+47	Q153963	German East Africa
+48	Q154741	Confederation of the Rhine
+49	Q154849	Grand Duchy of Tuscany
+50	Q156038	Duchy of Courland and Semigallia
+51	Q157109	Burgundian Netherlands
+52	Q157367	Brandenburg-Prussia
+53	Q157904	Sultanate of Zanzibar
+54	Q159856	Duchy of Brabant
+55	Q170588	Republic of Texas
+56	Q170895	Moldavian Soviet Socialist Republic
+57	Q171393	Wallachia
+58	Q172107	Polish–Lithuanian Commonwealth
+59	Q173082	Dacia
+60	Q175276	Kingdom of León
+61	Q175881	Roman Republic
+62	Q176495	Federal State of Austria
+63	Q178469	Biafra
+64	Q178913	Empire of Trebizond
+65	Q185488	Volga Bulgaria
+66	Q192180	Latvian Soviet Socialist Republic
+67	Q199821	Gran Colombia
+68	Q203817	First Bulgarian Empire
+69	Q206789	Ghana Empire
+70	Q210542	Fourth Brazilian Republic
+71	Q215443	Swedish Empire
+72	Q217169	Rhodesia
+73	Q221457	Congress Poland
+74	Q227007	Zou
+75	Q274488	Eastern Wu
+76	Q287996	Kingdom of Blambangan
+77	Q289577	Himyarite Kingdom
+78	Q306696	Austrian Littoral
+79	Q325461	Kingdom of Thessalonica
+80	Q330362	Commonwealth of England
+81	Q370173	Sultanate of Egypt
+82	Q370736	Cape Colony
+83	Q422065	Sultanate of Sulu
+84	Q424856	Kingdom of al-Abwab
+85	Q449639	Alodia
+86	Q454548	Amanuban
+87	Q457167	West Ukrainian People's Republic
+88	Q476757	Democratic Republic of Afghanistan
+89	Q498735	division of Korea
+90	Q501303	Free City of Kraków
+91	Q501684	Kingdom of Gomma
+92	Q505503	Cochinchina
+93	Q538636	Ankole
+94	Q542165	Despotate of Dobruja
+95	Q548114	Free State of Fiume
+96	Q550369	Northern Epirus
+97	Q551067	Northern Zhou
+98	Q552157	Nieuwe Republiek
+99	Q558596	Hadiya Kingdom
+100	Q571453	Former Shu
+101	Q600562	Mthethwa Paramountcy
+102	Q605000	North Caucasian Soviet Republic
+103	Q622783	Spanish Netherlands
+104	Q630882	Republic of New Granada
+105	Q631780	Vahszuszana
+106	Q642301	Seventeenth Dynasty of Egypt
+107	Q654766	Republic of North Peru
+108	Q657861	Dholpur State
+109	Q660393	Lower Lorraine
+110	Q664588	Uganda Scheme
+111	Q668415	Orchha State
+112	Q686312	Duchy of Amalfi
+113	Q689527	Aster Revolution
+114	Q693570	Duchy of Ferrara
+115	Q693980	Duchy of Swabia
+116	Q701337	Empire of Vietnam
+117	Q713750	West Germany
+118	Q714006	Republic of Ezo
+119	Q715210	Geumgwan Gaya
+120	Q716890	Indore State
+121	Q722071	Ashanti Empire
+122	Q729768	Zulu Kingdom
+123	Q736936	Lu
+124	Q737629	Twenty-second Dynasty of Egypt
+125	Q746558	Emirate of Bukhara
+126	Q762084	Bamana Empire
+127	Q766543	Hispanic Monarchy
+128	Q767089	Salamis
+129	Q808575	Baroda State
+130	Q818666	Berar Sultanate
+131	Q818742	Mon State
+132	Q831310	Bethio
+133	Q837998	Kingdom of East Anglia
+134	Q838291	Socialist Republic of Montenegro
+135	Q849623	Oyo Empire
+136	Q856843	United Arab States
+137	Q858269	Biffeche
+138	Q860407	Kahlur State
+139	Q862522	Mossi Kingdoms
+140	Q878717	Bit Adini
+141	Q889912	Toro Kingdom
+142	Q912068	Wu
+143	Q918204	Rajpipla State
+144	Q920527	Britonia
+145	Q933592	Duchy of Massa and Carrara
+146	Q940123	Rustamid dynasty
+147	Q940821	People's Democratic Republic of Ethiopia
+148	Q941881	Netherlands New Guinea
+149	Q950644	Carpatho-Ukraine
+150	Q953068	South-West Africa
+151	Q954585	Kingdom of Brycheiniog
+152	Q956451	Kingdom of Dyfed
+153	Q959419	Sicels
+154	Q965174	Coalition Provisional Authority
+155	Q967246	Ngoyo
+156	Q975405	Sultanate of Rum
+157	Q976091	East African Federation
+158	Q1045615	Guzhu
+159	Q1047069	Kizzuwatna
+160	Q1048340	Kingdom of Albania
+161	Q1048918	Kingdom of the Suebi
+162	Q1069690	Chen
+163	Q1072140	Roman Republic
+164	Q1108659	Republic of Benin
+165	Q1137110	Ducado de Ceneda
+166	Q1138904	Kingdom of Afghanistan
+167	Q1148042	Qutb Shahi dynasty
+168	Q1149098	Dai
+169	Q1154406	Ashikaga shogunate
+170	Q1155700	Rattanakosin Kingdom
+171	Q1192067	Min
+172	Q1192936	Kingdom of Burundi
+173	Q1193822	Wuyue
+174	Q1206012	German Reich
+175	Q1225154	Regnum Theodomiri
+176	Q1232988	Italian Eritrea
+177	Q1235737	County of Aragon
+178	Q1252744	Jind State
+179	Q1278242	Eastern States Union
+180	Q1280122	Principality of Capua
+181	Q1290932	Grafschaft Heiligenberg
+182	Q1322424	Maakhir
+183	Q1323195	Wu
+184	Q1353404	Principality of Kastrioti
+185	Q1361989	First Philippine Republic
+186	Q1395011	Chalukya dynasty
+187	Q1397174	Fartak
+188	Q1400154	Federated Malay States
+189	Q1406298	Serbian Empire
+190	Q1411349	County of Armagnac
+191	Q1411800	Schwäbisch-Österreich
+192	Q1419681	Crimean People's Republic
+193	Q1425000	County of Amiens
+194	Q1436243	Free Territory
+195	Q1468426	Limmu-Ennarea
+196	Q1483480	Prince of Sedan
+197	Q1520008	Duchy of Neopatria
+198	Q1535245	Sri Ksetra Kingdom
+199	Q1541699	County of Empúries
+200	Q1541812	County of Troyes
+201	Q1562357	Republic of Central Albania
+202	Q1588594	Panna State
+203	Q1591062	Haushabi
+204	Q1604981	Ratlam State
+205	Q1614435	Lordship of Rostock
+206	Q1618896	Rus' Khaganate
+207	Q1623936	Kingdom of Garo
+208	Q1683106	Jaora State
+209	Q1683696	Diarra
+210	Q1683756	Jasdan State
+211	Q1761355	Kuban-Black Sea Soviet Republic
+212	Q1761381	Giudicato of Logudoro
+213	Q1796202	Kingdom of Granada
+214	Q1796223	Kingdom of Lunda
+215	Q1796239	Kingdom of Seville
+216	Q1800206	Reich Niani
+217	Q1811029	Finnish Socialist Workers' Republic
+218	Q1843786	Anhalt-Bernburg-Schaumburg-Hoym
+219	Q1852345	Trucial States
+220	Q1964552	Nandgaon State
+221	Q1989935	Provisional Government of Albania
+222	Q1991540	Duchy of Courland and Semigallia
+223	Q2006864	Northern Yan
+224	Q2010024	Second Czechoslovak Republic
+225	Q2039165	Stad en Lande
+226	Q2077648	Cirebon Sultanate
+227	Q2086556	Kakatiya dynasty
+228	Q2096678	Beylik of Isfendiyar
+229	Q2096935	Kingdom of Sedang
+230	Q2121839	Alawi
+231	Q2139012	Rehoboth
+232	Q2191428	Taifa of Jérica
+233	Q2220019	Eastern Guo
+234	Q2220343	Republiek Montefiorino
+235	Q2263316	殷国
+236	Q2263339	虞国
+237	Q2300296	Latvian Socialist Soviet Republic
+238	Q2300884	Sonbai
+239	Q2301372	Castilian Kingdom of Toledo
+240	Q2324047	County of Apulia
+241	Q2398434	Taifa of Murviedro and Sagunto
+242	Q2413855	Juliana Republic
+243	Q2429253	Islamic State of Iraq and the Levant
+244	Q2440328	Tomani
+245	Q2454585	Third Czechoslovak Republic
+246	Q2456191	Kingdom of Seisyllwg
+247	Q2457072	Duchy of Gaeta
+248	Q2463081	Taifa of Constantina and Hornachuelos
+249	Q2502117	Urua
+250	Q2503648	Utum
+251	Q2509414	Tambralinga
+252	Q2523837	Brandenburg colonial empire
+253	Q2524715	Taifa of Ronda
+254	Q2564694	Powys Fadog
+255	Q2584842	Rijkslandvoogdij Wetterau
+256	Q2584857	Ruo
+257	Q2603305	Federation of Ethiopia and Eritrea
+258	Q2608761	Albret
+259	Q2622868	Bagratid Armenia
+260	Q2650123	Tan
+261	Q2668584	Taifa of Carmona
+262	Q2719360	Duchy of Luxembourg
+263	Q2919545	Principality of Svaneti
+264	Q2958284	Taifa of Menorca
+265	Q2975232	Republic of Independent Guyana
+266	Q2980922	Columbia District
+267	Q2991433	County of Sobrarbe
+268	Q3032694	Taifa of Purchena
+269	Q3133774	Wahidi Haban
+270	Q3185305	Kingdom of Israel
+271	Q3241025	Limbdi State
+272	Q3347092	Varendra
+273	Q3359147	Videha
+274	Q3443999	Subeihi
+275	Q3446243	Kingdom of Ait Abbas
+276	Q3456487	Sudanese Republic
+277	Q3496079	Czech Republic
+278	Q3503555	Palembang Sultanate
+279	Q3538254	奚
+280	Q3560494	Eastern Xia
+281	Q3591852	Free State of Antioquia
+282	Q3608782	Urmia Khanate
+283	Q3744305	Feudo di Castellano e Castelnuovo
+284	Q3765271	Utkala Kingdom
+285	Q3768593	Girifai
+286	Q3845762	Marchesato di Novello
+287	Q3845764	Marchesato di Spigno
+288	Q3932080	Kingdom of Sardinia and Corsica
+289	Q3932084	Kingdom of Tambapanni
+290	Q3933221	Repubblica Astese
+291	Q3968537	stati italiani nell'era napoleonica
+292	Q4066154	Andhra State
+293	Q4068252	Tsebelda
+294	Q4087330	Битва на Абалацком озере
+295	Q4123172	Волисполком
+296	Q4124689	Вольный город Рига
+297	Q4148096	Графство Трегье
+298	Q4155480	Dasarna Kingdom
+299	Q4210248	Kalmyk Khanate
+300	Q4217876	Cutch State
+301	Q4224859	Principality of Trinidad
+302	Q4249540	Qutqashen Sultanate
+303	Q4272186	Anga Kingdom
+304	Q4285171	Матча
+305	Q4333992	Олонецкое правительство
+306	Q4338940	Островецкая республика
+307	Q4347782	Skewbald Horde
+308	Q4348096	Пекат
+309	Q4363240	Principality of Pir
+310	Q4416470	Сеньория Авогур
+311	Q4428846	Сонсан Кая
+312	Q4442012	Stepanskoe Principality
+313	Q4452492	Татарские ханства
+314	Q4494730	Hyderabad State
+315	Q4529862	Principality of Èdesskoe
+316	Q4969562	British Bencoolen
+317	Q5062192	Centralist Republic of Mexico
+318	Q5098931	荣国
+319	Q5274236	Didouyu
+320	Q5363393	Xu (state)
+321	Q5367152	单国
+322	Q5440850	Federation of Nigeria
+323	Q5520438	Gan
+324	Q5782830	Muisca Confederation
+325	Q6410251	Kimpurusha Kingdom
+326	Q6412664	Realm of Stefan Dragutin
+327	Q6412671	Kingdom of Upatissa Nuwara
+328	Q6412684	Kingdom of the Canary Islands
+329	Q6429495	Konkana Kingdom
+330	Q6509709	Khalkhal Khanate
+331	Q6806805	Medieval Croatia
+332	Q6831903	Daewiguk
+333	Q6958282	Naga Kingdom
+334	Q6967073	Nasikya Kingdom
+335	Q6994316	Nepa Kingdom
+336	Q7233551	Post-independence Burma, 1948–1962
+337	Q7245108	Principality of Lebanon
+338	Q7380487	Kingdom of Pontus
+339	Q7559152	Somali Republic
+340	Q7636794	Sultanate of Dara
+341	Q7842409	Commonwealth realm of Trinidad and Tobago
+342	Q8146595	Upingtonia
+343	Q9595327	叶调
+344	Q10401008	烏壘
+345	Q10531418	Yuan dynasty
+346	Q10827246	Tiêu (nước)
+347	Q10857476	Athamania
+348	Q10884385	代 (西汉)
+349	Q10914393	Neo-Assyrian Empire
+350	Q10916017	史国
+351	Q10922797	唐旄
+352	Q10931099	塞国
+353	Q11065222	建国军政制置府
+354	Q11299497	クルンクン王国
+355	Q11920945	estat del Nil
+356	Q11945167	regne de Zion
+357	Q12035643	kingdom of Maroboduus
+358	Q12490901	Kepaksian Sekala Brak
+359	Q12491062	Kerajaan Tidung kuno
+360	Q12582633	Gammunguk
+361	Q12739306	Republica de la Comrat
+362	Q13414776	Western Chu
+363	Q13426199	Republic of China (1912–1949)
+364	Q15127142	Repubblica di Bobbio
+365	Q15900316	詹文侯
+366	Q15902270	辽东国 (楚汉战争)
+367	Q15902493	Shadow Government of China
+368	Q15903902	大明順天國
+369	Q15913116	琼崖苏维埃政府
+370	Q15935096	鄶國
+371	Q15935484	緬中行省
+372	Q15938851	荀国
+373	Q16071459	胡國
+374	Q16125570	إقليم الجند
+375	Q16510394	祝國
+376	Q16624774	Kingdom of Nicoya
+377	Q16692637	Российская республика
+378	Q16708974	Тюменское владение
+379	Q17039642	贾国
+380	Q17059107	西魏国
+381	Q17311418	Guler State
+382	Q18223897	Marchesato di Dolceacqua
+383	Q18407804	Жукотинское княжество
+384	Q18409824	Ulster
+385	Q18608788	Ghurid dynasty
+386	Q18651342	中国和平军
+387	Q19727687	Kesultanan Paser
+388	Q19746032	Kerajaan Talaga Manggung
+389	Q19748973	Kerajaan Tidung
+390	Q19786906	Msidis Reich
+391	Q19852106	后清大中国
+392	Q19855565	Dazhong Kingdom
+393	Q19915294	Unie van Dordrecht
+394	Q20008225	Contea di Borgonovo
+395	Q21076459	Khontéla
+396	Q21190192	Principato di Soragna
+397	Q21569213	Zimbabwe-Rhodèsia
+398	Q21789782	Emirat de Bedde
+399	Q21809320	emirat de Jama'are
+400	Q21815324	Emirat de Lafia
+401	Q21815327	Emirat de Misau
+402	Q24933875	Contea di San Secondo
+403	Q27554854	Zemgales hercogiste
+404	Q27907706	Shule Kingdom
+405	Q30890672	Kingdom of Sicily
+406	Q30944764	杜國
+407	Q30944973	桐國
+408	Q30945069	緜諸
+409	Q30945447	甲氏
+410	Q30945586	鄾國
+411	Q30945861	華國
+412	Q42378126	Kingdom of Setul Mambang Segara
+413	Q48838872	Santalpur
+414	Q49788484	Zheng
+415	Q56228982	Kerajaan Endekan
+416	Q56228990	Kerajaan Maiwa
+417	Q56228991	Kerajaan Manggarai
+418	Q56229004	Kerajaan Sebayak Lingga
+419	Q56229014	Ngalaroh
+420	Q58482373	lordship of Caymont
+421	Q61355432	Gordonia
+422	Q61861373	Taifa de Beja y Évora
+423	Q63022868	Kingdom of Navarre
+424	Q63524979	Marchesato di Scandiano
+425	Q77997266	Dadra and Nagar Haveli and Daman and Diu
+426	Q30	United States of America
+427	Q38	Italy
+428	Q43	Turkey
+429	Q213	Czech Republic
+430	Q235	Monaco
+431	Q242	Belize
+432	Q252	Indonesia
+433	Q258	South Africa
+434	Q262	Algeria
+435	Q664	New Zealand
+436	Q668	India
+437	Q672	Tuvalu
+438	Q695	Palau
+439	Q702	Federated States of Micronesia
+440	Q710	Kiribati
+441	Q717	Venezuela
+442	Q929	Central African Republic
+443	Q948	Tunisia
+444	Q1006	Guinea
+445	Q1007	Guinea-Bissau
+446	Q1027	Mauritius
+447	Q1036	Uganda
+448	Q1159	Andhra Pradesh
+449	Q1353	Delhi
+450	Q2277	Roman Empire
+451	Q5743	Ebla
+452	Q7462	Song dynasty
+453	Q8733	Qing dynasty
+454	Q9683	Tang Empire
+455	Q11774	Gupta Empire
+456	Q12548	Holy Roman Empire
+457	Q15864	United Kingdom of the Netherlands
+458	Q17167	Roman Republic
+459	Q20135	Grand Duchy of Hesse
+460	Q28370	Goguryeo
+461	Q31747	Irish Free State
+462	Q34266	Russian Empire
+463	Q37024	Serbia and Montenegro
+464	Q40362	Sahrawi Arab Democratic Republic
+465	Q41137	Assyria
+466	Q55522	Nanzan
+467	Q61292	Far Eastern Republic
+468	Q62454	Chen dynasty
+469	Q62623	Kalmar Union
+470	Q62943	Maurya Empire
+471	Q68682	Bukharan People's Soviet Republic
+472	Q69808	Vichy France
+473	Q69829	French Fourth Republic
+474	Q71084	First French Empire
+475	Q75903	Turkestan Autonomous Soviet Socialist Republic
+476	Q80702	Spanish Empire
+477	Q83572	Sikh Empire
+478	Q107299	Kingdom of Northumbria
+479	Q121932	People's Republic of Bulgaria
+480	Q138837	Catalan Republic
+481	Q139319	Russian Republic
+482	Q146328	Commonwealth of the Philippines
+483	Q146720	Mandatory Iraq
+484	Q146871	First Saudi State
+485	Q146880	State of Syria
+486	Q148499	Margraviate of Brandenburg
+487	Q151536	Novgorod Republic
+488	Q151938	Neutral Moresnet
+489	Q153665	German South-West Africa
+490	Q157535	People's Republic of Zanzibar and Pemba
+491	Q158835	Prince-Bishopric of Liège
+492	Q160307	Fatimid caliphate
+493	Q170468	United Arab Republic
+494	Q170770	Grand Duchy of Moscow
+495	Q180573	South Vietnam
+496	Q184536	Mali Empire
+497	Q186888	Karelo-Finnish Soviet Socialist Republic
+498	Q188553	Batavian Republic
+499	Q199688	Almohad Caliphate
+500	Q201705	Khmer Empire
+501	Q202775	Qu'aiti State in Hadhramaut
+502	Q205466	Göktürks
+503	Q205708	Taifa of Granada
+504	Q206279	Waalo
+505	Q206696	Helvetic Republic
+506	Q207272	Second Polish Republic
+507	Q208545	Socialist Republic of Bosnia and Herzegovina
+508	Q210036	Chechen Republic of Ichkeria
+509	Q210198	Erivan Khanate
+510	Q212439	Cossack Hetmanate
+511	Q217230	Empire of Brazil
+512	Q229411	Delhi Sultanate
+513	Q246737	Exarchate of Africa
+514	Q252323	Taifa of Dénia
+515	Q265824	Second Hellenic Republic
+516	Q271570	Kingdom of Araucanía and Patagonia
+517	Q273025	Gallic Empire
+518	Q276841	Taifa of Badajoz
+519	Q307066	Eastern Zhou
+520	Q307069	Eastern Wei
+521	Q324470	Kara Koyunlu tribe
+522	Q325493	Kingdom of Abkhazia
+523	Q330756	Transcaucasian Democratic Federative Republic
+524	Q330988	Democratic Kampuchea
+525	Q371334	Second Mexican Empire
+526	Q373988	Beylik of Teke
+527	Q376778	United Baltic Duchy
+528	Q382593	New Netherland
+529	Q404774	Sultanate of Lahej
+530	Q428634	Lordship of Negroponte
+531	Q429981	Tenth Dynasty of Egypt
+532	Q435583	Old Swiss Confederacy
+533	Q463289	Cispadane Republic
+534	Q466581	Hoysala Empire
+535	Q467864	People's Socialist Republic of Albania
+536	Q468814	Dahomey
+537	Q481766	Amurru kingdom
+538	Q487829	Chagatai Khanate
+539	Q491507	Egypt Eyalet
+540	Q491921	Andia
+541	Q494625	Usan-guk
+542	Q516160	First Hungarian Republic
+543	Q519718	Taungoo Dynasty
+544	Q544630	Republic of Maryland
+545	Q545205	Transcaucasian Socialist Federative Soviet Republic
+546	Q600524	Sokoto Caliphate
+547	Q608245	Kröver Reich
+548	Q612359	Kingdom of Lithuania
+549	Q615902	Kingdom of Finland
+550	Q633573	Kingdom of Rheged
+551	Q657448	County of Conflent
+552	Q659312	Ligurian Republic
+553	Q665248	Freistaat Schwenten
+554	Q671899	Duchy of Teschen
+555	Q676811	Taifa of Valencia
+556	Q684430	Rauracian Republic
+557	Q686965	Anhalt-Bernburg
+558	Q696908	Kingdom of Poland
+559	Q697084	Duchy of Oldenburg
+560	Q698634	Arpad
+561	Q699964	Archduchy of Austria
+562	Q703340	Wiman Joseon
+563	Q704300	Free City of Frankfurt
+564	Q704358	State of Burma
+565	Q708865	Reformed Government of the Republic of China
+566	Q713393	Okjeo
+567	Q713397	Dongye
+568	Q718763	South Pacific Mandate
+569	Q721801	Seventh Dynasty of Egypt
+570	Q721807	Thirteenth Dynasty of Egypt
+571	Q728479	Fifteenth Dynasty of Egypt
+572	Q748151	Twenty-first Dynasty of Egypt
+573	Q751372	Maflahi
+574	Q752431	New Hebrides
+575	Q756895	Kediri
+576	Q760893	Jolof Empire
+577	Q770776	Dutch Gold Coast
+578	Q788071	Talysh-Mughan Autonomous Republic
+579	Q794210	Aztec Triple Alliance
+580	Q797422	Republic of Upper Volta
+581	Q797527	British Togoland
+582	Q806233	Banda (Staat)
+583	Q806963	Banswara State
+584	Q809955	Bashahr State
+585	Q814959	Beiyang Government
+586	Q834896	Partisanenrepublik Ossola
+587	Q838261	Federal Republic of Yugoslavia
+588	Q842390	Tuʻi Tonga Empire
+589	Q845531	Ran Wei
+590	Q848383	Duchy of Rome
+591	Q854850	Bharatpur State
+592	Q855058	Bhor State
+593	Q866716	Jalayirids
+594	Q877155	Chera Dynasty
+595	Q877619	French Consulate
+596	Q877875	Palmyrene Empire
+597	Q887803	Bruneian Empire
+598	Q888574	Pagan Kingdom
+599	Q889030	Kingdom of Manipur
+600	Q907112	Pridnestrovie
+601	Q910505	Tmutarakan
+602	Q917553	Patiala State
+603	Q932487	Miraj Senior
+604	Q954044	Republic of Alba
+605	Q965346	Tripolitanian Republic
+606	Q973433	Dungarpur State
+607	Q986665	First East Turkestan Republic
+608	Q1017396	Bushmanland
+609	Q1040193	Ji
+610	Q1069868	Liang dynasty
+611	Q1069905	Cheng Han
+612	Q1069959	Kingdom of Imereti
+613	Q1072362	Provisional Revolutionary Government of the Republic of South Vietnam
+614	Q1099731	Oghuz Yabgu State
+615	Q1108445	Kyivska Rus'
+616	Q1145367	Fusang
+617	Q1147037	Eastern Han Dynasty
+618	Q1150706	Kalinga
+619	Q1178974	Daxi
+620	Q1183407	Taifa of Algeciras
+621	Q1183649	Deccan sultanates
+622	Q1188046	Yan
+623	Q1190905	Duchy of Pannonian Croatia
+624	Q1192347	Chu
+625	Q1192437	East Sumatra
+626	Q1194765	Kamarupa
+627	Q1196201	Tuyuhun
+628	Q1198163	Southern Ming Dynasty
+629	Q1235720	Republic of Lucca
+630	Q1236944	Dombes
+631	Q1262881	Balkan Federation
+632	Q1269234	Stellaland
+633	Q1332370	Ellipi
+634	Q1375154	Benares State
+635	Q1376303	Malla
+636	Q1384210	volkstaat
+637	Q1395320	Duchy of Siewierz
+638	Q1407718	Confederate Ireland
+639	Q1408641	Sultanate of Gowa
+640	Q1466831	Marion
+641	Q1479726	Malaya
+642	Q1483430	Principality of Kiev
+643	Q1508143	Ukrainian State
+644	Q1515009	Duchy of Greater Poland
+645	Q1518229	Mewar
+646	Q1538311	Travancore-Cochin
+647	Q1553143	Alwar State
+648	Q1554367	Gulmu
+649	Q1555101	Western Guo
+650	Q1580934	Yugra
+651	Q1582792	Mira
+652	Q1614427	Montpellier
+653	Q1627613	Republic of Ancona
+654	Q1627675	Pyu city-states
+655	Q1639521	Huša
+656	Q1656775	Kingdom of Lithuania
+657	Q1656908	Idrisid Emirate of Asir
+658	Q1660566	Sultanate of Banjar
+659	Q1660773	East Caprivi
+660	Q1721466	Kapitaï and Koba
+661	Q1737252	Kavangoland
+662	Q1740542	Quba Khanate
+663	Q1775277	Dominion of India
+664	Q1779823	Alash Autonomy
+665	Q1784316	Koriya
+666	Q1842362	Crimean Socialist Soviet Republic
+667	Q1897800	Wahidi Balhaf
+668	Q1951726	Mudhol State
+669	Q1967878	Land of Uz
+670	Q1977088	Přímořská říše
+671	Q1995514	Noimuti
+672	Q2006756	First Empire of Haiti
+673	Q2029317	Samtskhe atabegate
+674	Q2029522	Ternate Sultanate
+675	Q2037576	Republic of San Marco
+676	Q2039087	Chandela
+677	Q2096441	Subartu
+678	Q2139081	Reich Kiang
+679	Q2145348	Republik Graaff-Reinet
+680	Q2145397	Goshen
+681	Q2145402	Republic of South Peru
+682	Q2225895	Satara state
+683	Q2263351	Western Zhou
+684	Q2265843	Sefwi people
+685	Q2267498	Xích Quỷ
+686	Q2288848	Sindh (Staat)
+687	Q2290243	Sisi (Belu)
+688	Q2290502	Sitamau State
+689	Q2300246	Kingdom of Fez
+690	Q2327139	Taifa of Guadix and Baza
+691	Q2360973	Duchy of Carniola
+692	Q2368656	Liang
+693	Q2368688	Republic of Cabinda
+694	Q2390604	Taifa of Arcos
+695	Q2428714	Sena dynasty
+696	Q2453974	Don Republic
+697	Q2458078	Cokossi
+698	Q2458580	Republic of New Afrika
+699	Q2478615	Taifa of Jerez
+700	Q2485209	Emirate of Beihan
+701	Q2501055	Beylik of Dilmaç
+702	Q2528503	Sarmatia
+703	Q2534729	Tournaisis
+704	Q2548416	Wankaner State
+705	Q2585219	Pi
+706	Q2610420	sultanaat Zemio
+707	Q2626105	Kingdom of Sophene
+708	Q2650142	Huang
+709	Q2650468	Liao
+710	Q2662180	Qocho
+711	Q2666791	Taifa of Morón
+712	Q2830724	Beylik of Alaiye
+713	Q2969231	Liuqiu
+714	Q2980623	Kingdom of Bosnia
+715	Q2986401	Lai
+716	Q2989469	Makran
+717	Q2989491	Kharan State
+718	Q3087763	Republic of Egypt
+719	Q3087872	economy of England in the Middle Ages
+720	Q3177663	Pakualaman
+721	Q3192661	Kangra-Lambagraon
+722	Q3248556	Count of Bordeaux
+723	Q3281269	North Sea Empire
+724	Q3324546	Sovereign Council of Asturias and León
+725	Q3436066	Qutaibi
+726	Q3456472	Republic of Metz
+727	Q3559284	Villes libres de Menton et Roquebrune
+728	Q3566568	Wassoulou
+729	Q3623202	District of Branković
+730	Q3656404	Despotate of Angelokastron and Lepanto
+731	Q3687751	Contado di Cremona
+732	Q3687753	Contado di Lodi
+733	Q3687900	Contea degli Ottieri
+734	Q3696281	Sindhudesh
+735	Q3755547	Kingdom of Italy
+736	Q3765117	Eastern Chalukyas
+737	Q3771895	Glastening
+738	Q3773496	Kingdom of Gibraltar
+739	Q3847034	Margraviato d'Istria
+740	Q3921984	Principality of Pavia
+741	Q3932032	Kamata Kingdom
+742	Q3933255	Repubblica partigiana della Carnia
+743	Q3968534	Stati italiani attorno all'anno Mille
+744	Q4130471	Вятская вечевая республика
+745	Q4146687	State Meeting in Ufa
+746	Q4147012	State of Buryat-Mongolia
+747	Q4167201	Dosso Kingdom
+748	Q4186491	Rietumkrievijas valdība
+749	Q4199254	Sultanate Taranchinsky
+750	Q4204052	Islamic Revolutionary State of Afghanistan
+751	Q4251265	Кюринское ханство
+752	Q4272627	Kasmira Kingdom
+753	Q4338046	Beylik of Osman
+754	Q4397920	Russia Eastern Outskirts
+755	Q4406420	Confederation of Madya-as
+756	Q4417864	Grey Ukraine
+757	Q4426901	Сокая
+758	Q4453007	Tashkent Khanate
+759	Q4519976	Shamshadin Sultanate
+760	Q4522518	Principality of Shekin
+761	Q4778463	Anziku Kingdom
+762	Q4854092	Brunswijk-Celle
+763	Q5311394	Zhou (settlement)
+764	Q5622720	Commonwealth realm of Guyana
+765	Q5941965	Huna Kingdom
+766	Q5949183	گیزیل بوندا
+767	Q6083755	Islands of Refreshment
+768	Q6123746	Republican zone
+769	Q6124144	Jaipur State
+770	Q6381574	聃国
+771	Q6509039	League of East European States
+772	Q6553448	State of Buenos Aires
+773	Q6663923	Locach
+774	Q6728459	Madra Kingdom
+775	Q7130792	Pandya Kingdom
+776	Q7144388	Pate sultanate
+777	Q7251405	Protectorate of Peru
+778	Q7314469	Republic of Georgia
+779	Q7603765	State of Malta
+780	Q7636790	Sultanate of Bambao
+781	Q7636795	Sultanate of Dahlak
+782	Q7636800	Sultanate of Showa
+783	Q8575586	Umayyad Caliphate
+784	Q9384980	五翕侯
+785	Q10259877	尉头
+786	Q10340486	杜板
+787	Q10869627	东北行政委员会 (1932年成立)
+788	Q10872458	中华苏维埃共和国西北联邦
+789	Q10885360	休密
+790	Q10888926	偪阳国
+791	Q10899525	劉國
+792	Q10903084	北晉
+793	Q10921952	Kumul Khanate
+794	Q10922467	Tsongkha
+795	Q10952237	宿国
+796	Q10955123	South Chahar Autonomous Government
+797	Q11067850	Xian
+798	Q11074262	Ying
+799	Q11089317	North Shanxi Autonomous Government
+800	Q11153551	淳于国
+801	Q11605905	細川政権 (戦国時代)
+802	Q11750535	Księstwo chełmskie
+803	Q11750543	Księstwo kujawskie
+804	Q11784930	monarchia wczesnopiastowska
+805	Q11917803	Al-Dhubi
+806	Q12050835	Sakalava chiefdom of the Menabe
+807	Q12163800	Ukrainian State
+808	Q12229205	Uyunid Emirate
+809	Q12491397	Kesultanan Gunung Tabur
+810	Q12584196	Goriguk
+811	Q12842865	Marand Khanate
+812	Q14552167	Porbandar State
+813	Q14759030	Commonwealth realm of Mauritius
+814	Q14914778	Greater Germanic Reich
+815	Q15220502	Ying
+816	Q15647617	Qiao Shu
+817	Q15888896	都密
+818	Q15894318	共國
+819	Q15898241	大韓朝
+820	Q15900712	子申国
+821	Q15904324	浩天尚国
+822	Q15933722	燕京戎
+823	Q15941551	濫國
+824	Q15943981	邿國
+825	Q16034119	Despotate
+826	Q16056854	Kingdom of Hungary
+827	Q16178052	Iseoguk
+828	Q16187820	Golbeolguk
+829	Q16271387	Sultanate of Singora
+830	Q16543834	Contea di Carpegna
+831	Q16575708	Marchesato di Petrella
+832	Q16674373	République du Djéguéme
+833	Q16678194	Sultanat de Rehayto
+834	Q17061544	衡山国
+835	Q18164260	Radhanpur State
+836	Q18419124	Marchesato di Torriglia
+837	Q18590086	Contea di Loano
+838	Q19746027	Kerajaan Melayu
+839	Q19852237	大光天朝
+840	Q19852249	大明朝
+841	Q19856419	霸國
+842	Q19915237	People's Republic of Albania
+843	Q21815318	Emirat de Jemaa
+844	Q21815319	Emirat de Katagum
+845	Q21815321	Emirat de Kazaure
+846	Q21815331	Emirat de Ningi
+847	Q21819880	Emirat de Yauri
+848	Q21849591	Diggers Republic
+849	Q22667352	Sak Tz'i'
+850	Q23906811	Republic of Logone
+851	Q24948646	Polish Socialistic Soviet Republic
+852	Q25459957	Kingdom of Banggai
+853	Q28039118	Hittite empire
+854	Q28055530	Principality of Iberia
+855	Q28415657	胡國
+856	Q30944768	貳國
+857	Q30945171	伊洛之戎
+858	Q30945444	不羹
+859	Q30945865	封父國
+860	Q30946033	厥国
+861	Q30948432	宁远国
+862	Q39501433	State of Venezuela
+863	Q56228969	Kadipaten Pati
+864	Q56228970	Kadipaten Ponorogo
+865	Q56228976	Kerajaan Banten Pasisir
+866	Q56229006	Kerajaan Sebayak Suka
+867	Q56229007	Kerajaan Selebar
+868	Q56229010	Kerajaan Sukapiring Seberaja
+869	Q56695793	Эпернон (сеньория)
+870	Q63149558	Afsharid Empire
+871	Q85082201	Schwarzenberské dominium
+872	Q85105520	roman pharaoh
+873	Q27	Ireland
+874	Q115	Ethiopia
+875	Q145	United Kingdom
+876	Q189	Iceland
+877	Q212	Ukraine
+878	Q221	North Macedonia
+879	Q222	Albania
+880	Q229	Republic of Cyprus
+881	Q574	East Timor
+882	Q691	Papua New Guinea
+883	Q697	Nauru
+884	Q712	Fiji
+885	Q734	Guyana
+886	Q736	Ecuador
+887	Q739	Colombia
+888	Q750	Bolivia
+889	Q781	Antigua and Barbuda
+890	Q783	Honduras
+891	Q805	Yemen
+892	Q843	Pakistan
+893	Q874	Turkmenistan
+894	Q889	Afghanistan
+895	Q928	Philippines
+896	Q1032	Niger
+897	Q1033	Nigeria
+898	Q1037	Rwanda
+899	Q1039	São Tomé and Príncipe
+900	Q1061	Gujarat
+901	Q1164	Assam
+902	Q1184	Jharkhand
+903	Q1356	West Bengal
+904	Q1498	Uttar Pradesh
+905	Q1502	Mizoram
+906	Q2184	Russian Soviet Federative Socialist Republic
+907	Q2634	Naples
+908	Q7313	Yuan Empire
+909	Q7427	Western Xia
+910	Q8735	Medes
+911	Q9903	Ming dynasty
+912	Q12557	Mongol Empire
+913	Q16641	American Samoa
+914	Q26472	Dali Kingdom
+915	Q27138	Unaizah
+916	Q28179	Joseon
+917	Q28405	Gojoseon
+918	Q28456	Silla
+919	Q30573	Lokot Autonomy
+920	Q33296	Mughal Empire
+921	Q35355	Sumer
+922	Q39473	Transylvania
+923	Q41304	Weimar Republic
+924	Q41642	Phoenicia
+925	Q47690	Babylonia
+926	Q55521	Chūzan
+927	Q58202	July Monarchy
+928	Q58326	French Second Republic
+929	Q62389	Icelandic Commonwealth
+930	Q62589	Union between Sweden and Norway
+931	Q62651	Denmark-Norway
+932	Q66743	Puducherry
+933	Q71234	Corsican Republic
+934	Q71747	Duchy of Brittany
+935	Q81931	Confederate States of America
+936	Q117020	Free Imperial City of Nuremberg
+937	Q130229	Georgian Soviet Socialist Republic
+938	Q139708	French Mandate for Syria and the Lebanon
+939	Q139948	Khanate of Kalat
+940	Q146055	Eighteenth Dynasty of Egypt
+941	Q150981	North German Confederation
+942	Q152115	Duchy of Warsaw
+943	Q152855	Kingdom of Tungning
+944	Q153015	Kingdom of Saxony
+945	Q153529	Duchy of Milan
+946	Q156020	State of the Teutonic Order
+947	Q157070	County of Flanders
+948	Q162192	Riograndense Republic
+949	Q165154	Kingdom of Sardinia
+950	Q168811	Kazakh Soviet Socialist Republic
+951	Q171203	Benin Empire
+952	Q175379	Empire of China
+953	Q175934	Pratapgarh State
+954	Q177819	Old Kingdom of Egypt
+955	Q187035	Principality of Albania
+956	Q187461	Kingdom of Hereti
+957	Q188586	Kingdom of Sicily
+958	Q188712	Empire of Japan
+959	Q189545	Zengid dynasty
+960	Q189988	Central African Empire
+961	Q190025	Federal Republic of Central America
+962	Q192262	Autonomous Province of Western Bosnia
+963	Q197430	Zhao
+964	Q197598	Zheng
+965	Q199707	Turkmen Soviet Socialist Republic
+966	Q203493	Kingdom of Romania
+967	Q205047	Kurdistan Region
+968	Q207062	Zizhi Tongjian
+969	Q209062	Socialist Republic of Croatia
+970	Q211358	United States of Poland
+971	Q216173	Free City of Danzig
+972	Q223936	Kingdom of Italy
+973	Q225890	Kingdom of Strathclyde
+974	Q230791	Kingdom of Scotland
+975	Q233263	Second Republic of South Korea
+976	Q234197	Srivijaya
+977	Q245273	Aetolian League
+978	Q248452	British North America
+979	Q252580	Duchy of Modena and Reggio
+980	Q260713	Gorkhaland
+981	Q266657	Labin Republic
+982	Q267484	Taifa of Málaga
+983	Q268970	Republic of German-Austria
+984	Q269979	Sixth Dynasty of Egypt
+985	Q281961	Pinsk principality
+986	Q309272	Mauretania
+987	Q319881	Republic of Formosa
+988	Q332005	Principality of Achaea
+989	Q334731	Croatian Republic of Herzeg-Bosnia
+990	Q369587	Kakongo
+991	Q374521	Bahmani Sultanate
+992	Q394105	Agisymba
+993	Q400998	Ahmadnagar Sultanate
+994	Q411374	Corsican Constitution
+995	Q420759	Second Bulgarian Empire
+996	Q467627	Durrani Empire
+997	Q473433	Ammon
+998	Q477900	Parsua
+999	Q491106	Khanate of Khiva
+1000	Q491559	First Republic of South Korea
+1001	Q511257	Twenty-ninth Dynasty of Egypt
+1002	Q528042	Dalmatia
+1003	Q530670	Kingdom of Burgundy
+1004	Q536476	Toucouleur Empire
+1005	Q550374	South African Republic
+1006	Q552328	Mannaeans
+1007	Q568471	Duchy of Żagań
+1008	Q600473	Nakoku
+1009	Q635394	Massina Empire
+1010	Q646374	French India
+1011	Q652275	County of Cerdanya
+1012	Q655092	Cisrhenian Republic
+1013	Q671362	Principality of Turov and Pinsk
+1014	Q671559	Avar March
+1015	Q680530	Principality of Terebovlia
+1016	Q689837	Spanish Sahara
+1017	Q692946	Gorizia and Gradisca
+1018	Q697837	Mengjiang
+1019	Q699014	Arquqini
+1020	Q706488	Kingdom of Middag
+1021	Q707128	Jeong-an kingdom
+1022	Q715257	Unified Silla
+1023	Q717451	Beylik of Lâdik
+1024	Q719183	Arewa
+1025	Q736727	Republic of Siena
+1026	Q738264	State of Los Altos
+1027	Q748170	Twenty-third Dynasty of Egypt
+1028	Q762943	County of Holland
+1029	Q764697	Taifa of Orihuela
+1030	Q777147	Albanian Kingdom
+1031	Q786080	Kombo
+1032	Q786688	Ishtunda
+1033	Q796651	Azcapotzalco
+1034	Q797579	Baban
+1035	Q799797	Bafut Subdivision
+1036	Q807288	Baraundha State
+1037	Q810557	Bastar State
+1038	Q824047	Sachsen-Polen
+1039	Q828443	Senegambia Confederation
+1040	Q829356	Kingdom of Makuria
+1041	Q833118	Twenty-eighth Dynasty of Egypt
+1042	Q835435	Zhou dynasty (690–705)
+1043	Q837326	Principality of Nitra
+1044	Q842091	Duchy of Normandy
+1045	Q854917	Bhavnagar State
+1046	Q856444	Xing
+1047	Q859966	Bikaner State
+1048	Q862518	Geledi Sultanate
+1049	Q862532	Ajuuraan state
+1050	Q870517	Odrysian kingdom
+1051	Q872301	Serbian Empire of Jovan Nenad
+1052	Q872644	Rugiland
+1053	Q874283	Latin League
+1054	Q877001	Landvogtei Schwabe
+1055	Q878319	Serbian Despotate
+1056	Q886986	Kingdom of Lindsey
+1057	Q892292	Bone Sultanate
+1058	Q894995	Baudh State
+1059	Q901974	Free City of Danzig
+1060	Q918697	Panth-Piploda Province
+1061	Q925899	Shaib
+1062	Q926624	Twenty-seventh Dynasty of Egypt
+1063	Q932393	Raigarh State
+1064	Q974174	Staats-Overmaas
+1065	Q976099	Malayan Union
+1066	Q986881	Kingdom of Butua
+1067	Q1032808	รัฐศรีจนาศะ
+1068	Q1033421	Hammudid dynasty
+1069	Q1039186	Sam'al
+1070	Q1044536	Spain under the Restoration
+1071	Q1045322	Kingdom of Nanzhao
+1072	Q1047084	Quan
+1073	Q1054184	Khmer Republic
+1074	Q1057118	Chenla Kingdom
+1075	Q1061057	Aceh Sultanate
+1076	Q1068171	Tarhuntassa
+1077	Q1068408	Kuru Kingdom
+1078	Q1072949	Western Han Dynasty
+1079	Q1077630	Septinsular Republic
+1080	Q1078766	Almopia
+1081	Q1143126	Later Tang Dynasty
+1082	Q1149142	Yuwen
+1083	Q1152126	People's Republic of the Congo
+1084	Q1154540	Later Jin Dynasty
+1085	Q1157519	Daiaeni
+1086	Q1165594	Dar Sila
+1087	Q1166166	Narentines
+1088	Q1172593	Dathina
+1089	Q1172600	Datia State
+1090	Q1191125	Moghulistan
+1091	Q1193806	Shu
+1092	Q1198071	Southern Han
+1093	Q1207032	Qi
+1094	Q1233672	County of Barcelona
+1095	Q1250763	Emirate of Sicily
+1096	Q1251175	Dotawo
+1097	Q1254667	Beylik of Erzincan
+1098	Q1255614	Indo-Parthian Kingdom
+1099	Q1257607	United Nations Transitional Administration for Eastern Slavonia, Baranja and Western Sirmium
+1100	Q1259978	Habhi
+1101	Q1261743	Samthar State
+1102	Q1269910	Republic of Madawaska
+1103	Q1277557	Democratic Federal Yugoslavia
+1104	Q1291229	Hua
+1105	Q1292383	Dao
+1106	Q1311704	Zachlumia
+1107	Q1311805	Travunia
+1108	Q1322662	Principality of Chernigov
+1109	Q1322953	Kingdom of Sanwi
+1110	Q1335260	Emirate of Afghanistan
+1111	Q1337764	Daura Emirate
+1112	Q1343485	North Ingria
+1113	Q1375997	Deccan States Agency
+1114	Q1395929	Fante Confederacy
+1115	Q1396700	Faridkot State
+1116	Q1440712	Upper Gelderland
+1117	Q1461024	Kingdom of Janjero
+1118	Q1472004	Former Yan
+1119	Q1472873	Kingdom of Baguirmi
+1120	Q1483643	Nakhon Si Thammarat Kingdom
+1121	Q1484140	Protodynastic Period of Egypt
+1122	Q1501306	Vakataka empire
+1123	Q1518576	Provisional National Government of the Southwestern Caucasus
+1124	Q1533541	Gobir
+1125	Q1537016	Kanem Empire
+1126	Q1540575	Gozo
+1127	Q1541353	Sirmoor State
+1128	Q1546773	Talysh Khanate
+1129	Q1557627	State of Franklin
+1130	Q1574107	Han Zhao
+1131	Q1576537	list of possessions of Norway
+1132	Q1607154	Savanur State
+1133	Q1629505	Kingdom of Bamum
+1134	Q1632126	Turdetania
+1135	Q1644002	Gyaaman
+1136	Q1681450	Jamkhandi State
+1137	Q1688822	Jhabua State
+1138	Q1716449	Kingdom of Whydah
+1139	Q1720882	Cutch State
+1140	Q1722844	Kamani
+1141	Q1730130	Later Qin
+1142	Q1760473	Principality of Abkhazia
+1143	Q1771831	Kruševo Republic
+1144	Q1778255	Sarangarh State
+1145	Q1778868	Kingdom of Gumma
+1146	Q1778932	Kokka
+1147	Q1878022	Emirate of Bari
+1148	Q1917014	County of Sicily
+1149	Q1931074	Sarbadars
+1150	Q1949159	Black Sea Soviet Republic
+1151	Q1964139	Namaland
+1152	Q1968554	Abazinia
+1153	Q1968654	Beylik of Saruhan
+1154	Q1975782	Prince of Arches and Charleville
+1155	Q1990219	French colonization of the Americas
+1156	Q2022804	Socialist Republic of Chile
+1157	Q2030015	Sultanate of Deli
+1158	Q2037817	County of Girona
+1159	Q2056970	Patna State
+1160	Q2074363	Shupria
+1161	Q2077765	Taifa of Santa Maria do Algarve
+1162	Q2081763	Taifa of Saltés and Huelva
+1163	Q2114397	Yogyakarta Sultanate
+1164	Q2153653	Taifa of Segorbe
+1165	Q2227696	Saurashtra State
+1166	Q2250546	Taifa of Tavira
+1167	Q2252973	Duchy of Florence
+1168	Q2261321	Beylik of Adana
+1169	Q2273304	Moravian Serbia
+1170	Q2287085	Kuban Soviet Republic
+1171	Q2297073	Giudicato of Cagliari
+1172	Q2305337	Azerbaijan People's Government
+1173	Q2308237	Ahom kingdom
+1174	Q2346056	Kingdom of Livonia
+1175	Q2365056	Lezgistan
+1176	Q2368545	Surguja State
+1177	Q2390716	Kingdom of Pajang
+1178	Q2442581	Dutch Loango-Angola
+1179	Q2475921	Bogd Khanat
+1180	Q2478080	names of Vietnam
+1181	Q2481399	Osrūshana
+1182	Q2502503	Республика Исколата
+1183	Q2553863	White Horde
+1184	Q2580032	Taifa of Almería
+1185	Q2591393	Jiaozhi
+1186	Q2594899	Wouli
+1187	Q2618121	Principality of Samos
+1188	Q2620565	Taifa of Lisbon
+1189	Q2625228	League  Federal
+1190	Q2633124	Islamic rulers in South Asia
+1191	Q2670751	Margraviate of Moravia
+1192	Q2671329	Taifa of Calatayud
+1193	Q2750035	E
+1194	Q2817348	Bima Sultanate
+1195	Q2836037	Medieval Muslim Algeria
+1196	Q2949827	Government of the Grand National Assembly
+1197	Q2967804	Шато-Рено
+1198	Q2988765	Sultanate of Siak Sri Indrapura
+1199	Q3113481	Principality of Transylvania
+1200	Q3177676	Pakuan Pajajaran
+1201	Q3247858	liste des chefs armoricains
+1202	Q3267672	Republic of Entre Ríos
+1203	Q3279296	Sweden-Finland
+1204	Q3332217	Gorkha Kingdom
+1205	Q3338842	State of Maranhão and Piauí
+1206	Q3339389	State of Grão-Pará and Rio Negro
+1207	Q3446210	Kingdom of Pamplona
+1208	Q3482103	Shilluk Kingdom
+1209	Q3499107	Republic of Negros
+1210	Q3591854	Free and Independent State of Cundinamarca
+1211	Q3607864	Albania Satrapy
+1212	Q3687938	County of Aosta
+1213	Q3834771	stati italiani dell'era carolingia
+1214	Q3845403	Marca obertenga
+1215	Q3845763	Margravate of Mantua
+1216	Q3867365	Muraddash
+1217	Q3968612	Italian United Provinces
+1218	Q4072720	Афганские ханства
+1219	Q4075906	Бакинская коммуна
+1220	Q4093052	Бомбардовање аеродрома Удбина
+1221	Q4094853	Борчалинский султанат
+1222	Q4147015	Государство Филарета Варажнуни
+1223	Q4167965	Ancient Thracia
+1224	Q4182371	Забаха
+1225	Q4189498	Zvenyhorod Principality
+1226	Q4208754	Кайтагское уцмийство
+1227	Q4219190	Кельтские государства юго-восточной Британии
+1228	Q4224853	Княжество Мансура
+1229	Q4233761	Королевство Андорра
+1230	Q4247962	Coorg State
+1231	Q4250121	Sibirsky
+1232	Q4270433	Луши
+1233	Q4335613	Československo-polský spor o Oravu a Spiš
+1234	Q4400428	Русская Краина
+1235	Q4412594	Republic of Uhtua
+1236	Q4421237	Сицилийская держава Агафокла
+1237	Q4426336	Soviet Socialist Republic
+1238	Q4438504	Средневековые Балканы
+1239	Q4495225	Khamat
+1240	Q4495832	Harikela
+1241	Q4497789	Khim'yarity
+1242	Q4765854	Shan States
+1243	Q4833464	西喀喇汗
+1244	Q5124792	Civula
+1245	Q5177890	County of Luxembourg
+1246	Q5367111	Jiang (state)
+1247	Q5404684	Federazione dei Sette Comuni
+1248	Q5483255	Republic of Quito
+1249	Q5618128	Gumie
+1250	Q5812668	Dominación floreana
+1251	Q6412669	Kingdom of Tunisia
+1252	Q6414031	Kinnara Kingdom
+1253	Q6415938	Emirate of Dhala
+1254	Q6432969	Kosal state movement
+1255	Q6468406	Lachin Kurdish Republic
+1256	Q6488087	Lapai Emirate
+1257	Q6500954	Zaire
+1258	Q6563843	Nizari Ismaili state
+1259	Q6728457	Madra
+1260	Q6729587	Magadha Kingdom
+1261	Q6773257	Eastern Karakhanids Khanate
+1262	Q6799844	Mbwila
+1263	Q7126720	Palanpur State
+1264	Q7245103	Principality of Gjirokastër
+1265	Q7245121	Principality of Valona
+1266	Q7524320	Sinhala Kingdom
+1267	Q7784940	Third Republic of Madagascar
+1268	Q8341881	Persian Socialist Soviet Republic
+1269	Q8890160	Kingdom of Poland
+1270	Q9063401	United Provinces of Central America
+1271	Q9391434	Zjednoczone Królestwo Polskie
+1272	Q9514547	单桓
+1273	Q10401270	烏秅
+1274	Q10497344	舒蓼國
+1275	Q10748344	Provisional Central Government of Vietnam
+1276	Q10800936	Nhâm (nước)
+1277	Q10877828	Yiqu
+1278	Q10918086	向国
+1279	Q10921824	哀牢
+1280	Q10957559	Principality of Moldavia
+1281	Q11058126	巩国
+1282	Q11073785	愛沙尼亞共和國 (1990–1991)
+1283	Q11075248	戴国
+1284	Q11141501	Kingdom of Henan
+1285	Q11180184	Qi (Huang Chao)
+1286	Q11180205	Qi  (209–203 BC)
+1287	Q11344632	Sultanate of the Maldives
+1288	Q11664997	賴國
+1289	Q11681694	Republic of Spanish Haiti
+1290	Q11908127	Bar-wah
+1291	Q11929866	Kirchu
+1292	Q11938670	Niatiaga
+1293	Q11944481	Raghogarh State
+1294	Q11945159	regne de Logo
+1295	Q11945289	República de l'Iraq (1958-1978)
+1296	Q12108698	Карельське князівство
+1297	Q12490507	Rashidun Caliphates
+1298	Q12491028	Kerajaan Bangkalaan
+1299	Q12504651	Pengging
+1300	Q12520053	Tasifeto
+1301	Q12584242	Gobiriguk
+1302	Q12584364	Gowonguk
+1303	Q13258120	Republic of West Florida
+1304	Q13375062	Wahidi Azzan
+1305	Q13474305	Francoist Spain
+1306	Q13496558	Bishopric of Brixen
+1307	Q13638247	Fugger
+1308	Q14378682	Staats-Vlaanderen
+1309	Q14516987	Principality of Anhalt (1562–1606)
+1310	Q14830247	Ngụy (Tây Chu đến Xuân Thu)
+1311	Q15075493	Вялікае Княства Рускае
+1312	Q15102440	Kingdom of Serbs, Croats and Slovenes
+1313	Q15146034	Turkic Khaganate
+1314	Q15214542	Dangs
+1315	Q15890801	Signoria of Milan
+1316	Q15898486	雍国 (楚汉战争)
+1317	Q15901433	大治帝国
+1318	Q15901934	苏吉丹
+1319	Q15902982	大順國
+1320	Q15904374	大漢中華國
+1321	Q15909533	天生大順國
+1322	Q15932778	中华人民共和国联合政府
+1323	Q15950443	钟吾国
+1324	Q16163029	Sabeolguk
+1325	Q16171705	Chopalguk
+1326	Q16187700	Kerajaan Muna
+1327	Q16295095	Tuwana
+1328	Q16685163	Паханг
+1329	Q16858170	Zabarima
+1330	Q16881283	Sultanate of Muscat
+1331	Q16985296	Hungarian Republic
+1332	Q17022251	Sultanate of Kano
+1333	Q17026309	王叔国
+1334	Q17053216	Principality of Ushrusana
+1335	Q17060414	那孤儿
+1336	Q17457201	Reichsstadt Münster im Gregoriental
+1337	Q18165285	絞國
+1338	Q18285930	German Empire of 1848/1849
+1339	Q19631804	Inni degli Stati italiani preunitari
+1340	Q19727688	Kesultanan Sambaliung
+1341	Q19746028	Kerajaan Mempawah
+1342	Q19767747	Marchesato di Caravaggio
+1343	Q19852246	大平关国
+1344	Q20076500	Другий Кримський крайовий уряд
+1345	Q20427320	Kesultanan Soppeng
+1346	Q20732380	Empire of Harsha
+1347	Q13053139	Hittite Empire
+1348	Q21076431	Gwiriko
+1349	Q21207864	Marchesato di Solferino
+1350	Q21328974	Marchesato di Gazzuolo
+1351	Q21789784	Emirat de Borgu
+1352	Q23039102	First Toungoo Empire
+1353	Q25487207	Սյունիքի իշխանություն
+1354	Q25591771	Chola empire
+1355	Q28415831	於餘邱國
+1356	Q29954627	Commonwealth of England, Scotland and Ireland
+1357	Q30944760	軫國
+1358	Q30944782	鼓國
+1359	Q30945445	留吁
+1360	Q30945515	豲戎
+1361	Q31173391	Kerajaan Suppa
+1362	Q31354462	Republic of Abkhazia
+1363	Q42345769	Catalan Republic
+1364	Q42346134	Catalan State (1873)
+1365	Q46465122	Islamic states
+1366	Q48742118	Kingdom of Italy under Fascism
+1367	Q54863204	crown of Galicia
+1368	Q55979574	Duchy of Thouars
+1369	Q56228968	Kadipaten Carangsoka
+1370	Q56228979	Kerajaan Benayuk
+1371	Q56228985	Kerajaan Galuh Sindula
+1372	Q56228987	Kerajaan Jembrana
+1373	Q56228993	Kerajaan Pagesangan
+1374	Q56228994	kerajaan Pananjung
+1375	Q56228997	Kerajaan Payangan
+1376	Q56229009	Kerajaan Simpang
+1377	Q56229011	Kerajaan Swarnabhumi
+1378	Q56229013	Kesultanan Jailolo
+1379	Q57695350	Ireland
+1380	Q57981050	Kassa
+1381	Q60023785	United Republic of Cameroon
+1382	Q63021609	Kingdom of Navarre
+1383	Q63158027	Qajar Iran
+1384	Q65037491	Ag Qoyunlu state
+1385	Q66087897	principauté impériale du Liechtenstein
+1386	Q89234734	East Sister Independent States
+1387	Q90386328	Soviet asia
+1388	Q114	Kenya
+1389	Q159	Russia
+1390	Q211	Latvia
+1391	Q214	Slovakia
+1392	Q224	Croatia
+1393	Q236	Montenegro
+1394	Q241	Cuba
+1395	Q265	Uzbekistan
+1396	Q334	Singapore
+1397	Q347	Liechtenstein
+1398	Q408	Australia
+1399	Q769	Grenada
+1400	Q774	Guatemala
+1401	Q786	Dominican Republic
+1402	Q796	Iraq
+1403	Q813	Kyrgyzstan
+1404	Q822	Lebanon
+1405	Q854	Sri Lanka
+1406	Q881	Vietnam
+1407	Q921	Brunei
+1408	Q945	Togo
+1409	Q953	Zambia
+1410	Q963	Botswana
+1411	Q1005	Gambia
+1412	Q1011	Cape Verde
+1413	Q1041	Senegal
+1414	Q1162	Arunachal Pradesh
+1415	Q1177	Himachal Pradesh
+1416	Q1180	Jammu and Kashmir
+1417	Q1437	Rajasthan
+1418	Q4628	Faroe Islands
+1419	Q5780	Meroë
+1420	Q7209	Han dynasty
+1421	Q7352	Jin dynasty
+1422	Q11196	Republika Srpska
+1423	Q15581	Principality of Catalonia
+1424	Q21203	Aruba
+1425	Q25279	Curaçao
+1426	Q26988	Cook Islands
+1427	Q27306	Kingdom of Prussia
+1428	Q28322	Balhae
+1429	Q28567	Mayan civilization
+1430	Q29520	China
+1431	Q31454	Kingdom of Libya
+1432	Q31723	Kingdom of Mauretania
+1433	Q33946	Czechoslovakia
+1434	Q34020	Niue
+1435	Q36704	Yugoslavia
+1436	Q42834	Western Roman Empire
+1437	Q43287	German Empire
+1438	Q43433	Chandigarh
+1439	Q46107	Dadra and Nagar Haveli
+1440	Q46370	West Francia
+1441	Q48685	Judah
+1442	Q49910	Colony of Aden
+1443	Q55523	Hokuzan
+1444	Q61385	Galician Soviet Socialist Republic
+1445	Q61427	Donetsk-Krivoy Rog Soviet Republic
+1446	Q62519	Finnish Democratic Republic
+1447	Q62567	Kingdom of Iceland
+1448	Q66710	Daman and Diu
+1449	Q70802	French Third Republic
+1450	Q83546	Grand Duchy of Vladimir
+1451	Q124943	Kingdom of Egypt
+1452	Q128938	Shang dynasty
+1453	Q130654	Dutch Empire
+1454	Q136884	Lazica
+1455	Q139377	Kingdom of Aksum
+1456	Q146246	Francia
+1457	Q146885	Syrian Republic
+1458	Q150058	Travancore
+1459	Q154195	Kingdom of Bavaria
+1460	Q154853	Diauehi
+1461	Q155019	Duchy of Lorraine
+1462	Q156506	Serbian-Hungarian Baranya-Baja Republic
+1463	Q157727	Ifat Sultanate
+1464	Q158445	Grand Duchy of Mecklenburg-Schwerin
+1465	Q159631	Kingdom of Württemberg
+1466	Q161885	Great Britain
+1467	Q171740	Caliphate of Córdoba
+1468	Q173761	Lithuanian Soviet Socialist Republic
+1469	Q174306	Republic of Genova
+1470	Q179293	Kingdom of Castile
+1471	Q181254	Empire of Nicaea
+1472	Q190636	Centrocaspian Dictatorship
+1473	Q199442	Kingdom of Aragon
+1474	Q199841	South Yemen
+1475	Q200969	Chaldea
+1476	Q202687	Songhai Empire
+1477	Q204920	Crown of Aragón
+1478	Q205662	Tokugawa Shogunate
+1479	Q208404	Kingdom of Armenia
+1480	Q208475	Edom
+1481	Q212056	Mongolian People's Republic
+1482	Q217196	Crown of Castile
+1483	Q219060	State of Palestine
+1484	Q220167	Lydenburg Republic
+1485	Q235030	Principality of Antioch
+1486	Q244165	Artsakh
+1487	Q245176	Zwölf Lehnsfürstentümer
+1488	Q246690	Namri
+1489	Q249578	Ghaznavid Empire
+1490	Q255931	Hariphunchai
+1491	Q260437	Atropatene
+1492	Q267584	Yemen Arab Republic
+1493	Q287463	Épinoy
+1494	Q303421	Kingdom of Galicia
+1495	Q306928	Eastern Jin dynasty
+1496	Q337524	Espiritu Santo
+1497	Q337767	Wilusa
+1498	Q389004	Principality of Wallachia
+1499	Q402145	Mataram Sultanate
+1500	Q402580	Medang Kingdom
+1501	Q412980	Ajmer-Merwara
+1502	Q426025	Duchy of Savoy
+1503	Q431731	Tanganyika
+1504	Q444912	Romanian Old Kingdom
+1505	Q451519	Hesse-Rheinfels
+1506	Q468902	Middle Francia
+1507	Q473557	Terra de Ravenstein
+1508	Q473748	Buganda
+1509	Q487687	Third Republic of South Korea
+1510	Q494354	Kara-Khanid Khanate
+1511	Q497158	History of Rakhine
+1512	Q509572	Koch Bihar
+1513	Q514423	Parthenopean Republic
+1514	Q518101	First Republic of Austria
+1515	Q528546	First Hellenic Republic
+1516	Q546266	County of Champagne
+1517	Q557392	Eastern Kingdom of Women
+1518	Q567986	Fortriu
+1519	Q568523	Nobatia
+1520	Q580188	Mutawakkilite Kingdom of Yemen
+1521	Q581741	Chimor
+1522	Q582861	Marinid Sultanate
+1523	Q594798	kwaZulu
+1524	Q596092	Kingdom of Zimbabwe
+1525	Q623151	Empire of Thessalonica
+1526	Q624638	Arachosia
+1527	Q631210	Nogai Horde
+1528	Q639073	South Kasai
+1529	Q650945	Fourteenth Dynasty of Egypt
+1530	Q652560	West Indies Federation
+1531	Q654342	Federation of Rhodesia and Nyasaland
+1532	Q664980	Tswanaland
+1533	Q669814	Sittacene
+1534	Q671658	Republic of Yucatán
+1535	Q707767	Prince-Bishopric of Utrecht
+1536	Q717112	Beylik of Aydın
+1537	Q718374	State of Slovenes, Croats and Serbs
+1538	Q719634	Eleventh Dynasty of Egypt
+1539	Q734867	Banten Sultanate
+1540	Q737695	Sixteenth Dynasty of Egypt
+1541	Q738144	United Provinces of the Río de la Plata
+1542	Q756617	Kingdom of Denmark
+1543	Q756854	Kosala
+1544	Q769782	Kingdom of Powys
+1545	Q772861	Margraviate of Antwerp
+1546	Q775550	Adamawa Emirate
+1547	Q777981	Duchy of the Archipelago
+1548	Q791787	Aussa Sultanate
+1549	Q797214	French Togoland
+1550	Q807069	Baoni State
+1551	Q815731	Principality of Bulgaria
+1552	Q831218	Uyghur Khaganate
+1553	Q842199	Belarusian People's Republic
+1554	Q844250	Lordship of Ireland
+1555	Q848668	Venda
+1556	Q853348	Czechoslovak Socialist Republic
+1557	Q863279	Sukhothai Kingdom
+1558	Q867782	Kingdom of Funan
+1559	Q874357	Western Turkic Khaganate
+1560	Q874561	Later Liao
+1561	Q877670	Muzaffarids of Iran
+1562	Q889884	Kingdom of Rwanda
+1563	Q889897	Bunyoro
+1564	Q905131	Kingdom of Breifne
+1565	Q909606	Goryeong Gaya
+1566	Q912043	Jin
+1567	Q918500	Bantva Manavadar State
+1568	Q933333	Count of Lerín
+1569	Q941887	Beylik of Karasi
+1570	Q952123	Sicani
+1571	Q960681	Duchy of Saint Sava
+1572	Q964024	Moldavian Democratic Republic
+1573	Q973988	Kingdom of Matamba
+1574	Q986469	Guan
+1575	Q986822	Rozwi Empire
+1576	Q999297	Maihar State
+1577	Q1010624	Boer Republics
+1578	Q1028133	Autonomous Albanian Republic of Korçë
+1579	Q1054032	Duchy of Estonia
+1580	Q1061488	United States of Colombia
+1581	Q1062748	Shakya
+1582	Q1064825	Livonian confederation
+1583	Q1106857	State of Somaliland
+1584	Q1117051	Kingdom of Illyria
+1585	Q1121819	Transjordan
+1586	Q1154556	Later Zhou dynasty
+1587	Q1195649	Duan tribe
+1588	Q1196298	Chouchi
+1589	Q1207561	Dhar State
+1590	Q1209822	Kingdom of Kakheti
+1591	Q1232459	Catalan counties
+1592	Q1240096	Hyderabad State
+1593	Q1249230	Gaztelako konderria
+1594	Q1295806	Lower Yafa
+1595	Q1307407	Cultura Tiahunaco
+1596	Q1317579	Kedah Sultanate
+1597	Q1333032	Elmet
+1598	Q1356151	Teng
+1599	Q1358851	Zhangzhung
+1600	Q1406277	Viscounts of Béarn
+1601	Q1415585	Islamic State of Afghanistan
+1602	Q1433125	Mabhuza Ginindza
+1603	Q1433131	Lebowa
+1604	Q1433142	KwaNdebele
+1605	Q1462877	Kingdom of Kaffa
+1606	Q1463691	Anconine Republic
+1607	Q1470101	Kingdom of Hungary
+1608	Q1472105	Kingdom of Haiti
+1609	Q1474791	Sultanate of Darfur
+1610	Q1476723	Sachin State
+1611	Q1479952	Kadamba Dynasty
+1612	Q1486262	Zamua
+1613	Q1489916	Isuwa
+1614	Q1493766	Gao Empire
+1615	Q1542741	Palmares
+1616	Q1545942	Nawanagar State
+1617	Q1589163	Kingdom of Kotte
+1618	Q1591030	Hausa Kingdoms
+1619	Q1636212	Karabakh Khanate
+1620	Q1642997	Joseon
+1621	Q1658023	Ijebu Kingdom
+1622	Q1661321	Kingdom of Niumi
+1623	Q1668970	Western Qin
+1624	Q1725122	Karalla
+1625	Q1757296	Soli
+1626	Q1768252	Kingdom of Luba
+1627	Q1778994	Kuban People's Republic
+1628	Q1785592	Kourion
+1629	Q1798703	Sonepur State
+1630	Q1806438	Las Bela State
+1631	Q1852814	Provisional Government of Western Thrace
+1632	Q1967443	Republika Zujewa
+1633	Q2014166	Oddiyana
+1634	Q2018564	Vemerana
+1635	Q2028318	Gurian Republic
+1636	Q2034184	Tastil
+1637	Q2037501	Republic of Ploiești
+1638	Q2047076	Yenisei Kyrgyz Khaganate
+1639	Q2048712	Taifa of Rueda
+1640	Q2067314	County of Bigorre
+1641	Q2078820	Odessa Soviet Republic
+1642	Q2195101	Principality of Guria
+1643	Q2196956	Kingdom of Norway (872–1397)
+1644	Q2235609	Taifa of Huesca
+1645	Q2247225	Tarumanagara
+1646	Q2308885	Lemko Republic
+1647	Q2314869	Later Liang
+1648	Q2326511	Republica Bernensis
+1649	Q2347909	East Bengal
+1650	Q2376315	British rule in Burma
+1651	Q2424187	Kingdom of Rarotonga
+1652	Q2437292	Nueva Galicia
+1653	Q2468597	Turkish Republic of Aras
+1654	Q2479352	Principado da Grande Pérmia
+1655	Q2500952	Ava Kingdom
+1656	Q2506068	Azadistan
+1657	Q2511407	Vicomté d'Oloron
+1658	Q2577303	Kingdom of Sardinia
+1659	Q2578706	Kingdom of Ceredigion
+1660	Q2582590	Teispids
+1661	Q2594661	Kingdom of Gwent
+1662	Q2597352	Kingdom of Norway (1814)
+1663	Q2627082	Bombay State
+1664	Q2643374	Taifa of Santarém
+1665	Q2665520	Lordship of Prilep
+1666	Q2674433	Rijkslandvoogdij Ortenau
+1667	Q2703679	Crimean Regional Government
+1668	Q2842000	Ambazonia
+1669	Q2935756	Canada East
+1670	Q3175929	Mirdasid dynasty
+1671	Q3302610	Restored Hanthawaddy Kingdom
+1672	Q3348640	Italian Ethiopia
+1673	Q3374892	Mysore State
+1674	Q3399982	Kingdom of Spain
+1675	Q3446152	Kingdom of Bora Bora
+1676	Q3446232	Tanjungpura Kingdom
+1677	Q3509510	Second Nigerian Republic
+1678	Q3530610	Thanjavur Maratha kingdom
+1679	Q3574076	Kingdom of Toledo
+1680	Q3651039	Duchy of Racha
+1681	Q3688464	County of Novellara and Bagnolo
+1682	Q3765100	Vishnukundina
+1683	Q3780537	Gaza Empire
+1684	Q3933257	Republic of Valsesia
+1685	Q3960415	Signoria di Correggio
+1686	Q4100821	Bhopal State  (1949–56)
+1687	Q4105363	Wahidi
+1688	Q4120908	Inner Mongolian People's Republic
+1689	Q4159675	Javad khanate
+1690	Q4167941	Древний Бенин
+1691	Q4182327	White movement in Transbaikal
+1692	Q4183465	Заглебьевская республика
+1693	Q4274522	Tyrconnell
+1694	Q4278048	Малмыжское княжество
+1695	Q4337218	Kingdom of Orungu
+1696	Q4384185	Han
+1697	Q4393598	Republic of the Cape Verde Islands
+1698	Q4421240	Сицилийская держава Гелона
+1699	Q4449685	Beylik of Tacettin
+1700	Q4503615	Tsebelda culture
+1701	Q4505481	Liu Qi
+1702	Q4533605	South Russia
+1703	Q4783941	Aram Rehob
+1704	Q5124786	Civitas Schinesghe
+1705	Q5148517	Colony and Protectorate of Nigeria
+1706	Q5269336	Dharmasraya
+1707	Q5343710	Kingdom of Italy
+1708	Q5519387	Galuh Kingdom
+1709	Q5560770	zone under the control of the nationalist faction
+1710	Q5581085	Gomanta Kingdom
+1711	Q5848651	United States of Venezuela
+1712	Q5866728	Democratic Republic of the Sudan
+1713	Q5947557	Taifa of Ceuta
+1714	Q6123742	Second Republic (Dominican Republic)
+1715	Q6404540	Qutlugh-Khanids
+1716	Q6414862	Kirata Kingdom
+1717	Q6673921	Lotharingia
+1718	Q6734111	Mahisha Kingdom
+1719	Q6741448	Commonwealth realm of Malawi
+1720	Q6759911	거리국
+1721	Q6830639	Dachanghe
+1722	Q6831333	Đại Nghĩa Ninh
+1723	Q7735661	Commonwealth realm of the Gambia
+1724	Q7884006	Undivided Assam
+1725	Q10104760	子合
+1726	Q10402730	焦國
+1727	Q10434625	盖国
+1728	Q10513637	蒲犂國
+1729	Q10726489	axis occupation of Serbia
+1730	Q10869002	且弥
+1731	Q10893179	六國 (諸侯國)
+1732	Q10911198	原国
+1733	Q10947299	安陵國
+1734	Q11029653	Nabataean kingdom
+1735	Q11175164	Jun
+1736	Q11285099	美國統治琉球時期
+1737	Q11354923	三好政権
+1738	Q11704201	Taifa of Arjona
+1739	Q11915046	comtat de Laroche
+1740	Q11946876	Sangibirtu
+1741	Q12491034	Kahuripan
+1742	Q12491045	Kerajaan Pagatan
+1743	Q12491053	Kerajaan Selaparang
+1744	Q12491395	Kesultanan Berau
+1745	Q12583396	Geonmaguk
+1746	Q12617434	Jujomaguk
+1747	Q12660335	Kashi
+1748	Q13563256	Dalmatia
+1749	Q15695801	Marquisate of Oristano
+1750	Q15788609	Bila
+1751	Q15892936	介國
+1752	Q15893356	阚国
+1753	Q15902576	皇明天朝
+1754	Q15902774	中天国
+1755	Q15904474	黃壇國
+1756	Q15925436	Republic of Crimea
+1757	Q15939286	和田伊斯兰王国
+1758	Q16084290	Illyrian Kingdom
+1759	Q16164005	Uhyumotakguk
+1760	Q16678116	Московское государство
+1761	Q16746854	Luhansk People's Republic
+1762	Q16822366	Banu Kathir
+1763	Q16912926	Novorossiya (Union of People's Republics)
+1764	Q16949002	Lordship of Brecknock
+1765	Q17015016	Bishopric of Verdun
+1766	Q17026804	Genmou
+1767	Q17028056	Zhongli
+1768	Q17034723	Jiaodong Kingdom
+1769	Q17063037	須句國
+1770	Q17108151	Sultanate of Dewe
+1771	Q17636159	Marchesato di Ostiano
+1772	Q18111824	Dhrol State
+1773	Q18165305	郭國
+1774	Q18207528	Great Ardra
+1775	Q18234383	Safavid Empire
+1776	Q18331029	Hungarian State
+1777	Q18397500	Repubblica dell'Alto Monferrato
+1778	Q19852275	大靖龙朝
+1779	Q19892830	Kingdom of Coorg
+1780	Q19937663	Republic of Vinica
+1781	Q20009975	Marchesato di Zibello
+1782	Q20063215	尚明国
+1783	Q20639104	Margravate of Flanders
+1784	Q20973653	Kingdom of Munster
+1785	Q21004660	Pictland
+1786	Q21075369	Abarsal
+1787	Q21076535	Islamic Republic of Qaim
+1788	Q21280826	縛婁
+1789	Q21707489	Zuba
+1790	Q21815325	Emirat de Lafiagi
+1791	Q21819878	emirat de Shonga
+1792	Q25053733	Khasa Kingdom
+1793	Q25099308	Tamuwan
+1794	Q25421261	emirat d'Adrar
+1795	Q25424205	Sultanate of Mohéli
+1796	Q25459967	Kerajaan Palu
+1797	Q28470114	Shirvan
+1798	Q30744169	Fereral republic of Cameroon
+1799	Q30943828	房國
+1800	Q30945441	河宗氏
+1801	Q30945472	宗國
+1802	Q30945659	蔑国
+1803	Q30945866	贯国
+1804	Q48838868	Tharad
+1805	Q56228980	Kerajaan Bojong Galuh
+1806	Q56228981	Kerajaan Bugis
+1807	Q56228984	Kerajaan Galuh Rahyang
+1808	Q56229001	Kerajaan Rappang
+1809	Q56229002	Kerajaan Sebayak Barusjahe
+1810	Q56229003	Kerajaan Sebayak Kutabuluh
+1811	Q57981049	Batulappa
+1812	Q85775800	Lands of the Bohemian Crown
+1813	Q33	Finland
+1814	Q55	Netherlands
+1815	Q217	Moldova
+1816	Q218	Romania
+1817	Q228	Andorra
+1818	Q244	Barbados
+1819	Q403	Serbia
+1820	Q414	Argentina
+1821	Q419	Peru
+1822	Q424	Cambodia
+1823	Q683	Samoa
+1824	Q685	Solomon Islands
+1825	Q757	Saint Vincent and the Grenadines
+1826	Q763	Saint Kitts and Nevis
+1827	Q826	Maldives
+1828	Q917	Bhutan
+1829	Q977	Djibouti
+1830	Q1009	Cameroon
+1831	Q1014	Liberia
+1832	Q1025	Mauritania
+1833	Q1029	Mozambique
+1834	Q1045	Somalia
+1835	Q1171	Goa
+1836	Q1193	Manipur
+1837	Q1599	Nagaland
+1838	Q5324	Gurjara-Pratihara
+1839	Q5481	Republic of Tatarstan
+1840	Q5684	Babylon
+1841	Q12536	Abbasid Caliphate
+1842	Q16410	People's Republic of Hungary
+1843	Q16957	German Democratic Republic
+1844	Q23681	Turkish Republic of Northern Cyprus
+1845	Q27260	Samma dynasty
+1846	Q28307	Mustang
+1847	Q30623	Manchukuo
+1848	Q40888	Andaman and Nicobar Islands
+1849	Q42199	Principality of Ansbach
+1850	Q61291	Khorezm People's Soviet Republic
+1851	Q65362	SAO Eastern Slavonia, Baranja and Western Syrmia
+1852	Q76048	Congo Free State
+1853	Q76236	Lithuanian–Belorussian Soviet Socialist Republic
+1854	Q93180	Seleucid Empire
+1855	Q129286	British Raj
+1856	Q129569	Poher
+1857	Q139315	Dʿmt
+1858	Q140359	First Czechoslovak Republic
+1859	Q144395	Zainabad
+1860	Q146740	Jabal Druze State
+1861	Q146862	Second Saudi State
+1862	Q152420	Guelders
+1863	Q153080	East Francia
+1864	Q153091	Duchy of Prussia
+1865	Q153943	Kingdom of Westphalia
+1866	Q155361	Rouran Khaganate
+1867	Q156199	Electorate of Saxony
+1868	Q156418	Kingdom of Hawaiʻi
+1869	Q160440	Crimean Khanate
+1870	Q163268	Principality of Tver
+1871	Q167360	First Portuguese Republic
+1872	Q167639	Vijayanagara Empire
+1873	Q169705	Xia dynasty
+1874	Q170072	Dutch Republic
+1875	Q171150	Kingdom of Hungary
+1876	Q175211	Kingdom of Germany
+1877	Q178085	Principality of Zeta
+1878	Q178665	Mitanni
+1879	Q180568	New Kingdom of Egypt
+1880	Q185682	French Indochina
+1881	Q190353	Sovereign Military Order of Malta
+1882	Q193619	Union of South Africa
+1883	Q207521	Ethiopian Empire
+1884	Q207778	Second Dynasty of Egypt
+1885	Q209327	Kuba Kingdom
+1886	Q213651	Gandhara
+1887	Q214102	Union
+1888	Q220276	Third Dynasty of Egypt
+1889	Q238445	Emirate of Granada
+1890	Q240123	Indo-Scythians
+1891	Q241748	Kingdom of Serbia
+1892	Q248572	Sultanate of Maguindanao
+1893	Q267256	Dian Kingdom
+1894	Q269109	Principality of Ryazan
+1895	Q269864	Socialist Republic of Serbia
+1896	Q283330	County of Buren
+1897	Q288200	Provisional Government of Mexico
+1898	Q303598	Austrian colonies
+1899	Q317078	Pskov Republic
+1900	Q318987	Bishopric of Eichstätt
+1901	Q320930	Cao Wei
+1902	Q329618	German colonial empire
+1903	Q334714	Duchy of Athens
+1904	Q338248	Kingdom of Luang Phrabang
+1905	Q371883	Lado Enclave
+1906	Q379042	Ciskei
+1907	Q386303	Thirtieth Dynasty of Egypt
+1908	Q386496	Kingdom of Montenegro
+1909	Q484104	United States Army Military Government in Korea
+1910	Q484578	Uzbek Soviet Socialist Republic
+1911	Q488521	Fourth Republic of South Korea
+1912	Q502009	State of Maranhão
+1913	Q508488	Hertogdom Arenberg
+1914	Q523380	Republic of Central Lithuania
+1915	Q526507	Later Shu
+1916	Q527814	Protestant Union
+1917	Q544636	County of Verdun
+1918	Q564809	Republic of Acre
+1919	Q568473	Burgraviate of Nuremberg
+1920	Q575247	Pattin
+1921	Q583501	Twentieth Dynasty of Egypt
+1922	Q584435	Pattani Kingdom
+1923	Q589251	County of Montbéliard
+1924	Q590743	Ruanda-Urundi
+1925	Q605930	Taifa of Tortosa
+1926	Q616992	Governorate of Montenegro
+1927	Q617078	People's Republic of Mozambique
+1928	Q649310	Idar State
+1929	Q650370	Margraviate of Baden-Durlach
+1930	Q684030	Principality of Serbia
+1931	Q697787	Duchy of Limburg
+1932	Q699871	Taebong
+1933	Q719639	Twelfth Dynasty of Egypt
+1934	Q728449	Ninth Dynasty of Egypt
+1935	Q739722	Wahidi Bir Ali
+1936	Q748846	Dilmun
+1937	Q750823	Republika Sławkowska
+1938	Q758709	Audhali
+1939	Q770281	Syro–Hittite states
+1940	Q771193	Kingdom of Brittany
+1941	Q782781	Oaș Country
+1942	Q784851	Turkish Federated State of Cyprus
+1943	Q784963	Anglo-Saxon England
+1944	Q798431	Republic of Dahomey
+1945	Q810432	Basoda State
+1946	Q826475	Goëllo
+1947	Q827040	Nanyue
+1948	Q828665	Ikhshidid dynasty
+1949	Q832554	Argentine Confederation
+1950	Q844910	Pandya dynasty
+1951	Q845909	Scythia
+1952	Q846670	Danishmends
+1953	Q854468	Kingdom of Mutapa
+1954	Q862478	Kaabu
+1955	Q867778	People's Republic of Kampuchea
+1956	Q878726	Bit-Zamani
+1957	Q889374	Warsangali Sultanate
+1958	Q903061	Cochinchina Autonomous Republic
+1959	Q913828	Republic of Prekmurje
+1960	Q918837	Tianwan
+1961	Q921067	Taifa of Murcia
+1962	Q922317	Morvi State
+1963	Q929357	Nabha State
+1964	Q943392	Former Liang
+1965	Q970343	Vindhya Pradesh
+1966	Q1002606	Buhaya
+1967	Q1028095	Cambay State
+1968	Q1055227	Union of Horodło
+1969	Q1056772	Shen
+1970	Q1057542	Republic of Hawaii
+1971	Q1065073	Song
+1972	Q1067513	Injuids
+1973	Q1069829	Later Han dynasty
+1974	Q1071439	Merina Kingdom
+1975	Q1071493	Chhatarpur State
+1976	Q1077538	Tian Qi
+1977	Q1081620	Siam
+1978	Q1125793	Mangyül Gungthang
+1979	Q1128483	Cascadia
+1980	Q1135255	Chinese Soviet Republic
+1981	Q1152508	Ducado de Brescia
+1982	Q1155101	Jin
+1983	Q1157054	Daegaya
+1984	Q1157079	Aram
+1985	Q1164500	Kingdom of Murcia
+1986	Q1186434	Muang Phuan
+1987	Q1186858	Empire of Great Fulo
+1988	Q1207641	Dhenkanal State
+1989	Q1237976	Palanpur Agency
+1990	Q1241847	Giudicato of Arborea
+1991	Q1254491	Zobah
+1992	Q1264808	Beylik of Dulkadir
+1993	Q1275158	Elymais
+1994	Q1277895	Türgesh
+1995	Q1308627	Madhya Bharat
+1996	Q1314592	Laqe
+1997	Q1319681	Qi
+1998	Q1325075	Jingnan
+1999	Q1329944	Chedi Kingdom
+2000	Q1329990	Lapithos
+2001	Q1330149	Surasena
+2002	Q1330803	Gorno-Altai Autonomous Soviet Socialist Republic
+2003	Q1333012	Elmina (Staat)
+2004	Q1334331	Sijilmasa
+2005	Q1351979	Stavropol Soviet Republic
+2006	Q1361281	Eropina
+2007	Q1362278	United States of Stellaland
+2008	Q1365493	Republic of Pisa
+2009	Q1378584	Byeonhan confederacy
+2010	Q1389743	Kotoko kingdom
+2011	Q1414395	Republic of South Maluku
+2012	Q1415128	Republic of Afghanistan
+2013	Q1433867	Kazakh Khanate
+2014	Q1444485	Empire of Kitara
+2015	Q1448131	Albanian Kingdom
+2016	Q1449069	Shěn
+2017	Q1471373	Saloum
+2018	Q1501001	Ovamboland
+2019	Q1517772	Protectorate of South Arabia
+2020	Q1587244	Kong Empire
+2021	Q1609800	Hereroland
+2022	Q1653000	Xiaoyuan
+2023	Q1678784	Jaisalmer State
+2024	Q1688151	Kingdom of Thomond
+2025	Q1702572	Jokadu
+2026	Q1703449	Shaki Khanate
+2027	Q1720063	Kaokoland
+2028	Q1728782	Kapurthala State
+2029	Q1743884	Kition
+2030	Q1745385	United States of Matsya
+2031	Q1751495	Slovak Socialist Republic
+2032	Q1763996	Văn Lang
+2033	Q1791839	Akwamu
+2034	Q1792004	Kumme (Stadt)
+2035	Q1793177	Kurpfalz-Bayern
+2036	Q1796198	Kingdom of Córdoba
+2037	Q1796221	Mandara Kingdom
+2038	Q1923401	Zunghar Khanate
+2039	Q1949848	Angoche Sultanate
+2040	Q1991314	Khan's Mosque
+2041	Q1991965	Czech Socialist Republic
+2042	Q1998866	Czech and Slovak Federal Republic
+2043	Q2001966	company rule in India
+2044	Q2011891	Third Saudi state
+2045	Q2017684	French protectorate of Tunisia
+2046	Q2027229	Second Philippine Republic
+2047	Q2060657	Singasari
+2048	Q2060937	Taifa of Albarracín
+2049	Q2066979	Colchians
+2050	Q2086608	Western Satraps
+2051	Q2121850	Aqrabi
+2052	Q2122988	Zamorin of Calicut
+2053	Q2139082	Reich der Frauen
+2054	Q2147037	Rewa Kantha Agency
+2055	Q2166417	Taifa of Lérida
+2056	Q2208130	Ju
+2057	Q2219448	Duchy of Saxony
+2058	Q2263327	Eastern Zhou
+2059	Q2276431	Shahpura State
+2060	Q2293827	Terek Soviet Republic
+2061	Q2327097	Imperial City of Windsheim
+2062	Q2328476	Taifa of Segura
+2063	Q2342822	West Pakistan
+2064	Q2361927	Duchy of Masovia
+2065	Q2365048	Adal Sultanate
+2066	Q2410637	Beylik of Hamid
+2067	Q2415003	Kingdom of Serbia
+2068	Q2429397	Ancient Carthage
+2069	Q2436604	Taifa of Mértola
+2070	Q2510537	Komancza Republic
+2071	Q2526751	Dál nAraidi
+2072	Q2548724	Taifa of Jaén
+2073	Q2554365	Wehali
+2074	Q2617017	Baluchistan States Union
+2075	Q2620668	Kingdom of Viguera
+2076	Q2627602	Mukhrani
+2077	Q2634240	Asahan Sultanate
+2078	Q2650109	Xu
+2079	Q2663776	Brong-Konföderation
+2080	Q2723760	Giudicato of Gallura
+2081	Q2741089	Greater Republic of Central America
+2082	Q3013827	Hellenic State
+2083	Q3041595	Republic of Iraq (1958–68)
+2084	Q3254110	Графство Корнуай
+2085	Q3255171	list of viscounts of Marsan
+2086	Q3315525	Taifa of Majorca
+2087	Q3381713	Dai
+2088	Q3446205	Myinsaing Kingdom
+2089	Q3496573	Republic of Zamboanga
+2090	Q3503559	Sultanate of Serdang
+2091	Q3511905	First Nigerian Republic
+2092	Q3532158	Venad
+2093	Q3535371	Pudukkottai State
+2094	Q3695735	Costituzione del Regno di Corsica
+2095	Q3775345	Beylik of Çubukoğulları
+2096	Q3845405	marquesat de Savona
+2097	Q3960419	Signoria di Piombino
+2098	Q3968532	stati italiani dal Congresso di Vienna all'unità d'Italia
+2099	Q4060371	Alabama in the American Civil War
+2100	Q4064872	Anarta Kingdom
+2101	Q4080196	Bashkurdistan
+2102	Q4118614	Sultanate of Tidore
+2103	Q4198209	Ижмаринское княжество
+2104	Q4199295	Elisu Sultanate
+2105	Q4224854	Княжество Мелитены
+2106	Q4224856	Княжество Рубенидов
+2107	Q4332415	Four Oirats
+2108	Q4388339	Разгон Центральной рады
+2109	Q4401032	Русское политическое совещание в Париже
+2110	Q4401176	Ma-i
+2111	Q4453003	Tashkent State
+2112	Q4498927	Khoy Khanate
+2113	Q4527647	Shuliavka Republic
+2114	Q4773399	Taw yağı
+2115	Q4777816	Anupa Kingdom
+2116	Q4827705	Avanti
+2117	Q5026500	Cameroon
+2118	Q5098964	温国
+2119	Q5364563	Na
+2120	Q5555325	Commonwealth realm of Ghana
+2121	Q5692614	Kingdom of Najera
+2122	Q5848635	Época progresista
+2123	Q6406219	Kikata Kingdom
+2124	Q6642843	El Arish plan
+2125	Q6669561	Chen Han
+2126	Q6675294	Janganguk
+2127	Q6733951	Mahi people
+2128	Q6821029	Song (1355–1366)
+2129	Q6833437	Đại Thiên Hưng
+2130	Q6846912	Triệu (Xuân Thu)
+2131	Q7489715	Sharifian Caliphate
+2132	Q7515161	Siljik
+2133	Q7636797	Sultanate of Harar
+2134	Q7877575	Commonwealth realm of Uganda
+2135	Q9384697	乌贪訾离
+2136	Q9546546	危須
+2137	Q9643578	Kara Del
+2138	Q10267679	山国
+2139	Q10289365	Getulia
+2140	Q10392784	渠勒
+2141	Q10518058	西南夷
+2142	Q10841085	Đại Cồ Việt
+2143	Q10863765	㠱国
+2144	Q10872373	Army and Navy Marshal stronghold of the Republic of China
+2145	Q10908694	南燕国
+2146	Q10922613	Tang (state)
+2147	Q11026135	Principality of Salm
+2148	Q11040572	Baltský stát
+2149	Q11056260	州国
+2150	Q11056344	Chao
+2151	Q11108043	柏国
+2152	Q11240305	Kasunanan Kartasura
+2153	Q11876909	State of Brazil
+2154	Q11884245	Soviet Finland
+2155	Q11919179	Taifa Tudela
+2156	Q11931244	Layzan
+2157	Q12590812	Dabeolguk
+2158	Q12712216	Uyghurstan
+2159	Q12816977	Kanker State
+2160	Q14923076	Canada West
+2161	Q15060257	Tahakay
+2162	Q15897121	道德金門開國軍
+2163	Q15899113	中原皇清国
+2164	Q15905301	順政國
+2165	Q16171516	Chosandobiriguk
+2166	Q16178404	Giri Kedaton
+2167	Q16187935	Barony of Castalla
+2168	Q16261647	Bijiguk
+2169	Q16514067	Odessa People's Republic
+2170	Q16692882	Рудобельская партизанская республика
+2171	Q16838406	Gangpur State
+2172	Q17036249	鱼国
+2173	Q17036629	牟國
+2174	Q18165300	遂国
+2175	Q18165309	鄟国
+2176	Q18165311	鄣国
+2177	Q18417182	Contea di Tassarolo
+2178	Q18816847	Contea di Rolo
+2179	Q19278571	Dukat
+2180	Q19545518	Signoria di Ferrara
+2181	Q19602664	Selská republika Dithmarsche
+2182	Q20009933	Dominio dei Canossa
+2183	Q20009974	Marchesato del Monte Santa Maria
+2184	Q20108771	República d'Alexandria
+2185	Q21034465	Phuljhar
+2186	Q21044748	Fürstentum Nowgorod
+2187	Q21809319	Emirat de Gwoza
+2188	Q23366230	Republic of Geneva
+2189	Q24834102	戎國
+2190	Q24841782	大月氏
+2191	Q25395037	Kingdom of Hungary
+2192	Q25421698	Natiaga
+2193	Q25463267	Kerajaan Tembong Agung
+2194	Q26236153	Bidiga
+2195	Q27304761	Asgardia
+2196	Q28163856	Duchy of Surabaya
+2197	Q28416094	仇由國
+2198	Q28776699	Later Sabeol
+2199	Q30941692	耿國
+2200	Q30945099	令支國
+2201	Q30945112	茅戎
+2202	Q30945514	養國
+2203	Q30945591	姒國
+2204	Q30946018	夷国
+2205	Q48838925	Vakhtapur
+2206	Q51089496	Nassau-Sonnenberg
+2207	Q55599391	Kingdom of Sardinia
+2208	Q55659450	Социалистическая Советская Республика Грузия
+2209	Q56228967	Kadipaten Bagelen
+2210	Q56228972	Kepaksian Bejalan Diway
+2211	Q56228974	Kepaksian Nyekhupa
+2212	Q56228988	Kerajaan Kassa
+2213	Q56229000	Kerajaan Rajagaluh
+2214	Q56229005	Kerajaan Sebayak Sarinembah
+2215	Q57981051	Lakekun
+2216	Q57981052	Naitimu
+2217	Q59227477	Օշինյանների իշխանություն
+2218	Q60852075	Демократическая Республика Конго
+2219	Q65050489	Sheikhdom of al-Hawra
+2220	Q66278313	Jammu and Kashmir
+2221	Q67200271	Democratic Republic of Mohéli
+2222	Q84734595	ߡߊ߲߬ߘߋ߲߬ ߟߐ߬ߦߌ߬ߟߊ߬  ߞߏ߫ ߟߎ߬ ߝߐߢߐ߲߯ߞߐ
+2223	Q17	Japan
+2224	Q20	Norway
+2225	Q21	England
+2226	Q34	Sweden
+2227	Q35	Denmark
+2228	Q37	Lithuania
+2229	Q41	Greece
+2230	Q77	Uruguay
+2231	Q191	Estonia
+2232	Q215	Slovenia
+2233	Q237	Vatican City
+2234	Q238	San Marino
+2235	Q399	Armenia
+2236	Q678	Tonga
+2237	Q754	Trinidad and Tobago
+2238	Q760	Saint Lucia
+2239	Q792	El Salvador
+2240	Q804	Panama
+2241	Q810	Jordan
+2242	Q811	Nicaragua
+2243	Q817	Kuwait
+2244	Q836	Myanmar
+2245	Q837	Nepal
+2246	Q842	Oman
+2247	Q851	Saudi Arabia
+2248	Q902	Bangladesh
+2249	Q924	Tanzania
+2250	Q954	Zimbabwe
+2251	Q962	Benin
+2252	Q967	Burundi
+2253	Q970	Comoros
+2254	Q974	Democratic Republic of the Congo
+2255	Q983	Equatorial Guinea
+2256	Q1000	Gabon
+2257	Q1008	Ivory Coast
+2258	Q1013	Lesotho
+2259	Q1016	Libya
+2260	Q1174	Haryana
+2261	Q1185	Karnataka
+2262	Q1195	Meghalaya
+2263	Q1246	Kosovo
+2264	Q1410	Gibraltar
+2265	Q4948	Republic of Venice
+2266	Q5066	Jin dynasty
+2267	Q8680	British Empire
+2268	Q15180	Soviet Union
+2269	Q17557	California Republic
+2270	Q23148	Cornwall
+2271	Q26273	Sint Maarten (Dutch part)
+2272	Q29317	Bagan
+2273	Q31929	Carolingian Empire
+2274	Q33061	Taifa of Zaragoza
+2275	Q33242	Lower Burgundy
+2276	Q34754	Somaliland
+2277	Q35216	Zhou dynasty
+2278	Q38872	Prussia
+2279	Q42585	Kingdom of Bohemia
+2280	Q44642	Federation of Arab Republics
+2281	Q70972	Kingdom of France
+2282	Q71092	Second French Empire
+2283	Q79965	Golden Horde
+2284	Q83286	Socialist Federal Republic of Yugoslavia
+2285	Q83618	Maratha Empire
+2286	Q102679	Numidia
+2287	Q105313	Kingdom of Wessex
+2288	Q110888	Kingdom of Essex
+2289	Q130276	Kirghiz Soviet Socialist Republic
+2290	Q131694	Aden
+2291	Q131964	Austrian Empire
+2292	Q133356	Ukrainian Soviet Socialist Republic
+2293	Q140446	Zagwe dynasty
+2294	Q143309	Counts of Louvain
+2295	Q143737	Gurgum
+2296	Q146761	Hatay State
+2297	Q149846	County palatine of Cephalonia and Zakynthos
+2298	Q152750	Protectorate of Bohemia and Moravia
+2299	Q153136	Habsburg Monarchy
+2300	Q153660	Italian Social Republic
+2301	Q154401	Slovak State (1939-1945)
+2302	Q154667	Kingdom of Georgia
+2303	Q165269	East Frisia
+2304	Q173065	Kingdom of Naples
+2305	Q178897	Latin Empire
+2306	Q179876	Kingdom of England
+2307	Q180393	Kingdom of the Two Sicilies
+2308	Q183150	Colchis
+2309	Q186096	Tsardom of Russia
+2310	Q186320	Grand Duchy of Baden
+2311	Q190513	Khanate of Sibir
+2312	Q191324	Middle Kingdom of Egypt
+2313	Q191369	Ugarit
+2314	Q193152	Great Moravia
+2315	Q195972	Kingdom of Kartli
+2316	Q200896	Slovak Soviet Republic
+2317	Q207330	Lagash
+2318	Q209065	Kingdom of Greece
+2319	Q210163	Astrakhan Khanate
+2320	Q211274	Polish People's Republic
+2321	Q215530	Kingdom of Ireland
+2322	Q216632	Mali Federation
+2323	Q232806	County of Edessa
+2324	Q241790	Kush
+2325	Q248705	Awadh
+2326	Q262432	Der
+2327	Q266923	Kingdom of Mysore
+2328	Q276951	Taifa of Seville
+2329	Q284506	Nakhichevan Autonomous Soviet Socialist Republic
+2330	Q303836	Republic of Tarnobrzeg
+2331	Q307697	kingdom of Tlemcen
+2332	Q327179	Erfurt Union
+2333	Q330533	Seventeen Provinces
+2334	Q332232	Republic of Mahabad
+2335	Q370372	Emirate of Cyrenaica
+2336	Q385084	Great Perm
+2337	Q389688	Achaemenid Empire
+2338	Q427359	Government of National Unity
+2339	Q428991	Arbitration Commission of the Peace Conference on Yugoslavia
+2340	Q450736	Alzi
+2341	Q463845	Landgraviate of Hesse-Rotenburg
+2342	Q466803	Pallava
+2343	Q482705	Fifth Republic of South Korea
+2344	Q484195	Timurid Empire
+2345	Q503623	Gold Coast
+2346	Q504759	Chu
+2347	Q504769	Xin dynasty
+2348	Q506008	Kingdom of Deira
+2349	Q541455	مملكة مصر والسودان
+2350	Q546282	Xia
+2351	Q568561	Vidarbha
+2352	Q568712	Wassoulou Empire
+2353	Q569871	Free People's State of Württemberg
+2354	Q588672	Hammadid dynasty
+2355	Q605292	Kindah
+2356	Q620765	Lydia
+2357	Q625380	Eastern Hungarian Kingdom
+2358	Q637238	Electorate of Baden
+2359	Q650489	Margraviate of Baden
+2360	Q651377	Shunga Empire
+2361	Q665833	Soviet Republic of Naissaar
+2362	Q666674	Pact of Vilnius and Radom
+2363	Q669317	Bidar Sultanate
+2364	Q673837	Landgraviate of Hesse-Marburg
+2365	Q680997	Principality of Lower Pannonia
+2366	Q692015	United States of Belgium
+2367	Q695322	Landgraviate of Hesse
+2368	Q696241	Khanate of Kokand
+2369	Q696640	Duchy of Pomerania
+2370	Q701914	Territory of the Military Commander in Serbia
+2371	Q705598	Wituland
+2372	Q727710	Tabal
+2373	Q729481	Transpadane Republic
+2374	Q752662	Hafsid dynasty
+2375	Q754749	Twenty-fourth Dynasty of Egypt
+2376	Q783489	Later Liang dynasty
+2377	Q800236	Bahawalpur State
+2378	Q806019	Bamra State
+2379	Q836169	Qasim Khanate
+2380	Q836676	Kingdom of Majorca
+2381	Q841364	Ayutthaya Kingdom
+2382	Q844295	Yamataikoku
+2383	Q849770	Western Liang dynasty
+2384	Q854415	Kingdom of the Lombards
+2385	Q855044	Bhopal State
+2386	Q862467	Kingdom of Sine
+2387	Q862701	People's Republic of Benin
+2388	Q868942	Republic of Kuwait
+2389	Q890120	Zimbabwe Rhodesia
+2390	Q892061	Bonai State
+2391	Q907827	Bremen Soviet Republic
+2392	Q912052	Wei
+2393	Q914031	Tonk State
+2394	Q914898	Kingdom of Khotan
+2395	Q922190	Shanshan
+2396	Q953432	Couto Misto
+2397	Q954891	Free State of Waldeck-Pyrmont
+2398	Q963303	Union of Lublin
+2399	Q965466	Shirvan Khanate
+2400	Q978071	Thirty-first Dynasty of Egypt
+2401	Q1028848	French Cameroons
+2402	Q1029062	Martyazo
+2403	Q1044668	Republic of Rose Island
+2404	Q1052040	Cayor
+2405	Q1055740	Perea
+2406	Q1057551	Loulan Kingdom
+2407	Q1063498	United States of the Ionian Islands
+2408	Q1069609	Western Zhou
+2409	Q1115291	Thonburi Kingdom
+2410	Q1137403	Yue
+2411	Q1139807	County of Portugal
+2412	Q1140152	Irish Republic
+2413	Q1141215	Granadine Confederation
+2414	Q1143524	Northern Qi
+2415	Q1147897	Wey
+2416	Q1149230	Western Yan
+2417	Q1155818	Anga
+2418	Q1156662	Karasahr
+2419	Q1158213	Damaraland
+2420	Q1232887	County of Savoy
+2421	Q1250673	Jenilu
+2422	Q1257454	Paddan Aram
+2423	Q1261908	Principality of Pereyaslavl
+2424	Q1290149	Federal People's Republic of Yugoslavia
+2425	Q1292987	Maravi
+2426	Q1311219	Jaffna kingdom
+2427	Q1320058	French Protectorate of Laos
+2428	Q1326742	Southern Tang
+2429	Q1327602	Wei
+2430	Q1329439	Southern Yan
+2431	Q1331184	Vatsa
+2432	Q1352878	Duchy of Livonia
+2433	Q1390749	Sultanate of Rafai
+2434	Q1392452	Gilzanu
+2435	Q1431522	Klein-Adra
+2436	Q1477220	Somali Democratic Republic
+2437	Q1502813	Sultanate of Agadez
+2438	Q1511207	Matabele-Königreich
+2439	Q1514510	County of Urgell
+2440	Q1534482	Later Yan
+2441	Q1539360	Northern Liang
+2442	Q1541779	County of Osona
+2443	Q1541813	County of Roussillon
+2444	Q1555184	Guriana
+2445	Q1588434	Thanjavur Nayak kingdom
+2446	Q1606043	Siberian Republic
+2447	Q1638408	Rinpungpa
+2448	Q1649290	Idel-Ural State
+2449	Q1661685	Indo-Sassanids
+2450	Q1678787	Jaitpur State
+2451	Q1708400	Księstwo płockie
+2452	Q1728162	Kantora
+2453	Q1740533	Baku Khanate
+2454	Q1756914	Sultanate of Nejd
+2455	Q1771706	Alania
+2456	Q1785349	Kota State
+2457	Q1965778	Sarir
+2458	Q1991742	Kingdom of Alba
+2459	Q2006542	Dominion of Pakistan
+2460	Q2030487	Airgíalla
+2461	Q2097045	Yelang
+2462	Q2109946	Principality of Galilee
+2463	Q2162698	Duchy of Bohemia
+2464	Q2182946	Commune of the Working People of Estonia
+2465	Q2183293	Duchy of Belz
+2466	Q2249661	United Provinces of New Granada
+2467	Q2253783	Kingdom of Glywysing
+2468	Q2285679	Taifa of Córdoba
+2469	Q2295939	Duchy of Vasconia
+2470	Q2331954	Despotate of Arta
+2471	Q2336882	Green Ukraine
+2472	Q2340665	Basutoland
+2473	Q2341105	Great Horde
+2474	Q2342282	Oman proper
+2475	Q2353476	Strandzha Commune
+2476	Q2354842	SAO Kninska Krajina
+2477	Q2370784	Shun Dynasty
+2478	Q2502093	Urteḫi
+2479	Q2579852	Taurida Soviet Socialist Republic
+2480	Q2598512	Xue
+2481	Q2604565	Rajputana Agency
+2482	Q2647882	Allabria
+2483	Q2650114	Sui
+2484	Q2650474	Lü
+2485	Q2665398	Matsya Kingdom
+2486	Q2670639	Powys Wenwynwyn
+2487	Q2684394	Taifa of Baeza
+2488	Q2872689	Turkestan Autonomy
+2489	Q2893890	Kamtapur
+2490	Q2899771	Principality of Hungary
+2491	Q2989320	Edeirnion
+2492	Q3028514	Kingdom of Tahiti
+2493	Q3177715	Pagaruyung Kingdom
+2494	Q3233989	Lanfang Republic
+2495	Q3403551	Principality of Halych
+2496	Q3446190	Royaume de Larantuka
+2497	Q3446223	Sagaing Kingdom
+2498	Q3456432	République des Sept-Dizains
+2499	Q3496420	Slovak Republic
+2500	Q3571951	Royal Lordship of Molina
+2501	Q3572054	Lordship of Albarracin
+2502	Q3687948	Contea di Asti
+2503	Q3688102	Contea di Como
+2504	Q3688641	Contea di Sovana
+2505	Q3708094	Seljuk Empire
+2506	Q3744563	Adsele
+2507	Q3834772	stati italiani dell'era dei comuni
+2508	Q3877418	Ibelin
+2509	Q3892131	Provincia Libre de Guayaquil
+2510	Q3933254	Repubblica partigiana del Corniolo
+2511	Q3933259	Repubblica partigiana di Maschito
+2512	Q3963975	Akkalkot State
+2513	Q3968538	stati italiani nella prima metà del XVIII secolo
+2514	Q4074097	Баакульское царство
+2515	Q4083686	Sultanate of Bengal
+2516	Q4133535	Гарамантида
+2517	Q4148091	Графство Генган
+2518	Q4184652	Transcaspian Government
+2519	Q4215076	Каринское княжество
+2520	Q4216316	Karusha Kingdom
+2521	Q4225218	Кобринское княжество
+2522	Q4281031	Maragheh Khanate
+2523	Q4304392	Русское (централизованное) государство
+2524	Q16	Canada
+2525	Q4412473	Северо-Западное правительство
+2526	Q4421239	Сицилийская держава Дионисия
+2527	Q4430531	Soi︠u︡z obʺedinennykh gort︠s︡ev Gorskai︠a︡ Respublika
+2528	Q4449812	Тайбугинский юрт
+2529	Q4520500	Шареный бугор
+2530	Q4667453	Abhira Kingdom
+2531	Q4858354	barangay
+2532	Q4898261	葛国
+2533	Q4899887	Beylik of Tanrıbermiş
+2534	Q4903979	Bida Emirate
+2535	Q4976669	毕国
+2536	Q4985038	Vettathunad
+2537	Q5185064	House of Zhu
+2538	Q5305952	Dravida Kingdom
+2539	Q5362837	Emirate of Jabal Shammar
+2540	Q5369469	Dumakru
+2541	Q6201794	Jin
+2542	Q6392538	Commonwealth realm of Kenya
+2543	Q6393363	Kerala Kingdom
+2544	Q6400806	Khasa
+2545	Q6498248	Lauhitya Kingdom
+2546	Q6648074	Chu (Chen Sheng)
+2547	Q7244759	Лакз
+2548	Q7314427	Republic of Baja California
+2549	Q7362066	Roman Libya
+2550	Q7638035	Sumpa
+2551	Q9304513	seigneurie de Naplouse
+2552	Q9385316	休循
+2553	Q9477386	劫国
+2554	Q9904423	Dapeng
+2555	Q10259881	尉犂國
+2556	Q10297069	扜弥
+2557	Q10463240	精絕
+2558	Q10513648	蒲类
+2559	Q10791211	Kingdom of Mrauk U
+2560	Q10826781	Thủy Xá and Hỏa Xá
+2561	Q10827839	平氏政権
+2562	Q10878917	九江国
+2563	Q10888925	偪国
+2564	Q10894682	冀国
+2565	Q10896028	凡国
+2566	Q10921634	Khoshut Khanate
+2567	Q10935638	Tai Republic
+2568	Q10943175	姑墨
+2569	Q10975458	Maramureș
+2570	Q10988528	Second East Turkestan Republic
+2571	Q11040270	尹國
+2572	Q11061992	Government of the Republic of China in Guangzhou
+2573	Q11064889	廧咎如
+2574	Q11074451	戎蛮
+2575	Q11076605	护国军政府
+2576	Q11097973	Li Shu
+2577	Q11100500	Yang (state)
+2578	Q11126834	Mao (state)
+2579	Q11165755	Polska Ludowa
+2580	Q11177699	Czechoslovak Federative Republic
+2581	Q11266977	Epirus
+2582	Q11378566	仲王朝
+2583	Q11571391	狗奴國
+2584	Q11621245	蒙古联盟自治政府
+2585	Q11750128	Królestwo Polskie (1830–1831)
+2586	Q11903659	Aapir
+2587	Q11909245	Bezaume
+2588	Q11910203	Al-Busi
+2589	Q11929656	Karakh
+2590	Q11929756	khanat de Balkh
+2591	Q11936115	Masmughans of Damavand
+2592	Q12054859	Slovak People's Republic
+2593	Q12488402	Kadipaten Pesantenan
+2594	Q12491035	Kalinyamat Sultanate
+2595	Q12491037	Kerajaan Kanjuruhan
+2596	Q12582684	Gamhaeguk
+2597	Q12595272	Morobiriguk
+2598	Q12607240	Yeomnoguk
+2599	Q12608943	Uyuguk
+2600	Q12610676	Eumjeupbeolguk
+2601	Q12868805	სანიგეთი
+2602	Q13031081	Клецкае княства
+2603	Q13107370	Principality of Serbia
+2604	Q13131807	Kingdom of Morgannwg
+2605	Q13534654	Taifa of Toledo
+2606	Q14803080	Jimara
+2607	Q15104874	Ailech
+2608	Q15890388	肸顿
+2609	Q15899492	大圣王朝
+2610	Q15902277	聖朝國
+2611	Q15904032	薩迦巴
+2612	Q15917061	謝國
+2613	Q15924477	鄫国
+2614	Q15940244	舒国
+2615	Q16158529	Ajmer State
+2616	Q16575705	Marchesato di Medole
+2617	Q16656928	Kazan kingdom
+2618	Q16662014	Карлукское ханство
+2619	Q16674374	Marquis of Veere and Flushing
+2620	Q16674381	République partisane de Cassiglio
+2621	Q16701789	Стародубское княжество
+2622	Q16770423	Kesultanan Makasar
+2623	Q16953965	British Military Administration
+2624	Q17040704	Gouding
+2625	Q17068375	Ramannadesa
+2626	Q17355516	Kingdom of Voss
+2627	Q17523945	Toltec Empire
+2628	Q17526620	Shirvanshahs' State
+2629	Q17540123	Erfurter Staat
+2630	Q18109835	大順朝
+2631	Q18165296	谷国
+2632	Q18599179	Казан татарлары
+2633	Q18648857	The Landi State
+2634	Q18816951	Шуми
+2635	Q19851632	东土中华大乾王国
+2636	Q19929935	Commonwealth realm of Tanganyika
+2637	Q20465038	Kerajaan Keritang
+2638	Q20581158	Kerajaan Demak
+2639	Q21001782	Kingdom of Leinster
+2640	Q21076457	khanat de Kunduz
+2641	Q21409375	North-Eastern Rus'
+2642	Q21815320	Emirat de Katsina
+2643	Q21815328	Emirat de Mubi
+2644	Q22936401	Luyag na Kaboloan
+2645	Q25508815	Naiman state
+2646	Q25536394	Вялікае Княства Літоўскае, 1812
+2647	Q28136352	Cebrenia
+2648	Q28417053	頓國
+2649	Q30943871	黎國
+2650	Q30944977	廬國
+2651	Q30944981	卢国
+2652	Q30945434	狄戎
+2653	Q30945771	越戲方
+2654	Q30945845	闕鞏國
+2655	Q42345047	Catalan Republic (1641)
+2656	Q43132080	Kerman Seljuk Sultanate
+2657	Q56228973	Kepaksian Belunguh
+2658	Q56228977	Kerajaan Baringin
+2659	Q56228986	Kerajaan Gelgel
+2660	Q60785082	Kingdom of Kashi
+2661	Q60849938	Хорезмская Социалистическая Советская Республика
+2662	Q65123867	Kingdom of Yatenga
+2663	Q84734237	ߞߙߎ߬ߞߊ߲ߝߎߥߊ߫ ߟߊ߬ߘߍ߬ ߞߎ߲
+2664	Q25	Wales
+2665	Q26	Northern Ireland
+2666	Q28	Hungary
+2667	Q29	Spain
+2668	Q36	Poland
+2669	Q39	Switzerland
+2670	Q96	Mexico
+2671	Q142	France
+2672	Q184	Belarus
+2673	Q223	Greenland
+2674	Q225	Bosnia and Herzegovina
+2675	Q227	Azerbaijan
+2676	Q232	Kazakhstan
+2677	Q657	Chad
+2678	Q709	Marshall Islands
+2679	Q766	Jamaica
+2680	Q778	Bahamas
+2681	Q784	Dominica
+2682	Q800	Costa Rica
+2683	Q858	Syria
+2684	Q865	Taiwan
+2685	Q1020	Malawi
+2686	Q1042	Seychelles
+2687	Q1165	Bihar
+2688	Q1168	Chhattisgarh
+2689	Q1186	Kerala
+2690	Q1445	Tamil Nadu
+2691	Q1505	Sikkim
+2692	Q2895	Byelorussian Soviet Socialist Republic
+2693	Q4958	Liao dynasty
+2694	Q8959	Northern Yuan Dynasty
+2695	Q11768	Ancient Egypt
+2696	Q16644	Northern Mariana Islands
+2697	Q22048	Odisha
+2698	Q23427	South Ossetia
+2699	Q26847	Galatia
+2700	Q28513	Austria-Hungary
+2701	Q29999	Kingdom of the Netherlands
+2702	Q34756	Qin
+2703	Q47588	Basque Country
+2704	Q49326	Majapahit
+2705	Q58296	French First Republic
+2706	Q58738	Bavarian Soviet Republic
+2707	Q68678	Socialist Soviet Republic of Byelorussia
+2708	Q72785	Cretan State
+2709	Q75613	Almoravid dynasty
+2710	Q80338	Bengal
+2711	Q83444	Kingdom of Corsica
+2712	Q83536	Anglo-Corsican Kingdom
+2713	Q87791	Frisian Kingdom
+2714	Q111471	Dál Riata
+2715	Q119695	New Castile Governorate
+2716	Q126936	Visigothic Kingdom
+2717	Q130280	Estonian Soviet Socialist Republic
+2718	Q130842	Greater Lebanon
+2719	Q131337	Azerbaijan Soviet Socialist Republic
+2720	Q146597	Zand dynasty
+2721	Q146872	State of Aleppo
+2722	Q147909	Kingdom of Bulgaria
+2723	Q149832	Kingdom of Kurdistan
+2724	Q156513	Banat Republic
+2725	Q165040	Duchy of Parma
+2726	Q172640	North Vietnam
+2727	Q176466	Rewa State
+2728	Q178084	Ilkhanate
+2729	Q179023	French colonial empire
+2730	Q187684	Despotate of Epirus
+2731	Q187979	Early Dynastic Period of Egypt
+2732	Q188161	Dutch East Indies
+2733	Q191077	Kingdom of Yugoslavia
+2734	Q191484	Old Great Bulgaria
+2735	Q200667	Ladakh
+2736	Q206411	Democratic Republic of Azerbaijan
+2737	Q207162	Bourbon Restoration
+2738	Q207600	Aghlabids
+2739	Q213638	Kingdom of Cyprus
+2740	Q218023	Orange Free State
+2741	Q221357	Dutch Brazil
+2742	Q230407	Kingdom of Israel
+2743	Q231392	Kingdom of Asturias
+2744	Q243652	Hungarian Soviet Republic
+2745	Q269237	Fifth Dynasty of Egypt
+2746	Q283680	Carchemish
+2747	Q285658	First Mexican Empire
+2748	Q307041	Socialist Soviet Republic of Abkhazia
+2749	Q310650	Schaumburg-Lippe
+2750	Q313136	Kingdom of Dumnonia
+2751	Q332137	Kingdom of Commagene
+2752	Q373189	Bithynia
+2753	Q377350	Iberian Union
+2754	Q391980	Free Territory of Trieste
+2755	Q427941	Islamic Emirate of Afghanistan
+2756	Q430309	Đại Việt
+2757	Q436994	Kingdom of Dublin
+2758	Q451677	Amabi
+2759	Q466551	Transkei
+2760	Q470467	Amfo'an
+2761	Q473353	Ammon
+2762	Q491790	Kerman-Seldschuken
+2763	Q497777	First Spanish Republic
+2764	Q500965	Kingdom of Gera
+2765	Q523435	United States of Indonesia
+2766	Q537503	Principality of Piombino
+2767	Q560771	Margraviate of Baden-Baden
+2768	Q568452	Restoration in Switzerland
+2769	Q572222	County of Horne
+2770	Q580447	Duchy of Styria
+2771	Q600018	Kingdom of Hungary
+2772	Q617218	Yamhad
+2773	Q618399	Republic of the Congo (Léopoldville)
+2774	Q624887	Neo-Babylonian Empire
+2775	Q640010	Ardra
+2776	Q643900	Salm-Blankenburg
+2777	Q649262	Arzawa
+2778	Q655621	Principality of Transylvania
+2779	Q662653	British Somaliland
+2780	Q668294	Kamerun
+2781	Q669534	Patiala and East Punjab States Union
+2782	Q677037	Telangana
+2783	Q680472	Principality of Volhynia
+2784	Q686971	Lands of the Bohemian Crown
+2785	Q691037	Busoga
+2786	Q696242	Wang Jingwei regime
+2787	Q698089	Grand Duchy of Würzburg
+2788	Q707917	East Hebei Autonomous Council
+2789	Q721272	Lanka
+2790	Q730163	Autonomous Republic of Northern Epirus
+2791	Q733799	Kingdom of the Hwicce
+2792	Q736839	Kamakura shogunate
+2793	Q737040	Islamic Courts Union
+2794	Q737648	Twenty-fifth Dynasty of Sudanese
+2795	Q746443	Golden Ambrosian Republic
+2796	Q748595	Qataban
+2797	Q748876	Kotokolia
+2798	Q752265	Seha River Land
+2799	Q761370	Aro Confederacy
+2800	Q781705	Mughan Soviet Republic
+2801	Q788123	Comté de Tende
+2802	Q794451	Azzi
+2803	Q796583	Kingdom of Kongo
+2804	Q809652	Barwani State
+2805	Q815524	Belgian colonial empire
+2806	Q821546	Bit Bahiani
+2807	Q823862	Quwê
+2808	Q824489	Estado Novo
+2809	Q825902	Polish–Lithuanian union
+2810	Q834486	Federation of South Arabia
+2811	Q837136	Kingdom of Deheubarth
+2812	Q837855	Qi
+2813	Q870055	Kingdom of Laos
+2814	Q899706	Peru–Bolivian Confederation
+2815	Q903779	United Kingdom of Portugal, Brazil and the Algarves
+2816	Q904346	Kingdom of Desmond
+2817	Q909650	Ara Gaya
+2818	Q924833	Kaarta
+2819	Q926295	Italian Empire
+2820	Q927154	Tsardom of Vidin
+2821	Q932370	Changbhakar
+2822	Q947616	Rascia
+2823	Q950756	Ba
+2824	Q956729	Counts of Berga
+2825	Q958291	United Principalities
+2826	Q971375	Shewa
+2827	Q994451	Western Liang
+2828	Q1025803	Cai
+2829	Q1028835	British Cameroons
+2830	Q1031430	Habsburg Netherlands
+2831	Q1046443	Republic of Užice
+2832	Q1061582	Chan Santa Cruz
+2833	Q1062415	Kingdom of Champasak
+2834	Q1069636	Saurashtra
+2835	Q1079109	Calchfynydd
+2836	Q1096374	Banu Ilyas
+2837	Q1100893	Province of the Dejanović family
+2838	Q1106424	Darawiish
+2839	Q1111926	Taqali
+2840	Q1130797	Hill States of India
+2841	Q1131500	Free State of Icaria
+2842	Q1132786	Ouaddai Empire
+2843	Q1136251	Kingdom of Thulamela
+2844	Q1136259	Koofur Orsi
+2845	Q1139314	Kathiawar Agency
+2846	Q1139762	Kanem-Bornu Empire
+2847	Q1146786	Señorío of Cuzcatlán
+2848	Q1148907	State of Katanga
+2849	Q1188459	Yarkent Khanate
+2850	Q1193554	Guge
+2851	Q1232141	Djelgodji
+2852	Q1252942	Duklja
+2853	Q1268307	Dvaravati
+2854	Q1275804	Deng
+2855	Q1276649	Seven Warring States
+2856	Q1291919	Yan
+2857	Q1297894	County of Ribagorza
+2858	Q1324889	Beylik of Germiyan
+2859	Q1330290	Southern Liang
+2860	Q1330881	Hamazi
+2861	Q1365851	Minaeans
+2862	Q1400780	Sailana State
+2863	Q1415162	Garðaríki
+2864	Q1435466	Limerick Soviet
+2865	Q1457519	Udaipur State
+2866	Q1471995	Former Qin
+2867	Q1479630	Kingdom of Loango
+2868	Q1483403	Principality of Dukagjini
+2869	Q1499150	Lucchesische Republik
+2870	Q1517159	Hadhramaut
+2871	Q1519074	Lands of Denmark
+2872	Q1530762	Kingdom of Kandy
+2873	Q1535236	Kalahandi State
+2874	Q1557792	Gwalior State
+2875	Q1642472	Tondo (historical polity)
+2876	Q1649871	Kingdom of Poland
+2877	Q1651832	Thaton Kingdom
+2878	Q1656624	Idalium
+2879	Q1658411	Raj of Sarawak
+2880	Q1688526	Yettishar
+2881	Q1747689	Ancient Rome
+2882	Q1759078	Kingdom of Jimma
+2883	Q1760729	Alashiya
+2884	Q1776972	Ramdurg State
+2885	Q1815305	Qashliq
+2886	Q1865132	Aden Protectorate
+2887	Q1877562	Mark Marmoutier
+2888	Q1885093	Mahra Sultanate
+2889	Q1926180	Sankheda Mehwas
+2890	Q1936158	Minyue
+2891	Q1948254	Mormaer of Moray
+2892	Q1984556	Niamina
+2893	Q1986139	Parthian Empire
+2894	Q1991084	White Serbia
+2895	Q1994382	North Caucasian Emirate
+2896	Q1998401	North Yemen
+2897	Q2028730	Улус Орда-Эджена
+2898	Q2040947	Kerajaan Inderagiri
+2899	Q2090473	Khazar Khaganate
+2900	Q2118309	Poonch
+2901	Q2122499	Surakarta Sunanate
+2902	Q2150951	State of Haiti
+2903	Q2208978	Alamannia
+2904	Q2214985	Northern Liao
+2905	Q2221701	Sangli State
+2906	Q2287491	Qedarite
+2907	Q2305208	Russian Soviet Federative Socialist Republic
+2908	Q2314907	Later Zhao
+2909	Q2368620	Rui
+2910	Q2368631	纪国
+2911	Q2393278	Republic of Cospaia
+2912	Q2431480	Tibetan Empire
+2913	Q2458532	Terra Mariana
+2914	Q2473518	Uduri-Etiuni
+2915	Q2499883	Ura
+2916	Q2504040	Gagauz Republic
+2917	Q2507497	National Legionary State
+2918	Q2522604	Taifa of Tejada
+2919	Q2529175	Vizegrafschaft Meaux
+2920	Q2564950	Western India States Agency
+2921	Q2576305	Duchy of Croatia
+2922	Q2593459	Provisional Government of Hawaii
+2923	Q2605410	Tarascan State
+2924	Q2616953	Quisling regime
+2925	Q2618458	Madras State
+2926	Q2625496	State of East Indonesia
+2927	Q2631403	Republic of Kosova
+2928	Q2657134	Kingdom of Albania
+2929	Q2670139	Porhoët
+2930	Q2670895	Taifa of Alpuente
+2931	Q2753516	Königreich Barotse
+2932	Q2776615	Batuma Respubliko
+2933	Q2778131	Dizak
+2934	Q2784785	Kingdom of the Gepids
+2935	Q2918348	Goa, Daman and Diu
+2936	Q2976571	County of Drenthe
+2937	Q2979717	Second Empire of Haiti
+2938	Q2988069	Pan Pan
+2939	Q3167772	Kingdom of Polonnaruwa
+2940	Q3324486	Prince-Bishopric of Montenegro
+2941	Q3503548	Sultanate of Bulungan
+2942	Q3556993	Viscounty of Léon
+2943	Q3624335	Duchy of Austria
+2944	Q3652371	Abasgia
+2945	Q3688198	Contea di Gattara
+2946	Q3707863	Dinastia macedone dell'Egitto
+2947	Q3715875	Ducato di Sabbioneta
+2948	Q3845404	Marca fermana
+2949	Q3845756	Marchesato di Castel Goffredo
+2950	Q3845759	Marchesato di Gavi
+2951	Q3845760	Marchesato di Gorzegno
+2952	Q3933256	Repubblica partigiana della Val Taro
+2953	Q3960459	Kingdom of Sikkim
+2954	Q4055229	Абхазские княжества
+2955	Q4056388	Government of Inner Mongolia
+2956	Q4069055	Арест отрекшегося Николая II в Царском Селе
+2957	Q4079098	Басмыльский каганат
+2958	Q4096583	Британская Южная Африка
+2959	Q4120907	内蒙古自治运动联合会
+2960	Q79	Egypt
+2961	Q4147013	Государство Тулунидов
+2962	Q4148098	Earldom of Orkney
+2963	Q4154364	Sultanate of Damagaram
+2964	Q4212235	Kangar union
+2965	Q4219801	Кесунское княжество
+2966	Q4276709	Малая Башкирия
+2967	Q4296376	Misiminia
+2968	Q4336183	Оренбургский Казачий Круг
+2969	Q4393602	Republic of the North Solomons
+2970	Q4398229	Russian state 1918-1920
+2971	Q4401303	Kingdom of Butuan
+2972	Q4517333	Da Chu
+2973	Q4690373	Afshar Beylik
+2974	Q4833446	Second Turkic Khaganate
+2975	Q5102103	Reddy Dynasty
+2976	Q5228183	Kingdom of Vaspurakan
+2977	Q5311360	Duchy of Inowrocław
+2978	Q5311378	Duchy of Perugia
+2979	Q5366130	郕国
+2980	Q5479650	Franceville, New Hebrides
+2981	Q5520664	Gandhara Kingdom
+2982	Q5653520	Hara Huna Kingdom
+2983	Q6106050	Supreme Council of the Floridas
+2984	Q6174260	Época Garciana
+2985	Q6207845	Jodhpur State
+2986	Q6382548	Kedatuan
+2987	Q6385364	Kekeya Kingdom
+2988	Q6430319	Kontagora Emirate
+2989	Q6987126	Negara Daha
+2990	Q7314513	Republic of South Carolina
+2991	Q7882199	Burgundian State
+2992	Q8003894	Xi
+2993	Q8067629	Zazzau
+2994	Q8842943	Estado Libre del Istmo
+2995	Q9390027	依耐
+2996	Q10297224	捐毒
+2997	Q10408695	狐胡
+2998	Q10430470	白題
+2999	Q10497374	舒鳩國
+3000	Q10715354	Neo-Inca State
+3001	Q10912581	双靡
+3002	Q10920088	Zhou dynasty (1678–1681)
+3003	Q10932236	夔國
+3004	Q10938496	大靖政權
+3005	Q10965276	Clun
+3006	Q10997467	Kerajaan Kotawaringin
+3007	Q11060334	常山国 (楚汉战争)
+3008	Q11088223	Ming Zheng
+3009	Q11091481	Jiang Qi
+3010	Q11120039	極國
+3011	Q11125624	殷国 (楚汉战争)
+3012	Q11237141	Kalingga
+3013	Q11608382	織田政権
+3014	Q11908082	Banu Djubar
+3015	Q11909456	Bit Agusi
+3016	Q11913408	Celtiberia
+3017	Q11913591	Champaner
+3018	Q11920943	estat del Kuban
+3019	Q11923784	Garenganze
+3020	Q11945165	regne de Sheka
+3021	Q11950520	sultanat de Tadjoura
+3022	Q11950523	Sumapaz
+3023	Q11954516	vescomtat de Gabardà
+3024	Q12183911	Syrian Federation
+3025	Q12491044	Kerajaan Negara Dipa
+3026	Q12491059	Kingdom of Sumedang Larang
+3027	Q12491396	Kesultanan Buton
+3028	Q12491399	Kutai (Sultanate)
+3029	Q12502383	Pamukan
+3030	Q12505550	Pinangawan
+3031	Q12597397	Balloguk
+3032	Q12793818	Kobarid Republic
+3033	Q13164238	祭 (周)
+3034	Q13411328	Muscovy
+3035	Q13576027	Prome Kingdom
+3036	Q14544269	Molo (Westtimor)
+3037	Q14624218	Western Chalukya Empire
+3038	Q14920623	Commonwealth realm of Sierra Leone
+3039	Q15241011	작 (제후)
+3040	Q15243157	Luwu
+3041	Q15535871	Uzbek Khanate
+3042	Q15824305	Kota Pinang
+3043	Q15849636	Sungai Taras
+3044	Q15895314	翟国
+3045	Q15902564	後大中華佛國
+3046	Q15904169	农佛合国
+3047	Q15935206	罗国
+3048	Q15952682	郳國
+3049	Q15956330	顓臾國
+3050	Q16034236	Sultanat de Goba'ad
+3051	Q16086793	Revolutionary Serbia
+3052	Q16150196	Donetsk People's Republic
+3053	Q16250774	Kharkov People's Republic
+3054	Q16555898	Feudo di Gazoldo
+3055	Q16639091	Государство Лаос
+3056	Q16683504	Орёл Шестого легиона
+3057	Q17004586	茅國
+3058	Q17030053	韩国 (汉朝)
+3059	Q17036011	Yan (Zang Tu)
+3060	Q17080982	Palistin
+3061	Q17161010	小虢國
+3062	Q17501190	门毒国
+3063	Q17524011	Dardanian Kingdom
+3064	Q17636162	Marchesato di Sorbello
+3065	Q18129046	Oudh State
+3066	Q18643293	Сул-Санааг-Айн
+3067	Q19831559	Oldenburg
+3068	Q19901436	Suriname
+3069	Q19985067	Principato di Oneglia
+3070	Q20379740	Mauretanian kuningaskunta
+3071	Q20581170	Kerajaan Gowa
+3072	Q20739561	Yancai
+3073	Q21005050	Kingdom of Morgannwg
+3074	Q21590889	Dar al Kuti
+3075	Q21693792	Abekouta
+3076	Q21815322	Emirat de Keffi
+3077	Q21819879	emirat de Wase
+3078	Q21843509	Бадахшанское ханство
+3079	Q24833581	大骆国
+3080	Q25226973	Zhoulai
+3081	Q28051704	Sena kingdom
+3082	Q28419349	Bakhatgarh
+3083	Q28876802	Урыс Олысы
+3084	Q29654286	Kingdom of Cappadocia
+3085	Q30607493	Wituland
+3086	Q30940754	光國
+3087	Q30943817	邶國
+3088	Q30945109	驪戎
+3089	Q30945170	苴國
+3090	Q30945442	鐸辰
+3091	Q30945629	Peng
+3092	Q31281094	Kingdom of Naples and Sicily
+3093	Q42346198	Catalan Republic
+3094	Q48698054	Montsoreau
+3095	Q50825947	Daju kingdom
+3096	Q56228971	Kadipaten Tegal
+3097	Q56229012	Kerajaan Tallu Batu Papan
+3098	Q56389709	Poso
+3099	Q66675079	Aztec civilization
+3100	Q22	Scotland
+3101	Q32	Luxembourg
+3102	Q40	Austria
+3103	Q117	Ghana
+3104	Q219	Bulgaria
+3105	Q230	Georgia
+3106	Q423	North Korea
+3107	Q711	Mongolia
+3108	Q730	Suriname
+3109	Q733	Paraguay
+3110	Q790	Haiti
+3111	Q794	Iran
+3112	Q833	Malaysia
+3113	Q846	Qatar
+3114	Q884	South Korea
+3115	Q958	South Sudan
+3116	Q965	Burkina Faso
+3117	Q971	Republic of the Congo
+3118	Q986	Eritrea
+3119	Q1019	Madagascar
+3120	Q1028	Morocco
+3121	Q1030	Namibia
+3122	Q1050	Eswatini
+3123	Q1188	Madhya Pradesh
+3124	Q1191	Maharashtra
+3125	Q2044	Florence
+3126	Q7405	Sui dynasty
+3127	Q21056	Onondaga people
+3128	Q25979	Kushan Empire
+3129	Q26927	Lakshadweep
+3130	Q28084	Gaya confederacy
+3131	Q28208	Goryeo
+3132	Q28233	Korean Empire
+3133	Q30609	Independent Macedonia
+3134	Q33235	Upper Burgundy
+3135	Q37102	Rif Republic
+3136	Q46652	Malacca sultanate
+3137	Q49683	Grand Duchy of Lithuania
+3138	Q49697	Liu Song dynasty
+3139	Q62456	Southern Qi
+3140	Q69323	Kingdom of France (1791-1792)
+3141	Q80211	Lithuanian Soviet Socialist Republic
+3142	Q83821	Bijapur Sultanate
+3143	Q105098	Austrasia
+3144	Q106577	Neustria
+3145	Q121869	Nupe
+3146	Q128904	Elam
+3147	Q129799	Bukey Horde
+3148	Q132856	Armenian Soviet Socialist Republic
+3149	Q139670	First Republic of Armenia
+3150	Q142417	Kingdom of Valencia
+3151	Q146562	State of Damascus
+3152	Q146600	Arab Kingdom of Syria
+3153	Q148540	Republic of Florence
+3154	Q149427	Samo's Empire
+3155	Q150056	Kingdom of Cochin
+3156	Q150061	Republic of Ararat
+3157	Q151148	Chola dynasty
+3158	Q153128	Independent State of Croatia
+3159	Q157734	Muscat and Oman
+3160	Q157956	Nineteenth Dynasty of Egypt
+3161	Q158236	Bophuthatswana
+3162	Q161036	Free State of Prussia
+3163	Q164079	Kingdom of Hanover
+3164	Q170174	Papal States
+3165	Q171348	Crown of the Kingdom of Poland
+3166	Q172579	Kingdom of Italy
+3167	Q174193	United Kingdom of Great Britain and Ireland
+3168	Q177076	Caucasian Albania
+3169	Q178038	Second Spanish Republic
+3170	Q179548	QwaQwa
+3171	Q180114	Ayyubid dynasty
+3172	Q180235	Wadhwan State
+3173	Q182279	Fadhli Sultanate
+3174	Q185068	Urartu
+3175	Q186537	Khanate of Kazan
+3176	Q197913	Zhongshan (state)
+3177	Q199711	Tajik Soviet Socialist Republic
+3178	Q200464	Portuguese Empire
+3179	Q203859	First Dynasty of Egypt
+3180	Q205718	Zirid dynasty
+3181	Q207991	Imperial State of Iran
+3182	Q208169	Republic of Ragusa
+3183	Q209857	Kingdom of Lombardy–Venetia
+3184	Q211001	Fourth Dynasty of Egypt
+3185	Q211092	Socialist Republic of Slovenia
+3186	Q211853	Republic of Serbian Krajina
+3187	Q212278	Kingdom of Holland
+3188	Q213353	Cisalpine Republic
+3189	Q215643	Indo-Greek Kingdom
+3190	Q216068	Sheba
+3191	Q234009	Magadha
+3192	Q237234	Osroene
+3193	Q240592	Socialist Republic of Macedonia
+3194	Q242036	Tamil Eelam
+3195	Q243610	Ukrainian People's Republic
+3196	Q245160	Democratic Republic of Georgia
+3197	Q253094	Kingdom of Hungary
+3198	Q272033	County of Tripoli
+3199	Q282350	Land of Punt
+3200	Q282475	Kingdom of Kartli-Kakheti
+3201	Q283627	Margraviate of Austria
+3202	Q284964	Cao
+3203	Q294652	House of Ögedei
+3204	Q310293	Saar
+3205	Q319460	Northern Song Dynasty
+3206	Q320925	Shu Han
+3207	Q321371	Bosporan Kingdom
+3208	Q332337	League of Corinth
+3209	Q335088	Armenian Kingdom of Cilicia
+3210	Q357201	Burgundy
+3211	Q368986	Republic of Mississippi
+3212	Q373650	Sur Empire
+3213	Q425405	Kingdom of Khana
+3214	Q431575	Idrisid dynasty
+3215	Q454941	Amarasi
+3216	Q459188	Kingdom of the Isles
+3217	Q466433	Karkota dynasty
+3218	Q483421	Meluhha
+3219	Q497958	Idumea
+3220	Q501754	Carantania
+3221	Q507346	Baté Empire
+3222	Q507796	Gujarat Sultanate
+3223	Q514557	Vest Recklinghausen
+3224	Q517333	Principality of Polotsk
+3225	Q532048	Sandur State
+3226	Q550691	Malwa
+3227	Q552241	Akhiyawa
+3228	Q555994	Ag Qoyunlu Tribe
+3229	Q577668	Khanate of Bukhara
+3230	Q577867	Kingdom of Poland
+3231	Q583038	Ostrogothic Kingdom
+3232	Q589662	Royal Prussia
+3233	Q605199	Vajji
+3234	Q616965	State of Grão-Pará and Maranhão
+3235	Q623751	Kingdom of Bernicia
+3236	Q623944	Arab Islamic Republic
+3237	Q625649	Aram-Damascus
+3238	Q638522	Ardalan
+3239	Q644979	Blue Horde
+3240	Q648046	United Duchies of Jülich-Cleves-Berg
+3241	Q657946	Kolhapur State
+3242	Q661340	Duchy of Salzburg
+3243	Q662410	Twenty-sixth Dynasty of Egypt
+3244	Q669241	League of Lezhë
+3245	Q676184	Kingdom of Sussex
+3246	Q697781	Principality of Stavelot-Malmedy
+3247	Q698239	Hubaekje
+3248	Q701273	Jinhan confederacy
+3249	Q701969	Principality of Regensburg
+3250	Q704278	Mahan confederacy
+3251	Q704312	Grand Duchy of Frankfurt
+3252	Q707584	County of Loon
+3253	Q747314	Bechuanaland Protectorate
+3254	Q770862	Staats-Brabant
+3255	Q774783	Sovereign Principality of the United Netherlands
+3256	Q777779	Kingdom of Awsan
+3257	Q779011	Principality of Montenegro
+3258	Q781935	Principality of Benevento
+3259	Q806435	Bang Assu
+3260	Q807068	Baol
+3261	Q816709	Tuvan People's Republic
+3262	Q832222	Caprivi Strip
+3263	Q836937	Duchy of Jülich
+3264	Q840601	East Turkestan
+3265	Q853477	Lan Xang
+3266	Q858841	Kingdom of Croatia
+3267	Q861784	Sultanate of Mogadishu
+3268	Q862304	Qara Khitai
+3269	Q865584	Princedom of Albania
+3270	Q868222	County of Coimbra
+3271	Q874954	Principality of Theodoro
+3272	Q875305	Northern Wei
+3273	Q877381	Gaochang
+3274	Q885304	Margraviate of Baden-Hachberg
+3275	Q892272	Bundu
+3276	Q894030	Bornu Empire
+3277	Q933413	Jath State
+3278	Q934644	Republic of Serbia
+3279	Q940741	Republic of Hungary
+3280	Q949268	Nanda Empire
+3281	Q956357	Kingdom of Hejaz
+3282	Q958764	Karadakh khanate
+3283	Q976913	Narsinghgarh State
+3284	Q999381	Jefferson Territory
+3285	Q1027122	Pengwern
+3286	Q1028614	Eastern Liao
+3287	Q1029847	Natalia Republic
+3288	Q1053874	Central India Agency
+3289	Q1055713	Yan
+3290	Q1059707	Lanna
+3291	Q1060520	Chamba State
+3292	Q1062546	Later Jin
+3293	Q1062946	Characene
+3294	Q1078602	Kingdom of Nepal
+3295	Q1089675	Chobanids
+3296	Q1141471	Northern Han
+3297	Q1141632	Kingdom of Vientiane
+3298	Q1142179	Orange River Colony
+3299	Q1143164	Western Wei
+3300	Q1145470	Western Jin dynasty
+3301	Q1147043	Southern Song Dynasty
+3302	Q1147373	Dongdan Kingdom
+3303	Q1179260	Dayuan
+3304	Q1193412	Taungoo
+3305	Q1194906	Assaka
+3306	Q1207105	Dewas State
+3307	Q1247508	Domain of Soissons
+3308	Q1274468	Republic of Bosnia and Herzegovina
+3309	Q1280079	Ludamar
+3310	Q1296908	Kathiri
+3311	Q1328546	Kucha
+3312	Q1337828	Emirate of Tbilisi
+3313	Q1337854	emirate of Córdoba
+3314	Q1345964	Gododdin
+3315	Q1348750	Gazankulu
+3316	Q1367119	Upper Yafa
+3317	Q1368026	Lingnan
+3318	Q1400616	Eighth Dynasty of Egypt
+3319	Q1423581	Italian Regency of Carnaro
+3320	Q1437302	Tan
+3321	Q1469100	Beylik of Karaman
+3322	Q1469742	Sunda Kingdom
+3323	Q1472492	Iga
+3324	Q1483495	Principality of Smolensk
+3325	Q1483510	Principality of Wales
+3326	Q1493843	Klein Vrystaat
+3327	Q1541613	County of Astarac
+3328	Q1541642	County of Besalú
+3329	Q1541787	County of Pallars
+3330	Q1550130	Kingdom of Artsakh
+3331	Q1572529	Hanthawaddy Kingdom
+3332	Q1574130	Han
+3333	Q1617495	Kingdom of Jaén
+3334	Q1632695	Sanjeli
+3335	Q1633698	Hubushkia
+3336	Q1634940	Nakhichevan Khanate
+3337	Q1639475	Mountainous Republic of the Northern Caucasus
+3338	Q1641428	Upper Aulaqi Sheikhdom
+3339	Q1649602	Vermont Republic
+3340	Q1683780	Jashpur State
+3341	Q1740545	Khandesh (Provinz)
+3342	Q1756546	Kingdom of Nejd and Hejaz
+3343	Q1789596	Croatia in personal union with Hungary
+3344	Q1792017	Kummuh
+3345	Q1796232	Kingdom of Ndongo
+3346	Q1923781	Albanian Republic
+3347	Q1926064	Republic of Mountainous Armenia
+3348	Q1949209	Taifa of Lorca
+3349	Q1951905	Muhammadgarh State
+3350	Q1963593	Nagod State
+3351	Q1994569	Taifa of Silves
+3352	Q2004491	Nuhašše
+3353	Q2051582	All-Palestine Government
+3354	Q2072263	Personalunion zwischen Großbritannien und Hannover
+3355	Q2076823	Principality of Bidache
+3356	Q2128542	Rairakhol State
+3357	Q2128715	Rajgarh State
+3358	Q2128743	Rajkot State
+3359	Q2145361	Republik Winburg-Potchefstroom
+3360	Q2232777	Taifa of Molina
+3361	Q2268597	United Provinces of Central Italy
+3362	Q2338948	County of Manresa
+3363	Q2348016	Rijkshof Lustenau
+3364	Q2354639	East Punjab
+3365	Q2380231	November 1918 in Alsace-Lorraine
+3366	Q2412900	Republic of Salé
+3367	Q2414171	First Brazilian Republic
+3368	Q2444884	Tibet
+3369	Q2460753	Turira
+3370	Q2477776	Kimek Khanate
+3371	Q2552742	Northland State
+3372	Q2568325	Kuninda Kingdom
+3373	Q2608489	Aztec Empire
+3374	Q2624304	Charkhari State
+3375	Q2658252	Yamato (state)
+3376	Q2658454	Monarchies of Malaysia
+3377	Q2668600	Taifa of Niebla
+3378	Q2670092	Dominion of Ceylon
+3379	Q2712121	Irish Republic
+3380	Q2902588	Damot
+3381	Q2907860	Principality of Mingrelia
+3382	Q2920715	Kldekari
+3383	Q3125368	Mahdist Sudan
+3384	Q3196064	Khanat bulgare du Danube
+3385	Q3242360	Licchavi
+3386	Q3249160	Duchy of Aragvi
+3387	Q3284315	Pasai
+3388	Q3307686	Visigothic Kingdom of Toulouse
+3389	Q3446167	Kingdom of Derge
+3390	Q3446213	Pinya Kingdom
+3391	Q3446298	Mon kingdoms
+3392	Q3456373	Republic of Brescia
+3393	Q3456497	Italian Partisan Republics
+3394	Q3486676	Taiping Heavenly Kingdom
+3395	Q3503437	Ming Xia
+3396	Q3610549	Kingdom of Ruhuna
+3397	Q3653113	Kingdom of Syunik
+3398	Q3688051	Contea di Cesana
+3399	Q3688344	Contea di Lodrone
+3400	Q3715864	Duchy of Bergamo
+3401	Q3715872	Ducado de Piacenza
+3402	Q3818153	Banu Ukhaidhir
+3403	Q3834773	stati italiani dell'era feudale
+3404	Q3919363	Principality of Lahojsk
+3405	Q3933247	Republic of Noli
+3406	Q4098922	Булеленг
+3407	Q4110986	viscountcy of Osona
+3408	Q4120906	东蒙古人民自治政府
+3409	Q4127080	Временное Терско-Дагестанское правительство
+3410	Q4127081	Временное Ферганское правительство
+3411	Q4202348	Yin
+3412	Q4215328	Karluk yabghu
+3413	Q4232358	Копное право
+3414	Q4314897	Национально-культурная автономия мусульман тюрко-татар Внутренней России и Сибири
+3415	Q4397927	Russian Democratic Federative Republic
+3416	Q4401071	Rajahnate of Cebu
+3417	Q4461035	Akkadian empire
+3418	Q4470663	Ukrainian National Government
+3419	Q4783395	Xianbei state
+3420	Q4807407	Asmaka Kingdom
+3421	Q4843701	Great Socialist People's Libyan Arab Jamahiriya
+3422	Q4899891	Beylik of Tunis
+3423	Q5095124	Chi Tu
+3424	Q5208973	Dai
+3425	Q5215639	Danda Kingdom
+3426	Q5291089	Dominion of Fiji
+3427	Q5754768	Casa de Castilla
+3428	Q5870215	Third Republic of the Philippines
+3429	Q6372836	Karnata Kingdom
+3430	Q6424991	Sultanate of Dawaro
+3431	Q6680233	Lordship of Chios
+3432	Q7060213	Northwest Territorial Imperative
+3433	Q7216494	First Kingdom of Kakheti
+3434	Q7273754	Zheltuga Republic
+3435	Q7314467	Republic of Florida
+3436	Q7314468	Republic of Galicia
+3437	Q7636789	Sultanate of Bale
+3438	Q7636791	Sultanate of Arbabni
+3439	Q8050331	Yaudheya
+3440	Q9512730	卑陆
+3441	Q10295972	Hunnic Empire
+3442	Q10310866	无雷
+3443	Q10326738	朐衍国
+3444	Q10401297	烏洛侯
+3445	Q10416611	Vandal Kingdom
+3446	Q10497243	舒庸国
+3447	Q10518693	西夜
+3448	Q10565777	难兜
+3449	Q10882622	亚泽王朝
+3450	Q10885162	Ito
+3451	Q10935472	Dacheng
+3452	Q11070237	後清
+3453	Q11074448	戎盧
+3454	Q11091440	Sui
+3455	Q11120904	樊國
+3456	Q11134065	Jian (state)
+3457	Q11178782	Czechoslovak Republic
+3458	Q11634225	Toyotomi government
+3459	Q11909242	gabella de Sinope
+3460	Q11951649	Territori tribal de Berber
+3461	Q12031755	Kingdom of Dazhou
+3462	Q12150341	Samanid Empire
+3463	Q12167518	Холодноярська республіка
+3464	Q12183875	Cherifian Empire
+3465	Q12406729	Israeli Military Governorate
+3466	Q12491026	Aru Kingdom
+3467	Q12491039	Kerajaan Kubu
+3468	Q12491047	Kerajaan Panjalu Ciamis
+3469	Q12584384	Gojamidongguk
+3470	Q12599242	Bulsabunsaguk
+3471	Q12605505	Angnoguk
+3472	Q13099593	Soso Empire
+3473	Q13134747	Batavian Commonwealth
+3474	Q13534153	Athens (ancient Kingdom)
+3475	Q14120094	nước Phong
+3476	Q14635091	Huo (state)
+3477	Q14905932	Republic of Cuba (1902–59)
+3478	Q15824804	Kénédougou Kingdom
+3479	Q15903028	大同国
+3480	Q15907695	Shan State Republic
+3481	Q15921215	铸国
+3482	Q15946662	鄖國
+3483	Q15953091	郜國
+3484	Q16167036	Mokjiguk
+3485	Q16171455	Mioyamaguk
+3486	Q16657543	Калпийский султанат
+3487	Q16761250	Republika Srpska
+3488	Q17001784	邗国
+3489	Q17034965	臨江國
+3490	Q17163785	邘国
+3491	Q17163793	雍国
+3492	Q17355515	Kingdom of Telemark
+3493	Q17499121	崇国
+3494	Q17636153	Marchesato di Castiglione del Lago
+3495	Q18110343	中华文武国
+3496	Q18142055	九遊龍飛雲車真命天子鄭朝
+3497	Q18165301	遊騰
+3498	Q18165307	鄅国
+3499	Q18524206	Kingdom of Tallo
+3500	Q18651818	No label Q18651818
+3501	Q19276517	Kingdom of Persia
+3502	Q19653765	蔡友根
+3503	Q19837669	Principality of Salm
+3504	Q19840305	Kongsi federation
+3505	Q20062796	中华佛主国
+3506	Q20103241	comtat de Ripoll
+3507	Q20512270	Էթիուներ
+3508	Q20716241	Ten Kingdoms
+3509	Q20949725	Principality of Sperlinga
+3510	Q21076477	Malaisohmat
+3511	Q21076532	regne de Dauro
+3512	Q21076534	República de Zululand
+3513	Q21235088	Marchesato di Grana
+3514	Q21296156	Republic of Venezuela
+3515	Q21789783	emirat de Biu
+3516	Q21789787	Emirat de Hadejia
+3517	Q21815317	Emirat de Dutse
+3518	Q21815329	Emirat de Muri
+3519	Q21815330	Emirat de Nasarawa
+3520	Q23541302	Kaluga Soviet Republic
+3521	Q23668714	Yatenga Kingdom
+3522	Q24935764	Marchesato di Castiglione
+3523	Q25413868	Bolivian State
+3524	Q25463226	Kerajaan Galunggung
+3525	Q28058158	Madurai Nayak Kingdom
+3526	Q28415996	褒国
+3527	Q28516740	Sultanate of Pelalawan
+3528	Q30943800	項國
+3529	Q30944784	肥國
+3530	Q30945187	代戎
+3531	Q30945438	大荔之戎
+3532	Q30945527	西黃國
+3533	Q30945599	蓐國
+3534	Q30945647	且蘭
+3535	Q30945854	甲父
+3536	Q42346215	Catalan State
+3537	Q47499498	Pre-Colonial Basutoland
+3538	Q48838869	Wao
+3539	Q48838989	Sarila
+3540	Q56228975	Kerajaan Banten Girang
+3541	Q56228983	kerajaan Galuh Pagauban
+3542	Q56228989	Kerajaan Laiwui
+3543	Q56228999	Kerajaan Plakaran
+3544	Q56229008	kerajaan Sidenreng
+3545	Q56282578	Uryankhay Republic
+3546	Q56704734	Parada Kingdom
+3547	Q56885910	Emirate of Diriyah
+3548	Q60614780	Kingdom of the Heruli
+3549	Q61950933	Kingdom of Dalmatia
+3550	Q62124078	Kesultanan Bacan
+3551	Q63134381	Khwarezmian Empire
+3552	Q65051443	Sheikhdom of al-`Irqa
+3553	Q84314069	Русское царство
+3554	Q84731185	ߞߏߟߏ߲ߞߊߟߊ߲߫
+3555	Q90303093	Russian peripheral countries
+3556	Q90579326	No label Q90579326

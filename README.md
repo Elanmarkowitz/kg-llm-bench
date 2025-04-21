@@ -2,30 +2,46 @@
 
 This repository contains a benchmarking system for testing LLM performance on knowledge graph tasks, with support for AWS Bedrock batch processing.
 
+## Requirements
+
+- Python 3.8 or higher
+- See `requirements.txt` for the list of dependencies.
+
+
 ## Setup
 
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+Follow these steps to set up the project:
 
-2. Configure AWS credentials:
-```bash
-export AWS_ACCESS_KEY_ID=your_access_key
-export AWS_SECRET_ACCESS_KEY=your_secret_key
-export AWS_DEFAULT_REGION=your_region
-```
+1. **Clone the Repository**  
+   Clone this repository to your local machine:
+   ```bash
+   git clone https://github.com/Elanmarkowitz/kg-llm-bench.git
+   cd kg-llm-bench
+   ```
 
-3. Set up S3 buckets for batch processing:
-```bash
-export BEDROCK_INPUT_BUCKET=your-input-bucket
-export BEDROCK_OUTPUT_BUCKET=your-output-bucket
-```
+2. **Create a Virtual Environment (Optional)**  
+   Create and activate a virtual environment:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On macOS/Linux
+   venv\Scripts\activate     # On Windows
+   ```
 
-4. Create an IAM role for Bedrock batch processing with appropriate permissions and set:
-```bash
-export BEDROCK_BATCH_ROLE_ARN=arn:aws:iam::account:role/role-name
-```
+3. **Install Dependencies**  
+   Install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set Up Environment Variables**  
+   This project uses `python-dotenv` to manage environment variables. Create a `.env` file in the root directory and add your AWS credentials, OpenAI API and Gemini API keys:
+   ```env
+   AWS_ACCESS_KEY_ID=<your-access-key-id>
+   AWS_SECRET_ACCESS_KEY=<your-secret-access-key>
+   AWS_REGION=<your-region>
+   OPENAI_API_KEY=<your-openai-api-key>
+   GEMINI_API_KEY=<your-gemini-api-key>
+   ```
 
 ## Running Experiments with Batch Processing
 
