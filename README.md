@@ -24,6 +24,11 @@ This repository contains a benchmarking system for testing LLM performance on kn
 
 KG-LLM-Bench won Best Resource Paper at the 4th Workshop on Knowledge-Augmented NLP at NAACL 2025
 
+## Requirements
+
+- Python 3.8 or higher
+- See `requirements.txt` for the list of dependencies.
+
 ## Setup
 
 Follow these steps to set up the project:
