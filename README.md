@@ -1,4 +1,6 @@
-# Knowledge Graph LLM Benchmark with Batch Processing
+# KG-LLM-Bench: A Scalable Benchmark for Evaluating LLM Reasoning on Textualized Knowledge Graphs
+
+https://arxiv.org/abs/2504.07087
 
 This repository contains a benchmarking system for testing LLM performance on knowledge graph tasks, with support for AWS Bedrock batch processing.
 
@@ -7,6 +9,20 @@ This repository contains a benchmarking system for testing LLM performance on kn
 - Python 3.8 or higher
 - See `requirements.txt` for the list of dependencies.
 
+## Citation
+
+@article{Markowitz2025KGLLMBenchAS,
+  title={KG-LLM-Bench: A Scalable Benchmark for Evaluating LLM Reasoning on Textualized Knowledge Graphs},
+  author={Elan Markowitz and Krupa Galiya and Greg Ver Steeg and A. G. Galstyan},
+  journal={},
+  year={2025},
+  volume={abs/2504.07087},
+  url={https://api.semanticscholar.org/CorpusID:277634268}
+}
+
+## Updates
+
+KG-LLM-Bench won Best Resource Paper at the 4th Workshop on Knowledge-Augmented NLP at NAACL 2025
 
 ## Setup
 
